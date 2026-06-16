@@ -207,40 +207,55 @@ interface PlanCardProps {
 function PlanCard({
   active, onClick, title, subtitle, priceUsd, priceUnit, priceCop, badge, badgeClass, icon, highlight, girls,
 }: PlanCardProps) {
+  const bgActive = highlight
+    ? "bg-gradient-to-br from-baddia-gold/40 to-pink-100"
+    : girls
+    ? "bg-gradient-to-br from-pink-100 to-purple-100"
+    : "bg-white";
+  const bgIdle = "bg-white";
+
   return (
     <button
       onClick={onClick}
-      className={`relative w-full text-left rounded-2xl p-4 transition-all active:scale-[0.99] ${
-        active
-          ? highlight
-            ? "bg-gradient-to-br from-baddia-gold/30 to-pink-100 border-2 border-baddia-gold shadow-glow"
-            : girls
-            ? "bg-gradient-to-br from-pink-100 to-purple-100 border-2 border-baddia-hot shadow-glow"
-            : "bg-white border-2 border-baddia-purple shadow-card"
-          : "bg-white/70 border-2 border-pink-100"
+      className={`relative w-full text-left rounded-[22px] p-4 border-[2.5px] border-baddia-ink font-display transition-all ${
+        active ? bgActive : bgIdle
       }`}
+      style={{
+        boxShadow: active
+          ? "5px 5px 0 0 hsl(var(--ink))"
+          : "3px 3px 0 0 hsl(var(--ink) / 0.55)",
+        transform: active ? "translateY(-1px)" : "translateY(2px)",
+      }}
     >
       {badge && (
-        <span className={`absolute -top-2.5 right-4 chip text-[10px] font-bold ${badgeClass}`}>
+        <span
+          className={`absolute -top-3 right-3 px-2.5 py-1 rounded-full border-2 border-baddia-ink text-[10px] font-display font-black ${badgeClass}`}
+          style={{ boxShadow: "2px 2px 0 0 hsl(var(--ink))" }}
+        >
           {badge}
         </span>
       )}
       <div className="flex items-center gap-3">
-        <span className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-soft shrink-0">
+        <span className="w-10 h-10 rounded-xl bg-white border-2 border-baddia-ink flex items-center justify-center shrink-0">
           {icon}
         </span>
         <div className="flex-1 min-w-0">
-          <p className="font-display font-black text-baddia-purple text-[15px] leading-tight">{title}</p>
-          <p className="text-[11px] text-baddia-purple/60 truncate">{subtitle}</p>
+          <p className="font-display font-black text-baddia-ink text-[15px] leading-tight">{title}</p>
+          <p className="text-[11px] font-bold text-baddia-ink/60 truncate">{subtitle}</p>
         </div>
         <div className="text-right">
-          <p className="font-display font-black text-baddia-purple text-[15px] leading-none">{priceUsd}</p>
-          <p className="text-[10px] text-baddia-purple/60">{priceUnit}</p>
+          <p className="font-display font-black text-baddia-ink text-[15px] leading-none">{priceUsd}</p>
+          <p className="text-[10px] font-bold text-baddia-ink/60 mt-0.5">{priceUnit}</p>
         </div>
       </div>
-      <p className="text-[11px] text-baddia-purple/70 mt-2 pl-13 text-right font-semibold">
+      <p className="text-[11px] text-baddia-ink/70 mt-2 text-right font-bold">
         {priceCop}
       </p>
+      {active && (
+        <span className="absolute top-2 left-2 w-5 h-5 rounded-full bg-baddia-hot border-2 border-baddia-ink flex items-center justify-center">
+          <Check size={11} strokeWidth={4} className="text-white" />
+        </span>
+      )}
     </button>
   );
 }
