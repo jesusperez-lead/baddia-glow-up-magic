@@ -15,11 +15,7 @@ export function Welcome() {
       <Sparkles />
 
       {/* Top header */}
-      <header className="relative z-10 flex items-center justify-between px-6 pt-6">
-        <span className="chip glass border border-white/60 text-baddia-ink">
-          <span className="w-2 h-2 rounded-full bg-baddia-mint animate-pulse" />
-          beta · v1
-        </span>
+      <header className="relative z-10 flex items-center justify-end px-6 pt-6">
         <span className="chip bg-baddia-ink text-white">ES 🇪🇸</span>
       </header>
 
