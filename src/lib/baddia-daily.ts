@@ -81,11 +81,11 @@ export function computeDailyVibe(user: BaddiaUser): DailyVibe {
   const glowBand = GLOW_LABELS.find((b) => glowScore >= b.min)!;
 
   const advice = QUOTES[seed % QUOTES.length];
-  const color = COLORS[(seed >> 4) % COLORS.length];
+  const color = COLORS[(seed >>> 4) % COLORS.length];
 
   // Lucky number leans on life number + day rotation
   const luckyPool = [user.lifeNumber, 3, 7, 11, 13, 17, 21, 22, 27, 33];
-  const luckyNumber = luckyPool[(seed >> 8) % luckyPool.length] || 11;
+  const luckyNumber = luckyPool[(seed >>> 8) % luckyPool.length] || 11;
 
   const baseKw = KEYWORDS_BY_SIGN[user.sign as Zodiac] ?? KEYWORDS_BY_SIGN.Libra;
   // Pick 3 distinct keywords deterministically
