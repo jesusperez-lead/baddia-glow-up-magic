@@ -74,20 +74,20 @@ export function WidgetsShowcase() {
         {/* ───── HOME SCREEN MOCKUP ───── */}
         <Section emoji="📱" label="Home screen">
           <PhoneCanvas wallpaper="home">
-            <div className="pt-10 px-4 grid grid-cols-4 gap-3">
-              {/* Large widget — Consejo del día (2x2) */}
+            <div className="pt-12 px-3 grid grid-cols-4 gap-2">
+              {/* Large widget — Frase del día (2x2) */}
               <WidgetLarge>
-                <div className="h-full flex flex-col justify-between">
+                <div className="h-full flex flex-col justify-between min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1 text-[9px] font-display font-black uppercase tracking-wider text-baddia-hot">
+                    <span className="inline-flex items-center gap-1 text-[8px] font-display font-black uppercase tracking-wider text-baddia-hot">
                       💬 Frase
                     </span>
-                    <span className="text-baddia-yellow text-sm">✦</span>
+                    <span className="text-baddia-yellow text-sm leading-none">✦</span>
                   </div>
-                  <p className="font-display font-black text-[14px] leading-tight text-baddia-ink">
+                  <p className="font-display font-black text-[12px] leading-[1.15] text-baddia-ink break-words">
                     "Tu trabajo no es tu personalidad."
                   </p>
-                  <p className="text-[8px] font-display font-bold uppercase tracking-widest text-baddia-ink/50">
+                  <p className="text-[7px] font-display font-bold uppercase tracking-[0.2em] text-baddia-ink/50">
                     baddia
                   </p>
                 </div>
@@ -96,25 +96,25 @@ export function WidgetsShowcase() {
               {/* Small — Glow ring */}
               <WidgetSmall bg="bg-gradient-to-br from-baddia-yellow to-baddia-hot text-baddia-ink">
                 <div className="h-full flex flex-col items-center justify-center text-center">
-                  <p className="text-[8px] font-display font-black uppercase tracking-widest opacity-80">
+                  <p className="text-[7px] font-display font-black uppercase tracking-widest opacity-80">
                     Glow
                   </p>
-                  <p className="font-display font-black text-[28px] leading-none mt-0.5">87</p>
-                  <p className="text-[8px] font-display font-bold mt-0.5 opacity-80">/100 ✨</p>
+                  <p className="font-display font-black text-[24px] leading-none mt-0.5">87</p>
+                  <p className="text-[7px] font-display font-bold mt-0.5 opacity-80">/100 ✨</p>
                 </div>
               </WidgetSmall>
 
               {/* Small — Color */}
               <WidgetSmall bg="bg-white">
-                <div className="h-full flex flex-col">
-                  <p className="text-[8px] font-display font-black uppercase tracking-widest text-baddia-ink/60">
+                <div className="h-full flex flex-col min-w-0">
+                  <p className="text-[7px] font-display font-black uppercase tracking-widest text-baddia-ink/60 truncate">
                     🎨 Color
                   </p>
                   <div
-                    className="flex-1 my-1 rounded-xl border border-baddia-ink/30"
+                    className="flex-1 my-1 rounded-lg border border-baddia-ink/30"
                     style={{ background: "linear-gradient(135deg,#FFD6E0,#FF9BAF)" }}
                   />
-                  <p className="font-display font-black text-[10px] text-baddia-ink leading-tight">
+                  <p className="font-display font-black text-[9px] text-baddia-ink leading-tight truncate">
                     Rosa cuarzo
                   </p>
                 </div>
@@ -122,56 +122,56 @@ export function WidgetsShowcase() {
 
               {/* Medium — Luna (2x1) */}
               <WidgetMedium bg="gradient-bg-baddia text-white">
-                <div className="flex items-center gap-3 h-full">
-                  <div className="relative w-12 h-12 shrink-0">
+                <div className="flex items-center gap-2 h-full min-w-0">
+                  <div className="relative w-10 h-10 shrink-0">
                     <div className="absolute inset-0 rounded-full bg-baddia-yellow" />
                     <div className="absolute inset-0 rounded-full bg-baddia-ink/80" style={{ clipPath: "inset(0 0 0 50%)" }} />
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-[8px] font-display font-black uppercase tracking-widest opacity-80">🌙 Luna</p>
-                    <p className="font-display font-black text-[13px] leading-tight">Creciente</p>
-                    <p className="text-[9px] font-semibold opacity-85 leading-tight">Día de manifestar</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[7px] font-display font-black uppercase tracking-widest opacity-80 truncate">🌙 Luna</p>
+                    <p className="font-display font-black text-[12px] leading-tight truncate">Creciente</p>
+                    <p className="text-[8px] font-semibold opacity-85 leading-tight truncate">Día de manifestar</p>
                   </div>
                 </div>
               </WidgetMedium>
 
-              {/* Small — Vibra (Lucky number) */}
+              {/* Small — Lucky number */}
               <WidgetSmall bg="bg-baddia-lime text-baddia-ink">
                 <div className="h-full flex flex-col items-center justify-center text-center">
-                  <p className="text-[8px] font-display font-black uppercase tracking-widest">Lucky</p>
-                  <p className="font-display font-black text-[34px] leading-none mt-0.5">7</p>
+                  <p className="text-[7px] font-display font-black uppercase tracking-widest">Lucky</p>
+                  <p className="font-display font-black text-[28px] leading-none mt-0.5">7</p>
                   <p className="text-[8px] font-display font-bold mt-0.5">🍀</p>
                 </div>
               </WidgetSmall>
 
               {/* Small — Horóscopo */}
               <WidgetSmall bg="bg-baddia-soft text-baddia-ink">
-                <div className="h-full flex flex-col justify-between">
-                  <p className="text-[8px] font-display font-black uppercase tracking-widest opacity-70">♎ Libra</p>
-                  <p className="font-display font-black text-[11px] leading-tight">Día de equilibrio y amor propio.</p>
-                  <p className="text-[8px] font-bold opacity-70">⭐⭐⭐⭐</p>
+                <div className="h-full flex flex-col justify-between min-w-0">
+                  <p className="text-[7px] font-display font-black uppercase tracking-widest opacity-70 truncate">♎ Libra</p>
+                  <p className="font-display font-black text-[9.5px] leading-tight break-words">Día de equilibrio y amor propio.</p>
+                  <p className="text-[7px] font-bold opacity-70">⭐⭐⭐⭐</p>
                 </div>
               </WidgetSmall>
 
               {/* Medium — Crush Energy (2x1) */}
               <WidgetMedium bg="bg-white">
-                <div className="flex items-center gap-3 h-full">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-hot border-2 border-baddia-ink flex items-center justify-center text-2xl shrink-0">
+                <div className="flex items-center gap-2 h-full min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-hot border-2 border-baddia-ink flex items-center justify-center text-lg shrink-0">
                     💘
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-[8px] font-display font-black uppercase tracking-widest text-baddia-ink/60">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[7px] font-display font-black uppercase tracking-widest text-baddia-ink/60 truncate">
                       Crush Energy
                     </p>
-                    <p className="font-display font-black text-[14px] text-baddia-ink leading-tight">Magnética 92%</p>
-                    <p className="text-[9px] font-semibold text-baddia-ink/65 leading-tight">No persigas, atrae.</p>
+                    <p className="font-display font-black text-[12px] text-baddia-ink leading-tight truncate">Magnética 92%</p>
+                    <p className="text-[8px] font-semibold text-baddia-ink/65 leading-tight truncate">No persigas, atrae.</p>
                   </div>
                 </div>
               </WidgetMedium>
             </div>
 
             {/* iOS Dock */}
-            <div className="absolute bottom-3 left-3 right-3 rounded-3xl bg-white/25 backdrop-blur-xl border border-white/30 p-2.5 flex items-center justify-around">
+            <div className="absolute bottom-3 left-3 right-3 rounded-3xl bg-white/25 backdrop-blur-xl border border-white/30 p-2 flex items-center justify-around">
               {[
                 { emoji: "✨", color: "bg-gradient-hot" },
                 { emoji: "💬", color: "bg-baddia-mint" },
@@ -180,7 +180,7 @@ export function WidgetsShowcase() {
               ].map((d, i) => (
                 <div
                   key={i}
-                  className={`w-10 h-10 rounded-xl ${d.color} flex items-center justify-center text-lg shadow-md`}
+                  className={`w-9 h-9 rounded-xl ${d.color} flex items-center justify-center text-base shadow-md`}
                 >
                   {d.emoji}
                 </div>
