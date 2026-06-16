@@ -54,10 +54,10 @@ export function Paywall() {
           <div className="inline-flex items-center gap-1.5 chip bg-white/15 text-white mb-3">
             <Sparkles size={12} /> Baddia Pro
           </div>
-          <h2 className="font-display font-black text-[26px] leading-tight">
+          <h2 className="font-display font-black text-[24px] leading-tight text-white pr-10 drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
             Desbloquea tu lectura completa
           </h2>
-          <p className="mt-2 text-white/85 text-sm">
+          <p className="mt-2 text-white text-sm pr-6 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
             Amor, dinero, suerte, futuro y crush energy completa. Tu glow sin límites ✨
           </p>
         </div>
