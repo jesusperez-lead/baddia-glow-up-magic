@@ -26,8 +26,6 @@ const PLAN_LABEL: Record<PlanKey, BaddiaUser["plan"]> = {
   girls: "Baddia Girls",
 };
 
-import type { BaddiaUser } from "@/lib/baddia-state";
-
 export function Paywall() {
   const { paywallOpen, closePaywall, setUser } = useBaddia();
   const [selected, setSelected] = useState<PlanKey>("yearly");
