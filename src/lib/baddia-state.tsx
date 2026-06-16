@@ -20,7 +20,7 @@ export interface BaddiaUser {
   month: string;
   year: string;
   interests: Interest[];
-  plan: "Free" | "Pro";
+  plan: "Free" | "Pro" | "Pro Anual" | "Baddia Girls";
   sign: string;
   lifeNumber: number;
   savedQuotes: string[];
