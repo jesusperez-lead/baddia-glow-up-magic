@@ -167,25 +167,23 @@ export function FirstReading() {
 
       <div className="relative z-10 px-5 mt-8 space-y-3">
         <button
+          onClick={handleShare}
+          className="w-full py-3.5 rounded-2xl bg-white border border-pink-100 text-baddia-purple font-semibold flex items-center justify-center gap-2"
+        >
+          <Share2 size={16} /> Compartir mi energía
+        </button>
+        <button
           onClick={openPaywall}
-          className="btn-sticker w-full py-[16px] rounded-full bg-gradient-hot text-white flex items-center justify-center gap-2"
+          className="w-full py-4 rounded-2xl bg-gradient-glow text-white font-bold shadow-glow flex items-center justify-center gap-2"
         >
           <Lock size={16} /> Ver lectura completa
         </button>
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            onClick={handleShare}
-            className="btn-sticker py-3.5 rounded-full bg-white text-baddia-ink text-sm flex items-center justify-center gap-1.5"
-          >
-            <Share2 size={14} /> Compartir
-          </button>
-          <button
-            onClick={() => go("daily")}
-            className="btn-sticker py-3.5 rounded-full bg-baddia-ink text-white text-sm flex items-center justify-center gap-1.5"
-          >
-            Mi Daily <ArrowRight size={14} />
-          </button>
-        </div>
+        <button
+          onClick={() => go("daily")}
+          className="w-full py-3.5 rounded-2xl bg-baddia-purple text-white font-semibold flex items-center justify-center gap-2"
+        >
+          Ir a mi Baddia Daily <ArrowRight size={16} />
+        </button>
       </div>
     </div>
   );
