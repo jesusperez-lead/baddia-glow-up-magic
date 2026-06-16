@@ -212,7 +212,7 @@ export function Daily() {
           Hecho con IA y mucho amor ✨ úsalo para inspirarte, mimarte y confiar en tu propia intuición 💖
         </p>
       </div>
-      <ShareGlowSheet open={shareOpen} onClose={() => setShareOpen(false)} />
+      <ShareGlowSheet open={shareOpen} onClose={() => setShareOpen(false)} quote={quote} />
     </div>
   );
 }
