@@ -8,8 +8,9 @@ export default {
     container: { center: true, padding: "1rem", screens: { "2xl": "1400px" } },
     extend: {
       fontFamily: {
-        display: ["Fraunces", "serif"],
-        sans: ["Quicksand", "system-ui", "sans-serif"],
+        display: ["Fredoka", "Nunito", "sans-serif"],
+        sans: ["Nunito", "Quicksand", "system-ui", "sans-serif"],
+        serif: ["Fraunces", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
