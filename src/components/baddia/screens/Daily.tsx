@@ -200,8 +200,8 @@ export function Daily() {
           </div>
         </button>
 
-        <p className="text-[10px] text-center text-baddia-ink/50 pt-3 italic">
-          Lecturas creadas con IA para entretenimiento y amor propio.
+        <p className="text-[11px] text-center text-baddia-ink/50 font-semibold px-6 pt-3 leading-relaxed">
+          Hecho con IA y mucho amor ✨ úsalo para inspirarte, mimarte y confiar en tu propia intuición 💖
         </p>
       </div>
     </div>
