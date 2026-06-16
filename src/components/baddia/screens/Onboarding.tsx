@@ -66,7 +66,7 @@ export function Onboarding() {
   const back = () => (step > 1 ? setStep(step - 1) : go("welcome"));
 
   return (
-    <div key={step} className="relative min-h-full flex flex-col bg-baddia-pearl overflow-hidden">
+    <div key={step} className="relative min-h-full flex flex-col bg-baddia-pearl overflow-hidden isolate">
       <BackgroundDeco />
       <Sparkles />
 
