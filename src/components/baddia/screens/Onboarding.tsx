@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import { useBaddia, Interest } from "@/lib/baddia-state";
+import { computeZodiac, computeLifeNumber } from "@/lib/baddia-numerology";
 import { Sparkles } from "../PhoneFrame";
 import { LogoMark } from "../Logo";
 import { ChevronLeft } from "lucide-react";
+
+const NICKNAME_EXAMPLES = ["Vale", "Sofi", "Nena", "Baddie"];
+const TOTAL_STEPS = 4;
 
 const INTERESTS: { label: Interest; emoji: string; color: string; text: string }[] = [
   { label: "Amor",            emoji: "💖", color: "bg-baddia-bubble",  text: "text-white" },
