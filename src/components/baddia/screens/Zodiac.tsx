@@ -10,18 +10,19 @@ type MoodCard = {
   label: string;
   emoji: string;
   Icon: any;
-  vibe: string;          // 1-line vibe (free)
-  detail: string;        // longer text (free or pro)
-  color: string;
+  quote: string;         // ⭐ mensaje protagonista
+  detail: string;        // texto largo al expandir
+  color: string;         // bg + texto
+  accent: string;        // color del sticker emoji (esquina)
   pro: boolean;
 };
 
 const MOOD_CARDS: MoodCard[] = [
-  { key: "amor",    label: "Amor",    emoji: "💖", Icon: Heart,     vibe: "Magnetismo alto",     detail: "Tu energía atrae sin esfuerzo. Hoy se abre una puerta a relaciones más sanas.", color: "bg-baddia-hot text-white",      pro: false },
-  { key: "dinero",  label: "Dinero",  emoji: "💸", Icon: DollarSign,vibe: "Oportunidad cerca",   detail: "Una conversación de hoy puede abrir flujo de dinero en los próximos 7 días.",  color: "bg-baddia-lime text-baddia-ink", pro: true  },
-  { key: "trabajo", label: "Trabajo", emoji: "💼", Icon: Briefcase, vibe: "Enfoque y claridad",  detail: "Tu mente está afilada. Día perfecto para cerrar ciclos y mostrar tu valor.",   color: "bg-baddia-soft text-baddia-ink", pro: true  },
-  { key: "energia", label: "Energía", emoji: "⚡️", Icon: Zap,       vibe: "Vibrante",            detail: "Tu aura está al 87%. Cuida tu agua, descanso y tiempo lejos del scroll.",      color: "bg-baddia-yellow text-baddia-ink", pro: false },
-  { key: "suerte",  label: "Suerte",  emoji: "🍀", Icon: Clover,    vibe: "A tu favor",          detail: "Tus números mágicos: 3, 7, 21. El color que te potencia: rosa cuarzo.",        color: "bg-baddia-mint text-baddia-ink", pro: false },
+  { key: "amor",    label: "Amor",    emoji: "💖", Icon: Heart,     quote: "No persigas. Magnetiza.",          detail: "Tu energía atrae sin esfuerzo. Hoy se abre una puerta a relaciones más sanas.", color: "bg-baddia-hot text-white",          accent: "bg-baddia-yellow", pro: false },
+  { key: "dinero",  label: "Dinero",  emoji: "💸", Icon: DollarSign,quote: "El dinero te busca a ti.",         detail: "Una conversación de hoy puede abrir flujo de dinero en los próximos 7 días.",  color: "bg-baddia-lime text-baddia-ink",    accent: "bg-baddia-hot",    pro: true  },
+  { key: "trabajo", label: "Trabajo", emoji: "💼", Icon: Briefcase, quote: "It's just work. Don't take it personally.", detail: "Tu mente está afilada. Día perfecto para cerrar ciclos y mostrar tu valor.",   color: "bg-baddia-ink text-white",          accent: "bg-baddia-yellow", pro: true  },
+  { key: "energia", label: "Energía", emoji: "⚡️", Icon: Zap,       quote: "Hoy brillas en alta definición.",  detail: "Tu aura está al 87%. Cuida tu agua, descanso y tiempo lejos del scroll.",      color: "bg-baddia-yellow text-baddia-ink",  accent: "bg-baddia-hot",    pro: false },
+  { key: "suerte",  label: "Suerte",  emoji: "🍀", Icon: Clover,    quote: "El universo te debe una, y la cobra hoy.", detail: "Tus números mágicos: 3, 7, 21. El color que te potencia: rosa cuarzo.",        color: "bg-baddia-mint text-baddia-ink",    accent: "bg-baddia-lavender", pro: false },
 ];
 
 const SIGN_INFO = {
