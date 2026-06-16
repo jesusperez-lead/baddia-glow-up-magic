@@ -85,7 +85,7 @@ export function Zodiac() {
             </span>
           </div>
           <div className="relative rounded-3xl border-[2.5px] border-baddia-ink p-5 pt-7 shadow-[5px_6px_0_hsl(260_16%_15%)] overflow-hidden gradient-bg-baddia text-white">
-            <span className="absolute -bottom-6 -right-2 text-[140px] leading-none opacity-20 select-none">{SIGN_INFO.glyph}</span>
+            
             <div className="relative flex items-center gap-4">
               <div className="shrink-0 w-16 h-16 rounded-2xl border-2 border-white/60 bg-white/15 backdrop-blur-md flex items-center justify-center text-4xl shadow-[2px_2px_0_rgba(0,0,0,0.25)]">
                 {SIGN_INFO.glyph}
