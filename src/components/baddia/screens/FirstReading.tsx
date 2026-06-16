@@ -1,5 +1,6 @@
 import { useBaddia } from "@/lib/baddia-state";
 import { Sparkles } from "../PhoneFrame";
+import { SpeechBubble } from "../SpeechBubble";
 import { Share2, Lock, ArrowRight } from "lucide-react";
 
 export function FirstReading() {
