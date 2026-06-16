@@ -1,34 +1,19 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import { computeDailyVibe } from "@/lib/baddia-daily";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import { SpeechBubble } from "../SpeechBubble";
+import { ShareGlowSheet } from "../ShareGlowSheet";
 import { Share2, Lock, ArrowRight } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+
 
 export function FirstReading() {
   const { user, go, openPaywall } = useBaddia();
   const vibe = useMemo(() => computeDailyVibe(user), [user]);
   const scorePct = vibe.glowScore / 100;
   const dash = 314;
+  const [shareOpen, setShareOpen] = useState(false);
 
-  const handleShare = async () => {
-    const text = `✨ Mi energía de hoy en Baddia: Glow ${vibe.glowScore}% · Color ${vibe.color.name} · Lucky #${vibe.luckyNumber} 💖`;
-    try {
-      if (typeof navigator !== "undefined" && navigator.share) {
-        await navigator.share({ title: "Mi energía Baddia", text });
-        return;
-      }
-      if (typeof navigator !== "undefined" && navigator.clipboard) {
-        await navigator.clipboard.writeText(text);
-        toast({ title: "Copiado ✨", description: "Tu energía está lista para compartir." });
-        return;
-      }
-    } catch {
-      /* user cancelled */
-    }
-    toast({ title: "Compartir tu energía", description: text });
-  };
 
   return (
     <div className="relative min-h-full bg-white pb-10 overflow-hidden">
@@ -174,7 +159,7 @@ export function FirstReading() {
         </button>
         <div className="grid grid-cols-2 gap-3">
           <button
-            onClick={handleShare}
+            onClick={() => setShareOpen(true)}
             className="btn-sticker py-3.5 rounded-full bg-white text-baddia-ink text-sm flex items-center justify-center gap-1.5"
           >
             <Share2 size={14} /> Compartir
@@ -187,6 +172,9 @@ export function FirstReading() {
           </button>
         </div>
       </div>
+
+      <ShareGlowSheet open={shareOpen} onClose={() => setShareOpen(false)} />
     </div>
   );
 }
+
