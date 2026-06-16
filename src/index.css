@@ -171,21 +171,6 @@
     border-radius: 28px;
     box-shadow: 5px 6px 0 0 hsl(var(--ink));
   }
-  .speech-bubble::after {
-    content: "";
-    position: absolute;
-    right: 34px;
-    bottom: -18px;
-    width: 28px;
-    height: 28px;
-    background: inherit;
-    border-right: 2.5px solid hsl(var(--ink));
-    border-bottom: 2.5px solid hsl(var(--ink));
-    transform: rotate(45deg) skew(-8deg, -8deg);
-    border-bottom-right-radius: 6px;
-    box-shadow: 4px 4px 0 -1px hsl(var(--ink));
-    z-index: -1;
-  }
 }
 
 @layer utilities {
