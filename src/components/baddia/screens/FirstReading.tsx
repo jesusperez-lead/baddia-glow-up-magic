@@ -1,10 +1,11 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import { computeDailyVibe } from "@/lib/baddia-daily";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import { SpeechBubble } from "../SpeechBubble";
+import { ShareGlowSheet } from "../ShareGlowSheet";
 import { Share2, Lock, ArrowRight } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+
 
 export function FirstReading() {
   const { user, go, openPaywall } = useBaddia();
