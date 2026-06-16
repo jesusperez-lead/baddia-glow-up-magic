@@ -186,6 +186,106 @@ export function Daily() {
           </div>
         </div>
 
+        {/* ───── Section: signo + cartas ───── */}
+        <SectionLabel emoji="🌌" text="signos & cartas" />
+
+        {/* Mini horóscopo */}
+        <div className="relative">
+          <div className="absolute -top-3 left-5 z-10">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-baddia-lavender text-white px-3 py-1.5 text-[10px] font-display font-bold uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-1">
+              ♎ mini horóscopo
+            </span>
+          </div>
+          <div className="rounded-3xl bg-white border-[2.5px] border-baddia-ink p-5 pt-7 shadow-[5px_6px_0_hsl(260_16%_15%)]">
+            <div className="flex items-center gap-4">
+              <div className="shrink-0 w-14 h-14 rounded-2xl border-2 border-baddia-ink bg-gradient-to-br from-baddia-lavender to-baddia-bubble flex items-center justify-center text-3xl shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                ♎
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <p className="font-display font-black text-[15px] text-baddia-ink leading-none">Libra</p>
+                  <p className="text-[10px] font-semibold text-baddia-ink/55 leading-none">23 sep — 22 oct</p>
+                </div>
+                <p className="font-display font-bold text-[14px] text-baddia-ink leading-snug">
+                  Día de equilibrio y amor propio — di que sí solo a lo que te suma.
+                </p>
+                <p className="text-[11px] text-baddia-yellow font-bold mt-1.5 tracking-wider">★★★★☆</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tarot diario básico */}
+        <div className="relative">
+          <div className="absolute -top-3 left-5 z-10">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-baddia-ink text-white px-3 py-1.5 text-[10px] font-display font-bold uppercase tracking-widest shadow-[2px_2px_0_hsl(48_100%_59%)] rotate-1">
+              🔮 tarot del día
+            </span>
+          </div>
+          <div className="rounded-3xl bg-gradient-to-br from-pink-50 via-white to-baddia-soft/30 border-[2.5px] border-baddia-ink p-5 pt-7 shadow-[5px_6px_0_hsl(260_16%_15%)]">
+            <div className="flex items-center gap-4">
+              {/* Card flip */}
+              <button
+                onClick={() => setTarotFlipped((v) => !v)}
+                className="shrink-0 relative w-[88px] h-[128px] [perspective:900px] active:scale-95 transition-transform"
+                aria-label="Voltear carta"
+              >
+                <div
+                  className="absolute inset-0 transition-transform duration-700 [transform-style:preserve-3d]"
+                  style={{ transform: tarotFlipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
+                >
+                  {/* Back */}
+                  <div className="absolute inset-0 rounded-xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-baddia-lavender via-baddia-hot to-baddia-yellow shadow-[3px_4px_0_hsl(260_16%_15%)] [backface-visibility:hidden] flex items-center justify-center">
+                    <span className="text-3xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.3)]">✦</span>
+                    <span className="absolute inset-1.5 rounded-lg border border-white/40" />
+                  </div>
+                  {/* Front */}
+                  <div
+                    className="absolute inset-0 rounded-xl border-[2.5px] border-baddia-ink bg-white shadow-[3px_4px_0_hsl(260_16%_15%)] [backface-visibility:hidden] flex flex-col items-center justify-between p-2"
+                    style={{ transform: "rotateY(180deg)" }}
+                  >
+                    <span className="text-[8px] font-display font-black text-baddia-ink/60">XVII</span>
+                    <span className="text-4xl">⭐</span>
+                    <span className="text-[8px] font-display font-black uppercase tracking-wider text-baddia-ink text-center leading-tight">
+                      La Estrella
+                    </span>
+                  </div>
+                </div>
+              </button>
+
+              <div className="min-w-0 flex-1">
+                {!tarotFlipped ? (
+                  <>
+                    <p className="font-display font-black text-[15px] text-baddia-ink leading-tight">
+                      Tu carta de hoy te espera ✨
+                    </p>
+                    <p className="text-[12px] text-baddia-ink/65 font-semibold mt-1 leading-snug">
+                      Toca la carta para revelar tu mensaje del día.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="font-display font-black text-[15px] text-baddia-ink leading-tight">
+                      La Estrella ⭐
+                    </p>
+                    <p className="text-[12px] text-baddia-ink/70 font-semibold mt-1 leading-snug">
+                      Esperanza, claridad y renovación. Confía en lo que estás construyendo.
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* CTA Pro */}
+            <button
+              onClick={openPaywall}
+              className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 rounded-full bg-baddia-ink text-white text-[12px] font-display font-bold border-2 border-baddia-ink shadow-[3px_3px_0_hsl(48_100%_59%)] active:scale-[0.98] transition-transform"
+            >
+              <Lock size={13} /> Tirada de 3 cartas · Pro <ArrowRight size={13} />
+            </button>
+          </div>
+        </div>
+
         {/* ───── Section: Pro ───── */}
         <SectionLabel emoji="🔮" text="tu lectura completa" />
 
