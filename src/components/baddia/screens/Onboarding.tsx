@@ -26,18 +26,9 @@ const LOADING_MESSAGES = [
 function BackgroundDeco() {
   return (
     <>
-      {/* Full-screen gradient wash */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(120% 60% at 50% 0%, hsl(335 100% 88%) 0%, transparent 55%), radial-gradient(90% 50% at 100% 35%, hsl(256 100% 90%) 0%, transparent 60%), radial-gradient(100% 60% at 0% 70%, hsl(48 100% 86%) 0%, transparent 55%), radial-gradient(120% 60% at 50% 100%, hsl(325 100% 88%) 0%, transparent 60%), linear-gradient(180deg, hsl(333 100% 98%), hsl(39 100% 96%))",
-        }}
-      />
       <div className="blob -top-20 -left-16 w-72 h-72 bg-baddia-bubble/40" />
       <div className="blob top-40 -right-20 w-64 h-64 bg-baddia-soft/55" style={{ animationDelay: "4s" }} />
-      <div className="blob bottom-10 left-10 w-56 h-56 bg-baddia-yellow/35" style={{ animationDelay: "8s" }} />
-      <div className="blob -bottom-10 -right-10 w-64 h-64 bg-baddia-bubble/35" style={{ animationDelay: "6s" }} />
+      <div className="blob bottom-0 left-10 w-56 h-56 bg-baddia-yellow/35" style={{ animationDelay: "8s" }} />
     </>
   );
 }
