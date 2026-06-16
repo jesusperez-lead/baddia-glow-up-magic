@@ -162,7 +162,12 @@
     transform: translateY(3px);
     box-shadow: 0 2px 0 0 hsl(var(--ink)), 0 8px 18px -10px hsl(335 100% 55% / 0.45);
   }
-  .btn-sticker:disabled { opacity: .5; box-shadow: 0 4px 0 0 hsl(var(--ink) / .4); }
+  .btn-sticker:disabled {
+    background: #fff !important;
+    color: hsl(var(--ink)) !important;
+    opacity: 1;
+    box-shadow: 0 4px 0 0 hsl(var(--ink) / .45);
+  }
 
   /* Speech-bubble sticker card (like reference) */
   .speech-bubble {
