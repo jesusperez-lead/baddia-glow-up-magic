@@ -330,17 +330,59 @@ export function Onboarding() {
               </p>
             </div>
 
-            <div className="w-full max-w-[260px] mt-6">
-              <div className="h-3 bg-white rounded-full overflow-hidden border-2 border-baddia-ink/15 shadow-[2px_2px_0_hsl(260_16%_15%/0.15)]">
+            <div className="w-full max-w-[280px] mt-6">
+              {/* Floating % badge that rides the bar */}
+              <div className="relative h-7 mb-2">
                 <div
-                  className="h-full bg-gradient-hot rounded-full transition-all duration-100 relative"
-                  style={{ width: `${progress}%` }}
+                  className="absolute top-0 -translate-x-1/2 transition-all duration-100"
+                  style={{ left: `${progress}%` }}
                 >
-                  <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[10px]">✨</span>
+                  <div className="relative">
+                    <div className="bg-white border-2 border-baddia-ink rounded-full px-2.5 py-0.5 shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                      <span className="font-display font-bold text-[11px] text-baddia-ink">
+                        {Math.round(progress)}%
+                      </span>
+                    </div>
+                    {/* little tail */}
+                    <div className="absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-0 h-0 border-l-[5px] border-r-[5px] border-t-[6px] border-l-transparent border-r-transparent border-t-baddia-ink" />
+                  </div>
                 </div>
               </div>
-              <p className="text-[11px] text-baddia-ink/50 mt-2 font-semibold">
-                {Math.round(progress)}% cósmico
+
+              {/* Track */}
+              <div className="relative h-4 bg-white rounded-full border-2 border-baddia-ink overflow-hidden shadow-[3px_3px_0_hsl(260_16%_15%)]">
+                {/* dotted bg pattern */}
+                <div
+                  className="absolute inset-0 opacity-40"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(circle, hsl(260 16% 15% / 0.15) 1px, transparent 1px)",
+                    backgroundSize: "8px 8px",
+                  }}
+                />
+                {/* Fill */}
+                <div
+                  className="relative h-full bg-gradient-hot rounded-full transition-all duration-100 overflow-hidden"
+                  style={{ width: `${progress}%` }}
+                >
+                  {/* Glossy top highlight */}
+                  <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/55 to-transparent rounded-t-full" />
+                  {/* Animated shimmer */}
+                  <div
+                    className="absolute inset-y-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/70 to-transparent animate-shimmer"
+                  />
+                </div>
+                {/* Sparkle riding the end */}
+                <span
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 text-baddia-yellow text-base drop-shadow-[0_0_6px_hsl(48_100%_70%/0.9)] transition-all duration-100 pointer-events-none"
+                  style={{ left: `${progress}%` }}
+                >
+                  ✨
+                </span>
+              </div>
+
+              <p className="text-[11px] text-center text-baddia-ink/50 mt-3 font-semibold tracking-wide">
+                cargando tu glow cósmico ✦
               </p>
             </div>
           </div>
