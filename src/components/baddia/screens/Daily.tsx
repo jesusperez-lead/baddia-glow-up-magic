@@ -34,6 +34,10 @@ export function Daily() {
 
       <div className="relative z-10 px-5 mt-5 space-y-5">
         {/* Glow Score — sticker card */}
+        {/* ───── Section: tu energía ───── */}
+        <SectionLabel emoji="✨" text="tu energía de hoy" />
+
+        {/* Glow Score */}
         <div className="relative animate-slide-up">
           <div className="absolute -top-3 left-5 z-10">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-baddia-ink text-white px-3 py-1.5 text-[10px] font-display font-bold uppercase tracking-widest shadow-[2px_2px_0_hsl(48_100%_59%)]">
@@ -43,7 +47,6 @@ export function Daily() {
           <div className="relative rounded-3xl bg-white border-[2.5px] border-baddia-ink p-5 pt-7 shadow-[5px_6px_0_hsl(260_16%_15%)] overflow-hidden">
             <div className="absolute -top-10 -left-10 w-44 h-44 rounded-full bg-gradient-hot opacity-20 blur-2xl pointer-events-none" />
             <span className="absolute top-3 right-4 text-baddia-yellow text-lg animate-pulse">✦</span>
-
             <div className="flex items-center gap-5">
               <div className="relative shrink-0">
                 <svg width="108" height="108" viewBox="0 0 120 120" className="-rotate-90">
@@ -57,9 +60,7 @@ export function Daily() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="font-display font-black text-[38px] leading-none text-baddia-ink drop-shadow-[1px_2px_0_hsl(48_100%_70%)]">
-                    87
-                  </span>
+                  <span className="font-display font-black text-[38px] leading-none text-baddia-ink drop-shadow-[1px_2px_0_hsl(48_100%_70%)]">87</span>
                   <span className="mt-1 inline-flex items-center gap-0.5 rounded-full bg-baddia-ink text-white text-[8px] font-black uppercase tracking-[0.14em] px-2 py-[3px]">
                     <span className="text-baddia-yellow">✦</span> /100
                   </span>
@@ -76,6 +77,61 @@ export function Daily() {
             </div>
           </div>
         </div>
+
+        {/* Mini stats row: Color + Lucky numbers */}
+        <div className="grid grid-cols-2 gap-3">
+          {/* Color of the day */}
+          <div className="relative">
+            <div className="absolute -top-3 left-3 z-10">
+              <span className="inline-flex items-center gap-1 rounded-full bg-baddia-lavender text-white px-2 py-1 text-[9px] font-display font-bold uppercase tracking-wider shadow-[2px_2px_0_hsl(260_16%_15%)] rotate-1">
+                🎨 color
+              </span>
+            </div>
+            <div className="rounded-3xl bg-white border-[2.5px] border-baddia-ink p-3 pt-5 shadow-[5px_6px_0_hsl(260_16%_15%)] h-full flex flex-col items-center text-center">
+              <div
+                className="w-14 h-14 rounded-2xl border-[2.5px] border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] mb-2"
+                style={{ background: "linear-gradient(135deg,#FFD6E0,#FF9BAF)" }}
+              />
+              <p className="font-display font-black text-[15px] text-baddia-ink leading-tight">
+                Rosa cuarzo
+              </p>
+              <p className="text-[10.5px] text-baddia-ink/65 font-semibold mt-1 leading-tight">
+                Ropa, uñas, makeup o wallpaper.
+              </p>
+            </div>
+          </div>
+
+          {/* Lucky numbers */}
+          <div className="relative">
+            <div className="absolute -top-3 left-3 z-10">
+              <span className="inline-flex items-center gap-1 rounded-full bg-baddia-mint text-white px-2 py-1 text-[9px] font-display font-bold uppercase tracking-wider shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-1">
+                🍀 lucky
+              </span>
+            </div>
+            <div className="rounded-3xl bg-white border-[2.5px] border-baddia-ink p-3 pt-5 shadow-[5px_6px_0_hsl(260_16%_15%)] h-full flex flex-col items-center justify-between">
+              <div className="flex gap-1.5 justify-center">
+                {[
+                  { n: "7", bg: "bg-baddia-yellow" },
+                  { n: "11", bg: "bg-baddia-bubble" },
+                  { n: "24", bg: "bg-baddia-lime" },
+                ].map((item) => (
+                  <div
+                    key={item.n}
+                    className={`w-10 h-12 rounded-xl ${item.bg} border-2 border-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] flex items-center justify-center font-display font-black text-lg text-baddia-ink`}
+                  >
+                    {item.n}
+                  </div>
+                ))}
+              </div>
+              <p className="text-[10px] text-baddia-ink/60 font-semibold mt-2 text-center leading-tight">
+                Tus números mágicos ✨
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ───── Section: mini ritual ───── */}
+        <SectionLabel emoji="💖" text="para mimarte hoy" />
 
         {/* Advice */}
         <div className="relative">
@@ -111,60 +167,6 @@ export function Daily() {
           </div>
         </div>
 
-        {/* Color of the day */}
-        <div className="relative">
-          <div className="absolute -top-3 left-5 z-10">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-baddia-lavender text-white px-3 py-1.5 text-[10px] font-display font-bold uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] rotate-1">
-              🎨 color de hoy
-            </span>
-          </div>
-          <div className="rounded-3xl bg-white border-[2.5px] border-baddia-ink p-4 pt-6 shadow-[5px_6px_0_hsl(260_16%_15%)] flex items-center gap-4">
-            <div
-              className="w-20 h-20 rounded-2xl border-[2.5px] border-baddia-ink shrink-0 shadow-[3px_3px_0_hsl(260_16%_15%)]"
-              style={{ background: "linear-gradient(135deg,#FFD6E0,#FF9BAF)" }}
-            />
-            <div className="min-w-0">
-              <p className="font-display font-black text-[20px] text-baddia-ink leading-tight">
-                Rosa cuarzo
-              </p>
-              <p className="text-[12.5px] text-baddia-ink/70 font-medium mt-1 leading-snug">
-                Úsalo en ropa, uñas, maquillaje o fondo de pantalla.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Lucky numbers */}
-        <div className="relative">
-          <div className="absolute -top-3 left-5 z-10">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-baddia-mint text-white px-3 py-1.5 text-[10px] font-display font-bold uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-1">
-              🍀 lucky numbers
-            </span>
-          </div>
-          <div className="rounded-3xl bg-white border-[2.5px] border-baddia-ink p-4 pt-7 shadow-[5px_6px_0_hsl(260_16%_15%)]">
-            <p className="text-[13px] font-bold text-baddia-ink/80 text-center mb-3">
-              Tus números de suerte son
-            </p>
-            <div className="flex gap-2.5 justify-center">
-              {[
-                { n: "7", bg: "bg-baddia-yellow" },
-                { n: "11", bg: "bg-baddia-bubble" },
-                { n: "24", bg: "bg-baddia-lime" },
-              ].map((item) => (
-                <div
-                  key={item.n}
-                  className={`w-16 h-16 rounded-2xl ${item.bg} border-[2.5px] border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center justify-center font-display font-black text-2xl text-baddia-ink`}
-                >
-                  {item.n}
-                </div>
-              ))}
-            </div>
-            <p className="text-[10px] text-baddia-ink/50 mt-3 text-center italic">
-              Números simbólicos de entretenimiento.
-            </p>
-          </div>
-        </div>
-
         {/* Moon message */}
         <div className="relative">
           <div className="absolute -top-3 left-5 z-10">
@@ -180,6 +182,9 @@ export function Daily() {
           </div>
         </div>
 
+        {/* ───── Section: Pro ───── */}
+        <SectionLabel emoji="🔮" text="tu lectura completa" />
+
         {/* Pro teaser */}
         <button
           onClick={openPaywall}
@@ -192,7 +197,7 @@ export function Daily() {
           </div>
           <div className="rounded-3xl bg-gradient-to-br from-baddia-gold/30 via-pink-100 to-baddia-soft/40 border-[2.5px] border-baddia-ink p-5 pt-7 shadow-[5px_6px_0_hsl(260_16%_15%)]">
             <p className="font-display font-black text-baddia-ink text-[19px] leading-snug">
-              Tu lectura completa de <span className="gradient-text">amor, dinero y futuro</span> está lista ✨
+              Tu lectura de <span className="gradient-text">amor, dinero y futuro</span> está lista ✨
             </p>
             <div className="btn-sticker w-full mt-4 py-3 rounded-full bg-gradient-hot text-white text-[13px] flex items-center justify-center gap-1.5">
               <Lock size={13} /> Desbloquear con Baddia Pro <ArrowRight size={14} />
@@ -204,6 +209,18 @@ export function Daily() {
           Hecho con IA y mucho amor ✨ úsalo para inspirarte, mimarte y confiar en tu propia intuición 💖
         </p>
       </div>
+    </div>
+  );
+}
+
+function SectionLabel({ emoji, text }: { emoji: string; text: string }) {
+  return (
+    <div className="flex items-center gap-2 pt-1 pl-1">
+      <span className="text-base">{emoji}</span>
+      <p className="font-display font-black text-[12px] uppercase tracking-[0.15em] text-baddia-ink/70">
+        {text}
+      </p>
+      <span className="h-[2px] flex-1 bg-baddia-ink/15 rounded-full" />
     </div>
   );
 }
