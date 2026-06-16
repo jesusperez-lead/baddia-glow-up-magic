@@ -52,7 +52,7 @@ export function Onboarding() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (step !== 5) return;
+    if (step !== 4) return;
     setProgress(0);
     const msgInt = setInterval(() => setMsgIdx((i) => (i + 1) % LOADING_MESSAGES.length), 900);
     const progInt = setInterval(() => setProgress((p) => Math.min(100, p + 2.5)), 100);
@@ -83,7 +83,7 @@ export function Onboarding() {
         </button>
         <LogoMark size={40} />
         <div className="text-xs font-display font-bold text-baddia-ink/60 bg-white rounded-full px-3 py-1.5 border border-baddia-ink/10">
-          {step}/5
+          {step}/{TOTAL_STEPS}
         </div>
       </header>
 
@@ -92,7 +92,7 @@ export function Onboarding() {
         <div className="h-2 bg-white rounded-full overflow-hidden border border-baddia-ink/5">
           <div
             className="h-full bg-gradient-hot transition-all duration-500 rounded-full"
-            style={{ width: `${(step / 5) * 100}%` }}
+            style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
           />
         </div>
       </div>
