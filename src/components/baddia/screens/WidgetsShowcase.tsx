@@ -49,19 +49,19 @@ export function WidgetsShowcase() {
 
             {/* notifications */}
             <div className="absolute bottom-20 left-0 right-0 px-3 space-y-2">
-              <iOSNotification
+              <IOSNotification
                 app="Baddia"
                 title="Tu lectura de hoy está lista ✨"
                 body='"Hoy magnetizas más de lo que crees."'
                 time="ahora"
               />
-              <iOSNotification
+              <IOSNotification
                 app="Baddia"
                 title="🌙 La luna te dice algo"
                 body="No bajes tu energía para encajar."
                 time="hace 5m"
               />
-              <iOSNotification
+              <IOSNotification
                 app="Baddia · Girls"
                 title="Sofi compartió su glow contigo 💖"
                 body="Compatibilidad de hoy: 92% — vibra alta."
@@ -353,7 +353,7 @@ function LockChip({ icon, label, value }: { icon: string; label: string; value: 
   );
 }
 
-function iOSNotification({ app, title, body, time }: { app: string; title: string; body: string; time: string }) {
+function IOSNotification({ app, title, body, time }: { app: string; title: string; body: string; time: string }) {
   return (
     <div className="rounded-2xl bg-white/85 backdrop-blur-xl px-3 py-2 shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
       <div className="flex items-center justify-between mb-0.5">
