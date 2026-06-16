@@ -5,39 +5,97 @@ import { Sparkles } from "../PhoneFrame";
 export function Welcome() {
   const { go } = useBaddia();
   return (
-    <div className="relative min-h-full flex flex-col gradient-bg-soft overflow-hidden">
-      <Sparkles />
-      {/* Decorative blobs */}
-      <div className="absolute -top-20 -left-16 w-72 h-72 rounded-full bg-baddia-pink/40 blur-3xl" />
-      <div className="absolute top-32 -right-20 w-64 h-64 rounded-full bg-baddia-lavender/50 blur-3xl" />
-      <div className="absolute bottom-0 left-10 w-48 h-48 rounded-full bg-baddia-gold/30 blur-3xl" />
+    <div className="relative min-h-full flex flex-col overflow-hidden bg-baddia-pearl">
+      {/* Background blobs */}
+      <div className="blob -top-24 -left-20 w-80 h-80 bg-baddia-bubble/55" style={{ animationDelay: "0s" }} />
+      <div className="blob top-40 -right-24 w-72 h-72 bg-baddia-soft/70" style={{ animationDelay: "3s" }} />
+      <div className="blob bottom-0 left-1/4 w-72 h-72 bg-baddia-yellow/45" style={{ animationDelay: "6s" }} />
+      <div className="blob bottom-32 -right-10 w-48 h-48 bg-baddia-mint/40" style={{ animationDelay: "9s" }} />
 
-      <div className="relative flex-1 flex flex-col items-center justify-center px-6 text-center pt-20 pb-10">
-        <div className="animate-float mb-8">
-          <Logo size={88} />
+      <Sparkles />
+
+      {/* Top header */}
+      <header className="relative z-10 flex items-center justify-between px-6 pt-6">
+        <span className="chip glass border border-white/60 text-baddia-ink">
+          <span className="w-2 h-2 rounded-full bg-baddia-mint animate-pulse" />
+          beta · v1
+        </span>
+        <span className="chip bg-baddia-ink text-white">ES 🇪🇸</span>
+      </header>
+
+      {/* Collage zone */}
+      <div className="relative z-10 flex-1 px-6 pt-4 pb-6 flex flex-col">
+        <div className="relative h-[340px] mx-auto w-full max-w-[340px]">
+          {/* Center logo card */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="animate-pop-in">
+              <div className="relative">
+                <div className="absolute inset-0 rounded-[40%] bg-gradient-glow blur-2xl opacity-70" />
+                <div className="relative">
+                  <Logo size={84} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating stickers */}
+          <div className="absolute top-2 left-2 sticker-float" style={{ ['--r' as any]: '-8deg' }}>
+            <div className="baddia-pop px-3 py-2 text-xs font-display font-bold text-baddia-ink flex items-center gap-1">
+              <span className="text-base">🌙</span> zodiac mood
+            </div>
+          </div>
+          <div className="absolute top-0 right-0 sticker-float-slow" style={{ ['--r' as any]: '10deg' }}>
+            <div className="rounded-2xl bg-baddia-lime border-2 border-baddia-ink px-3 py-2 text-xs font-display font-bold text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)]">
+              glow score 87
+            </div>
+          </div>
+          <div className="absolute bottom-16 -left-2 sticker-float" style={{ ['--r' as any]: '6deg', animationDelay: '1s' }}>
+            <div className="rounded-2xl bg-white border-2 border-baddia-ink px-3 py-2 text-xs font-display font-bold text-baddia-hot shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center gap-1">
+              <span>💌</span> crush energy
+            </div>
+          </div>
+          <div className="absolute bottom-0 right-2 sticker-float-fast" style={{ ['--r' as any]: '-6deg' }}>
+            <div className="rounded-2xl bg-baddia-yellow border-2 border-baddia-ink px-3 py-2 text-xs font-display font-bold text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center gap-1">
+              <span>🍀</span> lucky #11
+            </div>
+          </div>
+          <div className="absolute top-24 right-4 text-3xl sticker-float-slow">💖</div>
+          <div className="absolute bottom-28 right-12 text-2xl sticker-float">✨</div>
+
+          {/* Doodle arrow */}
+          <svg className="absolute bottom-6 left-10 sticker-float-slow" width="60" height="40" viewBox="0 0 60 40" fill="none">
+            <path d="M2 30 C 15 5, 35 5, 55 18" stroke="hsl(335 100% 59%)" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="2 4" />
+            <path d="M48 12 L55 18 L48 24" stroke="hsl(335 100% 59%)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          </svg>
         </div>
-        <h1 className="font-display font-black text-3xl leading-tight text-baddia-purple mb-3 animate-fade-in">
-          Descubre tu energía,<br />tu suerte y tu poder.
-        </h1>
-        <p className="text-baddia-purple/70 max-w-[280px] text-sm font-medium">
-          Tu app diaria de glow up, zodiac mood y crush energy. ✨
-        </p>
+
+        {/* Headline */}
+        <div className="text-center mt-2 animate-slide-up" style={{ animationDelay: "0.15s" }}>
+          <h1 className="font-display font-bold text-[34px] leading-[1.05] text-baddia-ink">
+            Descubre tu <span className="gradient-text">energía</span>,<br />
+            tu <span className="text-baddia-lavender">suerte</span> y tu <span className="text-baddia-hot">poder</span>.
+          </h1>
+          <p className="mt-4 text-baddia-ink/70 text-[15px] font-semibold max-w-[300px] mx-auto">
+            Tu glow cósmico diario empieza aquí. ✨
+          </p>
+        </div>
       </div>
 
-      <div className="relative px-6 pb-10 space-y-3">
+      {/* CTAs */}
+      <div className="relative z-10 px-6 pb-8 space-y-3 animate-slide-up" style={{ animationDelay: "0.3s" }}>
         <button
           onClick={() => go("onboarding")}
-          className="w-full py-4 rounded-2xl bg-gradient-glow text-white font-bold text-lg shadow-glow active:scale-[0.98] transition-transform"
+          className="cta-glow w-full py-[18px] rounded-full bg-gradient-hot text-white font-display font-bold text-lg active:scale-[0.98] transition-transform"
         >
-          Empezar ✨
+          Empezar mi glow ✨
         </button>
         <button
           onClick={() => go("daily")}
-          className="w-full py-3.5 rounded-2xl bg-white border border-pink-100 text-baddia-purple font-semibold"
+          className="w-full py-4 rounded-full bg-white border-2 border-baddia-ink/10 text-baddia-ink font-display font-bold"
         >
           Ya tengo cuenta
         </button>
-        <p className="text-[11px] text-center text-muted-foreground px-4 pt-2 leading-relaxed">
+        <p className="text-[11px] text-center text-baddia-ink/50 pt-1 leading-relaxed px-4">
           Lecturas creadas con IA para entretenimiento, inspiración y amor propio.
         </p>
       </div>
