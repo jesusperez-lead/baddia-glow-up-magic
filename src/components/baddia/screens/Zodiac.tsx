@@ -190,10 +190,48 @@ export function Zodiac() {
               />
             </div>
             {openDaily && (
-              <div className="flex gap-2 mt-3 animate-fade-in">
-                <span className="rounded-full bg-baddia-yellow/40 text-baddia-ink border border-baddia-ink/20 px-2 py-0.5 text-[10px] font-bold">⭐⭐⭐⭐☆</span>
-                <span className="rounded-full bg-baddia-bubble/40 text-baddia-ink border border-baddia-ink/20 px-2 py-0.5 text-[10px] font-bold">color: rosa cuarzo</span>
-                <span className="rounded-full bg-baddia-mint/60 text-baddia-ink border border-baddia-ink/20 px-2 py-0.5 text-[10px] font-bold">🍀 3·7·21</span>
+              <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-baddia-ink/10 animate-fade-in">
+                {/* Energía del día */}
+                <div className="flex flex-col items-start">
+                  <p className="text-[9px] font-display font-black uppercase tracking-widest text-baddia-ink/55">Energía</p>
+                  <div className="flex items-end gap-[3px] mt-1.5 h-5">
+                    {[1,1,1,1,0].map((on, i) => (
+                      <span
+                        key={i}
+                        className={`w-1.5 rounded-full ${on ? "bg-baddia-hot" : "bg-baddia-ink/15"}`}
+                        style={{ height: `${(i + 1) * 4 + 4}px` }}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-[10px] font-display font-bold text-baddia-ink mt-1">Alta · 4/5</p>
+                </div>
+
+                {/* Color del día */}
+                <div className="flex flex-col items-start">
+                  <p className="text-[9px] font-display font-black uppercase tracking-widest text-baddia-ink/55">Color</p>
+                  <div className="flex items-center gap-1.5 mt-1.5">
+                    <span
+                      className="w-5 h-5 rounded-full border-2 border-baddia-ink shadow-[1.5px_1.5px_0_hsl(260_16%_15%)]"
+                      style={{ background: "linear-gradient(135deg,#FFD6E0,#FF9BAF)" }}
+                    />
+                    <span className="text-[10px] font-display font-bold text-baddia-ink leading-tight">Rosa<br/>cuarzo</span>
+                  </div>
+                </div>
+
+                {/* Lucky numbers */}
+                <div className="flex flex-col items-start">
+                  <p className="text-[9px] font-display font-black uppercase tracking-widest text-baddia-ink/55">Lucky</p>
+                  <div className="flex items-center gap-1 mt-1.5">
+                    {[3, 7, 21].map((n) => (
+                      <span
+                        key={n}
+                        className="min-w-[22px] h-[22px] px-1 rounded-md border-2 border-baddia-ink bg-baddia-yellow text-baddia-ink text-[11px] font-display font-black flex items-center justify-center shadow-[1.5px_1.5px_0_hsl(260_16%_15%)]"
+                      >
+                        {n}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>
