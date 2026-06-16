@@ -92,7 +92,7 @@ export function Welcome() {
           Ya tengo cuenta
         </button>
         <p className="text-[11px] text-center text-baddia-ink/50 pt-1 leading-relaxed px-4">
-          Hecho con magia ✨ e IA para inspirarte, mimarte y recordarte lo bad que eres 💖
+          Hecho con magia ✨ e IA para inspirarte, mimarte y recordarte lo única que eres 💖
         </p>
       </div>
 
