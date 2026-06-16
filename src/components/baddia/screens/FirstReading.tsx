@@ -48,56 +48,74 @@ export function FirstReading() {
           </div>
         </div>
 
-        {/* Consejo */}
-        <div className="baddia-sticker animate-slide-up" style={{ animationDelay: "0.08s" }}>
-          <span className="chip bg-baddia-hot text-white mb-2">💬 consejo gratis del día</span>
-          <p className="font-display font-bold text-xl text-baddia-ink leading-snug">
-            "Tu trabajo no es tu personalidad."
-          </p>
+        {/* Consejo — speech bubble sticker */}
+        <div className="pt-8 animate-slide-up" style={{ animationDelay: "0.08s" }}>
+          <SpeechBubble
+            variant="mint"
+            tailSide="left"
+            topSticker={
+              <span className="text-4xl drop-shadow-[2px_2px_0_hsl(260_16%_15%)]">⚡</span>
+            }
+          >
+            <p className="text-[10px] uppercase tracking-widest font-display font-bold opacity-80 mb-2">
+              💬 consejo gratis del día
+            </p>
+            <p className="font-display font-bold text-[26px] leading-[1.15]">
+              "Tu trabajo no es tu personalidad."
+            </p>
+          </SpeechBubble>
         </div>
 
         {/* Two cards */}
-        <div className="grid grid-cols-2 gap-3 animate-slide-up" style={{ animationDelay: "0.16s" }}>
-          <div className="rounded-3xl bg-white border-2 border-baddia-ink/10 p-4 shadow-card">
-            <p className="text-[10px] uppercase font-display font-bold tracking-wider text-baddia-ink/50">Color de hoy</p>
-            <div className="my-2 h-14 rounded-2xl border-2 border-white shadow-inner" style={{ background: "linear-gradient(135deg,#FFD6E6,#FF7AC8)" }} />
+        <div className="grid grid-cols-2 gap-3 pt-6 animate-slide-up" style={{ animationDelay: "0.16s" }}>
+          <div className="rounded-3xl bg-white border-[2.5px] border-baddia-ink p-4 shadow-[4px_5px_0_hsl(260_16%_15%)]">
+            <p className="text-[10px] uppercase font-display font-bold tracking-wider text-baddia-ink/60">Color de hoy</p>
+            <div className="my-2 h-14 rounded-2xl border-2 border-baddia-ink/80" style={{ background: "linear-gradient(135deg,#FFD6E6,#FF7AC8)" }} />
             <p className="font-display font-bold text-baddia-ink">Rosa cuarzo</p>
           </div>
-          <div className="rounded-3xl bg-baddia-lime border-2 border-baddia-ink p-4 shadow-[3px_3px_0_hsl(260_16%_15%)]">
-            <p className="text-[10px] uppercase font-display font-bold tracking-wider text-baddia-ink/60">Lucky #</p>
+          <div className="rounded-3xl bg-baddia-lime border-[2.5px] border-baddia-ink p-4 shadow-[4px_5px_0_hsl(260_16%_15%)]">
+            <p className="text-[10px] uppercase font-display font-bold tracking-wider text-baddia-ink/70">Lucky #</p>
             <p className="font-display font-bold text-6xl my-1 text-baddia-ink leading-none">11</p>
-            <p className="text-[10px] text-baddia-ink/60 font-bold">símbolo de tu día</p>
+            <p className="text-[10px] text-baddia-ink/70 font-bold">símbolo de tu día</p>
           </div>
         </div>
 
-        {/* Mood */}
-        <div className="rounded-3xl bg-baddia-ink text-white p-5 animate-slide-up shadow-card" style={{ animationDelay: "0.24s" }}>
-          <span className="chip bg-baddia-yellow text-baddia-ink mb-2">🌙 mood zodiacal</span>
-          <p className="text-[15px] leading-relaxed mt-1">
-            Hoy tu energía está conectada con{" "}
-            <span className="font-display font-bold text-baddia-yellow">amor propio, límites y confianza</span>.
-          </p>
+        {/* Mood — speech bubble dark */}
+        <div className="pt-8 animate-slide-up" style={{ animationDelay: "0.24s" }}>
+          <SpeechBubble
+            variant="ink"
+            tailSide="right"
+            topSticker={<span className="text-3xl drop-shadow-[2px_2px_0_hsl(260_16%_15%)]">🌙</span>}
+          >
+            <p className="text-[10px] uppercase tracking-widest font-display font-bold text-baddia-yellow mb-2">
+              mood zodiacal
+            </p>
+            <p className="text-[16px] leading-relaxed">
+              Hoy tu energía está conectada con{" "}
+              <span className="font-display font-bold text-baddia-yellow">amor propio, límites y confianza</span>.
+            </p>
+          </SpeechBubble>
         </div>
 
-        <p className="text-[10px] text-center text-baddia-ink/40 font-semibold px-4 pt-1">
+        <p className="text-[10px] text-center text-baddia-ink/40 font-semibold px-4 pt-6">
           Solo entretenimiento ✨ — los lucky numbers y lecturas no sustituyen consejo profesional.
         </p>
       </div>
 
-      <div className="relative z-10 px-5 mt-6 space-y-3">
+      <div className="relative z-10 px-5 mt-8 space-y-3">
         <button
           onClick={openPaywall}
-          className="cta-glow w-full py-[16px] rounded-full bg-gradient-hot text-white font-display font-bold flex items-center justify-center gap-2"
+          className="btn-sticker w-full py-[16px] rounded-full bg-gradient-hot text-white flex items-center justify-center gap-2"
         >
           <Lock size={16} /> Ver lectura completa
         </button>
         <div className="grid grid-cols-2 gap-3">
-          <button className="py-3.5 rounded-full bg-white border-2 border-baddia-ink/10 text-baddia-ink font-display font-bold text-sm flex items-center justify-center gap-1.5">
+          <button className="btn-sticker py-3.5 rounded-full bg-white text-baddia-ink text-sm flex items-center justify-center gap-1.5">
             <Share2 size={14} /> Compartir
           </button>
           <button
             onClick={() => go("daily")}
-            className="py-3.5 rounded-full bg-baddia-ink text-white font-display font-bold text-sm flex items-center justify-center gap-1.5"
+            className="btn-sticker py-3.5 rounded-full bg-baddia-ink text-white text-sm flex items-center justify-center gap-1.5"
           >
             Mi Daily <ArrowRight size={14} />
           </button>
