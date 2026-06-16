@@ -75,11 +75,11 @@ export function FirstReading() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="font-display font-bold text-[44px] leading-none text-baddia-ink">
+                  <span className="font-display font-black text-[42px] leading-none text-baddia-ink drop-shadow-[1px_2px_0_hsl(48_100%_70%)]">
                     {vibe.glowScore}
                   </span>
-                  <span className="text-[9px] uppercase tracking-[0.18em] font-bold text-baddia-ink/50 mt-0.5">
-                    de 100
+                  <span className="mt-1 inline-flex items-center gap-0.5 rounded-full bg-baddia-ink text-white text-[8px] font-black uppercase tracking-[0.14em] px-2 py-[3px]">
+                    <span className="text-baddia-yellow">✦</span> /100
                   </span>
                 </div>
               </div>
