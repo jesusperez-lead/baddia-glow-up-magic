@@ -1,5 +1,6 @@
 import { useBaddia } from "@/lib/baddia-state";
 import { Logo } from "../Logo";
+import { LanguagePicker } from "../LanguagePicker";
 import { Sparkles } from "../PhoneFrame";
 
 export function Welcome() {
@@ -16,7 +17,7 @@ export function Welcome() {
 
       {/* Top header */}
       <header className="relative z-10 flex items-center justify-end px-6 pt-6">
-        <span className="chip bg-baddia-ink text-white">ES 🇪🇸</span>
+        <LanguagePicker />
       </header>
 
       {/* Collage zone */}
