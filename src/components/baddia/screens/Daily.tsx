@@ -9,6 +9,7 @@ export function Daily() {
   const { user, setUser, openPaywall } = useBaddia();
   const [saved, setSaved] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [tarotFlipped, setTarotFlipped] = useState(false);
   const quote = "Tu trabajo no es tu personalidad.";
   const scorePct = 0.87;
   const dash = 314;
