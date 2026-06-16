@@ -1,32 +1,23 @@
 import { Sparkles, Hand, Heart, User, Moon } from "lucide-react";
 import { Screen, useBaddia } from "@/lib/baddia-state";
 
-type Tab = {
-  id: Screen;
-  label: string;
-  emoji: string;
-  Icon: any;
-  color: string; // bg color for active pill
-  text: string;  // text color for active label
-};
+type Tab = { id: Screen; label: string; Icon: any };
 
 const tabs: Tab[] = [
-  { id: "daily",   label: "Daily",  emoji: "✨", Icon: Sparkles, color: "bg-baddia-yellow",   text: "text-baddia-hot"  },
-  { id: "zodiac",  label: "Zodiac", emoji: "🌙", Icon: Moon,     color: "bg-baddia-lavender", text: "text-baddia-lavender" },
-  { id: "palm",    label: "Palm",   emoji: "🤚", Icon: Hand,     color: "bg-baddia-mint",     text: "text-baddia-ink"  },
-  { id: "love",    label: "Love",   emoji: "💘", Icon: Heart,    color: "bg-baddia-hot",      text: "text-baddia-hot"  },
-  { id: "profile", label: "Yo",     emoji: "💖", Icon: User,     color: "bg-baddia-bubble",   text: "text-baddia-ink"  },
+  { id: "daily",   label: "Daily",  Icon: Sparkles },
+  { id: "zodiac",  label: "Zodiac", Icon: Moon },
+  { id: "palm",    label: "Palm",   Icon: Hand },
+  { id: "love",    label: "Love",   Icon: Heart },
+  { id: "profile", label: "Yo",     Icon: User },
 ];
 
 export function BottomNav() {
   const { screen, go } = useBaddia();
 
   return (
-    <nav className="sticky bottom-0 z-40 px-3 pb-3 pt-2 bg-gradient-to-t from-white via-white/95 to-white/0">
-      <ul
-        className="relative flex items-stretch justify-between gap-1 rounded-[26px] border-[2.5px] border-baddia-ink bg-white px-2 py-2 shadow-[4px_5px_0_hsl(260_16%_15%)]"
-      >
-        {tabs.map(({ id, label, emoji, Icon, color, text }) => {
+    <nav className="sticky bottom-0 z-40 bg-white/85 backdrop-blur-xl border-t border-baddia-ink/10 px-2 pt-1.5 pb-2">
+      <ul className="flex items-stretch justify-between">
+        {tabs.map(({ id, label, Icon }) => {
           const active = screen === id;
           return (
             <li key={id} className="flex-1">
@@ -34,33 +25,25 @@ export function BottomNav() {
                 onClick={() => go(id)}
                 aria-label={label}
                 aria-current={active ? "page" : undefined}
-                className="group relative w-full flex flex-col items-center justify-end gap-1 py-1 transition-transform active:scale-95"
+                className="group w-full flex flex-col items-center gap-1 py-1.5 transition-opacity active:opacity-70"
               >
-                {/* active pill */}
+                <Icon
+                  size={22}
+                  strokeWidth={active ? 2.4 : 1.8}
+                  className={active ? "text-baddia-hot" : "text-baddia-ink/45"}
+                />
                 <span
-                  className={`relative flex items-center justify-center w-12 h-12 rounded-2xl border-[2.5px] border-baddia-ink transition-all ${
-                    active
-                      ? `${color} shadow-[2px_3px_0_hsl(260_16%_15%)] -translate-y-1 rotate-[-3deg]`
-                      : "bg-white text-baddia-ink/55 shadow-[2px_2px_0_hsl(260_16%_15%)] group-hover:-translate-y-0.5"
-                  }`}
-                >
-                  {active ? (
-                    <span className="text-[20px] leading-none drop-shadow-sm">{emoji}</span>
-                  ) : (
-                    <Icon size={20} strokeWidth={2.4} />
-                  )}
-                  {active && (
-                    <span className="absolute -top-1.5 -right-1.5 w-2.5 h-2.5 rounded-full bg-baddia-hot border-2 border-baddia-ink" />
-                  )}
-                </span>
-
-                <span
-                  className={`text-[10px] font-display font-black uppercase tracking-[0.08em] leading-none transition-colors ${
-                    active ? text : "text-baddia-ink/55"
+                  className={`text-[10px] font-semibold leading-none tracking-wide transition-colors ${
+                    active ? "text-baddia-ink" : "text-baddia-ink/45"
                   }`}
                 >
                   {label}
                 </span>
+                <span
+                  className={`h-[3px] w-1 rounded-full transition-all ${
+                    active ? "bg-baddia-hot w-5" : "bg-transparent"
+                  }`}
+                />
               </button>
             </li>
           );
