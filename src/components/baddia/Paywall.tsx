@@ -40,7 +40,7 @@ export function Paywall() {
     <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-baddia-purple/40 backdrop-blur-sm animate-fade-in">
       <div className="w-full md:max-w-[420px] bg-gradient-pearl rounded-t-[2.5rem] md:rounded-[2.5rem] max-h-[94vh] overflow-y-auto scrollbar-hide animate-scale-in relative">
         {/* Header */}
-        <div className="relative gradient-bg-night text-white p-6 pt-8 rounded-t-[2.5rem] overflow-hidden">
+        <div className="relative gradient-bg-baddia text-white p-6 pt-8 rounded-t-[2.5rem] overflow-hidden">
           <button
             onClick={closePaywall}
             aria-label="Cerrar"
