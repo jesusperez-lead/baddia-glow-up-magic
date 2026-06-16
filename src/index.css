@@ -155,12 +155,12 @@
   .btn-sticker {
     @apply relative inline-flex items-center justify-center font-display font-bold;
     border: 2.5px solid hsl(var(--ink));
-    box-shadow: 0 5px 0 0 hsl(var(--ink)), 0 14px 30px -10px hsl(335 100% 55% / 0.55);
+    box-shadow: 0 5px 0 0 hsl(var(--ink));
     transition: transform .15s ease, box-shadow .15s ease;
   }
   .btn-sticker:active:not(:disabled) {
     transform: translateY(3px);
-    box-shadow: 0 2px 0 0 hsl(var(--ink)), 0 8px 18px -10px hsl(335 100% 55% / 0.45);
+    box-shadow: 0 2px 0 0 hsl(var(--ink));
   }
   .btn-sticker:disabled {
     background: #fff !important;
