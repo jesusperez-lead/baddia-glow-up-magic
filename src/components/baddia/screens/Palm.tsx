@@ -235,55 +235,85 @@ export function Palm() {
         {/* RESULTADO */}
         {reading?.valid && reading.summary && (
           <>
-            <div className="baddia-sticker bg-gradient-baddia text-white relative overflow-hidden">
-              <span className="absolute top-2 right-3 text-baddia-gold text-xl animate-twinkle">✦</span>
-              <p className="chip bg-white/20 text-white mb-2">Lectura gratis</p>
-              <p className="font-display font-bold text-lg leading-snug">
-                {reading.summary}
-              </p>
+            {/* Hero summary — sticker */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-baddia-ink rounded-3xl translate-x-1.5 translate-y-1.5" />
+              <div className="relative bg-gradient-glow text-white border-[2.5px] border-baddia-ink rounded-3xl p-5 overflow-hidden">
+                <span className="absolute top-3 right-4 text-baddia-yellow text-xl animate-twinkle">✦</span>
+                <span className="inline-block px-2.5 py-1 bg-baddia-yellow border-2 border-baddia-ink rounded-full text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink mb-3 shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                  ✨ Lectura gratis
+                </span>
+                <p className="font-display font-black italic text-[20px] leading-tight">
+                  {reading.summary}
+                </p>
+              </div>
             </div>
 
             <button
               onClick={reset}
-              className="w-full py-2.5 rounded-2xl bg-white border-2 border-baddia-ink text-baddia-ink text-sm font-display font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
+              className="w-full py-2.5 rounded-2xl bg-white border-[2.5px] border-baddia-ink text-baddia-ink text-sm font-display font-black uppercase tracking-wider shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center justify-center gap-2 active:translate-y-0.5 active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
             >
               <RotateCcw size={14} /> Nueva lectura
             </button>
 
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-baddia-purple/60 mb-2 px-1">
-                {isPro ? "✨ Tu lectura completa" : "🔒 Lectura completa Pro"}
-              </p>
+              <div className="flex items-center justify-between mb-3 px-1">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-baddia-ink text-white rounded-full text-[10px] font-display font-black uppercase tracking-widest">
+                  {isPro ? "✨ Lectura completa" : "🔒 Pro · 7 secciones"}
+                </span>
+                {!isPro && (
+                  <span className="text-[10px] font-display font-black uppercase tracking-widest text-baddia-hot">
+                    bloqueado
+                  </span>
+                )}
+              </div>
+
               <div className="grid grid-cols-2 gap-3">
-                {PRO_META.map(({ key, label, Icon, color }) => {
+                {PRO_META.map(({ key, label, Icon, color }, i) => {
                   const text = reading.sections?.[key] ?? "";
+                  const tilt = i % 2 === 0 ? "-rotate-[1deg]" : "rotate-[1deg]";
                   return (
                     <button
                       key={key}
                       onClick={() => !isPro && openPaywall()}
-                      className="baddia-card bg-white relative text-left active:scale-[0.98] transition-transform overflow-hidden"
+                      className={`relative text-left group ${!isPro ? tilt : ""} active:translate-x-[2px] active:translate-y-[2px] transition-transform`}
                     >
-                      {!isPro && (
-                        <span className="absolute top-2 right-2 w-7 h-7 rounded-full bg-gradient-glow flex items-center justify-center shadow-soft z-10">
-                          <Lock size={12} className="text-white" />
+                      <span className="absolute inset-0 bg-baddia-ink rounded-2xl translate-x-1 translate-y-1 group-active:translate-x-0 group-active:translate-y-0 transition-transform" />
+                      <div className="relative bg-white border-[2.5px] border-baddia-ink rounded-2xl p-3 overflow-hidden min-h-[130px]">
+                        {/* corner accent */}
+                        <span className={`absolute -top-6 -right-6 w-16 h-16 rounded-full ${color} opacity-70`} />
+
+                        {/* lock badge */}
+                        {!isPro && (
+                          <span className="absolute top-2 right-2 z-10 w-7 h-7 rounded-full bg-baddia-ink border-2 border-baddia-ink flex items-center justify-center shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                            <Lock size={11} className="text-baddia-yellow" />
+                          </span>
+                        )}
+
+                        <span className={`relative inline-flex w-9 h-9 rounded-xl ${color} border-2 border-baddia-ink items-center justify-center mb-2 shadow-[2px_2px_0_hsl(260_16%_15%)]`}>
+                          <Icon size={16} className="text-baddia-ink" strokeWidth={2.5} />
                         </span>
-                      )}
-                      <span className={`inline-flex w-8 h-8 rounded-xl ${color} items-center justify-center mb-2`}>
-                        <Icon size={16} className="text-baddia-hot" />
-                      </span>
-                      <p className="font-display font-bold text-baddia-purple text-sm">{label}</p>
-                      <p
-                        className={`text-[11px] leading-snug mt-1 text-baddia-purple/75 ${
-                          isPro ? "" : "blur-[5px] select-none"
-                        }`}
-                      >
-                        {isPro ? text : "Mensaje completo personalizado de Baddia para ti, basado en las líneas de tu palma."}
-                      </p>
-                      {!isPro && (
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-baddia-hot mt-1.5">
-                          Desbloquear con Pro
+
+                        <p className="relative font-display font-black italic text-baddia-ink text-[15px] leading-none">
+                          {label}
                         </p>
-                      )}
+
+                        <p
+                          className={`relative text-[11px] leading-snug mt-1.5 text-baddia-ink/75 font-medium ${
+                            isPro ? "" : "blur-[4px] select-none"
+                          }`}
+                        >
+                          {isPro
+                            ? text
+                            : "Mensaje completo de Baddia, basado en las líneas de tu palma ✨"}
+                        </p>
+
+                        {!isPro && (
+                          <p className="relative mt-2 text-[9px] font-display font-black uppercase tracking-[0.15em] text-baddia-hot">
+                            ✦ Desbloquear
+                          </p>
+                        )}
+                      </div>
                     </button>
                   );
                 })}
@@ -292,14 +322,20 @@ export function Palm() {
               {!isPro && (
                 <button
                   onClick={openPaywall}
-                  className="mt-3 w-full rounded-full bg-baddia-ink text-white py-3 text-[12px] font-display font-black uppercase tracking-widest shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5 active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+                  className="relative w-full mt-4 group active:translate-x-[2px] active:translate-y-[2px] transition-transform"
                 >
-                  ✨ Ver mi lectura completa con Pro
+                  <span className="absolute inset-0 bg-baddia-ink rounded-2xl translate-x-1.5 translate-y-1.5 group-active:translate-x-0 group-active:translate-y-0 transition-transform" />
+                  <span className="relative flex items-center justify-center gap-2 bg-gradient-glow text-white py-4 px-6 rounded-2xl border-[2.5px] border-baddia-ink">
+                    <span className="font-display font-black text-[13px] uppercase tracking-widest">
+                      ✨ Ver mi lectura completa
+                    </span>
+                  </span>
                 </button>
               )}
             </div>
           </>
         )}
+
       </div>
     </div>
   );
