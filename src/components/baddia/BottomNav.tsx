@@ -92,7 +92,7 @@ export function BottomNav() {
                 <Sparkles size={24} strokeWidth={2.6} className="relative drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
               </span>
               <span className="mt-1 text-[10px] font-display font-black uppercase tracking-wide text-baddia-hot leading-none">
-                Lectura IA
+                Lectura
               </span>
             </button>
           </li>
