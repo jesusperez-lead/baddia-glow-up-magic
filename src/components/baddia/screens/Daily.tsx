@@ -1,5 +1,6 @@
 import { useBaddia } from "@/lib/baddia-state";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
+import { ShareGlowSheet } from "../ShareGlowSheet";
 import { Share2, Bookmark, Lock, Check, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -7,9 +8,11 @@ import { toast } from "sonner";
 export function Daily() {
   const { user, setUser, openPaywall } = useBaddia();
   const [saved, setSaved] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const quote = "Tu trabajo no es tu personalidad.";
   const scorePct = 0.87;
   const dash = 314;
+
 
   return (
     <div className="relative min-h-full bg-white pb-10 overflow-hidden">
@@ -158,7 +161,7 @@ export function Daily() {
                 {saved ? <Check size={14} /> : <Bookmark size={14} />} {saved ? "Guardada" : "Guardar"}
               </button>
               <button
-                onClick={() => toast("Compartido ✨")}
+                onClick={() => setShareOpen(true)}
                 className="btn-sticker flex-1 py-2.5 rounded-full bg-gradient-hot text-white text-[12px] flex items-center justify-center gap-1.5"
               >
                 <Share2 size={14} /> Compartir
@@ -209,6 +212,7 @@ export function Daily() {
           Hecho con IA y mucho amor ✨ úsalo para inspirarte, mimarte y confiar en tu propia intuición 💖
         </p>
       </div>
+      <ShareGlowSheet open={shareOpen} onClose={() => setShareOpen(false)} />
     </div>
   );
 }
