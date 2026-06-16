@@ -139,13 +139,13 @@ export function Paywall() {
         <div className="px-5 pt-5 pb-7 space-y-2.5">
           <button
             onClick={activate}
-            className="w-full py-4 rounded-2xl bg-gradient-glow text-white font-bold shadow-glow active:scale-[0.98] transition-transform"
+            className="btn-sticker w-full py-[16px] rounded-full bg-gradient-hot text-white flex items-center justify-center gap-2"
           >
-            {selected === "girls" ? "👯‍♀️ Crear mi Baddia Girls" : "✨ Empezar Baddia Pro"}
+            <Sparkles size={16} /> {selected === "girls" ? "Crear mi Baddia Girls" : "Empezar Baddia Pro"}
           </button>
           <button
             onClick={closePaywall}
-            className="w-full py-3.5 rounded-2xl bg-white border border-pink-100 text-baddia-purple font-semibold"
+            className="btn-sticker w-full py-3.5 rounded-full bg-white text-baddia-ink text-sm flex items-center justify-center gap-1.5"
           >
             Seguir con versión gratis
           </button>
