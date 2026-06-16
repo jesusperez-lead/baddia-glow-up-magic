@@ -166,8 +166,8 @@ export function FirstReading() {
           </SpeechBubble>
         </div>
 
-        <p className="text-[10px] text-center text-baddia-ink/40 font-semibold px-4 pt-6">
-          Solo entretenimiento ✨ — los lucky numbers y lecturas no sustituyen consejo profesional.
+        <p className="text-[11px] text-center text-baddia-ink/50 font-semibold px-6 pt-6 leading-relaxed">
+          Esto es magia para inspirarte y mimarte ✨ disfrútalo con cariño y siempre confía en tu propia intuición 💖
         </p>
       </div>
 
