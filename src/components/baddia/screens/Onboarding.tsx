@@ -290,78 +290,54 @@ export function Onboarding() {
           </div>
         )}
 
-        {/* STEP 4 — Plan teaser (free) */}
+        {/* STEP 4 — Loading */}
         {step === 4 && (
-          <div className="flex-1 flex flex-col animate-slide-up">
-            <div className="inline-flex self-start mb-3">
-              <span className="rounded-full bg-baddia-lime border-2 border-baddia-ink px-3 py-1.5 text-xs font-display font-bold text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2">
-                100% gratis para empezar
-              </span>
-            </div>
-            <h2 className="font-display font-bold text-[28px] leading-[1.1] text-baddia-ink">
-              Tu plan <span className="gradient-text">Baddia Free</span> incluye:
-            </h2>
-            <div className="mt-5 space-y-3">
-              {[
-                { e: "🌙", t: "Glow score y mood diario" },
-                { e: "🍀", t: "Lucky number y color del día" },
-                { e: "💌", t: "1 crush energy reading semanal" },
-                { e: "✨", t: "Frases de amor propio" },
-              ].map((f, i) => (
-                <div
-                  key={i}
-                  style={{ animationDelay: `${i * 80}ms` }}
-                  className="animate-slide-up baddia-sticker flex items-center gap-3 py-3"
-                >
-                  <span className="text-2xl">{f.e}</span>
-                  <p className="font-display font-bold text-baddia-ink text-[15px]">{f.t}</p>
-                </div>
-              ))}
-              <div className="rounded-2xl bg-gradient-hot text-white p-4 flex items-center gap-3 shadow-glow">
-                <span className="text-2xl">👑</span>
-                <div className="flex-1">
-                  <p className="font-display font-bold text-sm">Baddia Pro</p>
-                  <p className="text-[12px] opacity-90">Tarot diario, palm reading completo y más.</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex-1" />
-            <PrimaryButton onClick={() => setStep(5)}>Activar mi Baddia ✨</PrimaryButton>
-          </div>
-        )}
-
-        {/* STEP 5 — Loading */}
-        {step === 5 && (
           <div className="flex-1 flex flex-col items-center justify-center text-center animate-fade-in">
-            <div className="relative w-40 h-40 mb-8">
+            <div className="relative w-44 h-44 mb-8">
               {/* glow halo */}
-              <div className="absolute inset-0 rounded-full bg-gradient-glow blur-2xl opacity-70" />
+              <div className="absolute inset-0 rounded-full bg-gradient-glow blur-2xl opacity-70 animate-breathe" />
+
               {/* orbit sparkles */}
               <div className="absolute inset-0 animate-orbit">
-                <span className="absolute top-0 left-1/2 -translate-x-1/2 text-2xl text-baddia-yellow">✦</span>
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 text-2xl text-baddia-yellow drop-shadow-[0_0_10px_hsl(48_100%_70%/0.9)]">✦</span>
                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 text-xl text-baddia-mint">✧</span>
                 <span className="absolute top-1/2 left-0 -translate-y-1/2 text-lg text-baddia-hot">✦</span>
                 <span className="absolute top-1/2 right-0 -translate-y-1/2 text-lg text-baddia-lavender">✧</span>
               </div>
-              {/* breathing B */}
-              <div className="absolute inset-4 rounded-full bg-gradient-hot flex items-center justify-center shadow-glow animate-breathe">
-                <span className="font-display font-bold text-white text-7xl leading-none">B</span>
+
+              {/* Crescent moon */}
+              <div className="absolute inset-4 rounded-full bg-gradient-to-br from-baddia-soft via-white to-baddia-bubble border-2 border-baddia-ink shadow-glow flex items-center justify-center overflow-hidden animate-breathe">
+                <div className="absolute -right-6 -top-2 w-28 h-28 rounded-full bg-baddia-lavender" />
+                <span className="relative z-10 text-5xl leading-none">🌙</span>
               </div>
+
+              {/* Floating Baddia logo sticker */}
+              <div className="absolute -bottom-3 -right-3 sticker-float-fast">
+                <div className="bg-white border-2 border-baddia-ink rounded-2xl p-1.5 shadow-[3px_3px_0_hsl(260_16%_15%)]">
+                  <LogoMark size={34} />
+                </div>
+              </div>
+
+              {/* Dust sparkles */}
+              <span className="absolute -top-2 left-3 text-baddia-yellow text-sm sticker-float">✨</span>
+              <span className="absolute top-6 -right-4 text-baddia-hot text-xs sticker-float-slow">✦</span>
+              <span className="absolute -bottom-2 left-6 text-baddia-lavender text-sm sticker-float-fast">✧</span>
             </div>
 
-            <div className="min-h-[60px] flex items-center justify-center">
+            <div className="min-h-[60px] flex items-center justify-center px-4">
               <p key={msgIdx} className="font-display font-bold text-[18px] text-baddia-ink animate-fade-in">
                 {LOADING_MESSAGES[msgIdx]}
               </p>
             </div>
 
             <div className="w-full max-w-[260px] mt-6">
-              <div className="h-2.5 bg-white rounded-full overflow-hidden border border-baddia-ink/10">
+              <div className="h-3 bg-white rounded-full overflow-hidden border-2 border-baddia-ink/15 shadow-[2px_2px_0_hsl(260_16%_15%/0.15)]">
                 <div
-                  className="h-full bg-gradient-hot rounded-full transition-all duration-100"
+                  className="h-full bg-gradient-hot rounded-full transition-all duration-100 relative"
                   style={{ width: `${progress}%` }}
-                />
+                >
+                  <span className="absolute right-1 top-1/2 -translate-y-1/2 text-[10px]">✨</span>
+                </div>
               </div>
               <p className="text-[11px] text-baddia-ink/50 mt-2 font-semibold">
                 {Math.round(progress)}% cósmico
