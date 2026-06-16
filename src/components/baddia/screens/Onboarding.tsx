@@ -119,11 +119,35 @@ export function Onboarding() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Tu nombre o nickname"
+                maxLength={32}
                 className="w-full bg-white rounded-2xl px-5 py-5 border-2 border-baddia-ink/10 text-baddia-ink font-display font-bold text-lg placeholder:text-baddia-ink/30 placeholder:font-normal focus:outline-none focus:border-baddia-hot transition-colors"
               />
               {name && (
                 <span className="absolute -top-3 -right-2 text-2xl sticker-float-fast">💖</span>
               )}
+            </div>
+
+            <div className="mt-5">
+              <p className="text-[11px] font-display font-bold uppercase tracking-wider text-baddia-ink/40 ml-1 mb-2">
+                Ejemplos
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {NICKNAME_EXAMPLES.map((nk, i) => (
+                  <button
+                    key={nk}
+                    type="button"
+                    onClick={() => setName(nk)}
+                    style={{ animationDelay: `${i * 60}ms` }}
+                    className={`animate-pop-in rounded-full px-3.5 py-2 text-xs font-display font-bold border-2 border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-[2px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all ${
+                      name === nk
+                        ? "bg-baddia-hot text-white -rotate-2"
+                        : "bg-white text-baddia-ink hover:bg-baddia-soft/40"
+                    }`}
+                  >
+                    {nk}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="flex-1" />
@@ -195,7 +219,12 @@ export function Onboarding() {
             <div className="flex-1" />
             <PrimaryButton
               disabled={!day || !month || !year}
-              onClick={() => { setUser({ day, month, year }); setStep(3); }}
+              onClick={() => {
+                const sign = computeZodiac(day, month);
+                const lifeNumber = computeLifeNumber(day, month, year);
+                setUser({ day, month, year, sign, lifeNumber });
+                setStep(3);
+              }}
             >
               Ver mi energía ✨
             </PrimaryButton>
