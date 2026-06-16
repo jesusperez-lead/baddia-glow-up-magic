@@ -194,8 +194,8 @@ export function Daily() {
             <p className="font-display font-black text-baddia-ink text-[19px] leading-snug">
               Tu lectura completa de <span className="gradient-text">amor, dinero y futuro</span> está lista ✨
             </p>
-            <div className="mt-3 inline-flex items-center gap-1.5 bg-baddia-ink text-white font-display font-bold text-[12px] px-3 py-1.5 rounded-full">
-              Desbloquear <ArrowRight size={13} />
+            <div className="btn-sticker w-full mt-4 py-3 rounded-full bg-gradient-hot text-white text-[13px] flex items-center justify-center gap-1.5">
+              <Lock size={13} /> Desbloquear con Baddia Pro <ArrowRight size={14} />
             </div>
           </div>
         </button>
