@@ -65,10 +65,10 @@ export function FirstReading() {
               {/* Ring */}
               <div className="relative shrink-0">
                 <svg width="116" height="116" viewBox="0 0 120 120" className="-rotate-90">
-                  <circle cx="60" cy="60" r="50" stroke="hsl(333 60% 95%)" strokeWidth="14" fill="none" />
+                  <circle cx="60" cy="60" r="50" stroke="hsl(48 100% 90%)" strokeWidth="14" fill="none" />
                   <circle
                     cx="60" cy="60" r="50"
-                    stroke="hsl(256 90% 68%)" strokeWidth="14" fill="none" strokeLinecap="round"
+                    stroke="hsl(48 100% 59%)" strokeWidth="14" fill="none" strokeLinecap="round"
                     strokeDasharray={dash}
                     strokeDashoffset={dash - dash * scorePct}
                     style={{ transition: "stroke-dashoffset 0.8s ease", filter: "drop-shadow(0 2px 0 hsl(260 16% 15% / 0.15))" }}
