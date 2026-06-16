@@ -12,24 +12,8 @@ export function FirstReading() {
   const vibe = useMemo(() => computeDailyVibe(user), [user]);
   const scorePct = vibe.glowScore / 100;
   const dash = 314;
+  const [shareOpen, setShareOpen] = useState(false);
 
-  const handleShare = async () => {
-    const text = `✨ Mi energía de hoy en Baddia: Glow ${vibe.glowScore}% · Color ${vibe.color.name} · Lucky #${vibe.luckyNumber} 💖`;
-    try {
-      if (typeof navigator !== "undefined" && navigator.share) {
-        await navigator.share({ title: "Mi energía Baddia", text });
-        return;
-      }
-      if (typeof navigator !== "undefined" && navigator.clipboard) {
-        await navigator.clipboard.writeText(text);
-        toast({ title: "Copiado ✨", description: "Tu energía está lista para compartir." });
-        return;
-      }
-    } catch {
-      /* user cancelled */
-    }
-    toast({ title: "Compartir tu energía", description: text });
-  };
 
   return (
     <div className="relative min-h-full bg-white pb-10 overflow-hidden">
