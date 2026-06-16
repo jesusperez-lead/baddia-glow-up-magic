@@ -33,39 +33,39 @@ export function WidgetsShowcase() {
         <Section emoji="🔒" label="Lock screen">
           <PhoneCanvas wallpaper="lock">
             {/* time */}
-            <div className="pt-10 text-center text-white">
-              <p className="font-semibold text-[13px] opacity-90">jueves 16 de junio</p>
-              <p className="font-display font-black text-[72px] leading-none mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
+            <div className="pt-12 text-center text-white px-4">
+              <p className="font-semibold text-[11px] opacity-90 tracking-wide">jueves 16 de junio</p>
+              <p className="font-display font-black text-[64px] leading-none mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] tracking-tight">
                 09:24
               </p>
             </div>
 
             {/* lock-screen widgets row */}
-            <div className="px-5 mt-3 flex items-center justify-center gap-2">
+            <div className="px-4 mt-3 grid grid-cols-3 gap-1.5">
               <LockChip icon="✨" label="Glow" value="87" />
-              <LockChip icon="🌙" label="Luna" value="Creciente" />
+              <LockChip icon="🌙" label="Luna" value="Crec." />
               <LockChip icon="💘" label="Crush" value="Alta" />
             </div>
 
             {/* notifications */}
-            <div className="absolute bottom-20 left-0 right-0 px-3 space-y-2">
+            <div className="absolute bottom-16 left-0 right-0 px-2.5 space-y-1.5">
               <IOSNotification
                 app="Baddia"
-                title="Tu lectura de hoy está lista ✨"
-                body='"Hoy magnetizas más de lo que crees."'
+                title="Tu lectura está lista ✨"
+                body="Hoy magnetizas más de lo que crees."
                 time="ahora"
               />
               <IOSNotification
                 app="Baddia"
                 title="🌙 La luna te dice algo"
                 body="No bajes tu energía para encajar."
-                time="hace 5m"
+                time="5m"
               />
               <IOSNotification
                 app="Baddia · Girls"
-                title="Sofi compartió su glow contigo 💖"
-                body="Compatibilidad de hoy: 92% — vibra alta."
-                time="hace 12m"
+                title="Sofi compartió su glow 💖"
+                body="Compatibilidad de hoy: 92%."
+                time="12m"
               />
             </div>
           </PhoneCanvas>
@@ -74,20 +74,20 @@ export function WidgetsShowcase() {
         {/* ───── HOME SCREEN MOCKUP ───── */}
         <Section emoji="📱" label="Home screen">
           <PhoneCanvas wallpaper="home">
-            <div className="pt-10 px-4 grid grid-cols-4 gap-3">
-              {/* Large widget — Consejo del día (2x2) */}
+            <div className="pt-12 px-3 grid grid-cols-4 gap-2">
+              {/* Large widget — Frase del día (2x2) */}
               <WidgetLarge>
-                <div className="h-full flex flex-col justify-between">
+                <div className="h-full flex flex-col justify-between min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1 text-[9px] font-display font-black uppercase tracking-wider text-baddia-hot">
+                    <span className="inline-flex items-center gap-1 text-[8px] font-display font-black uppercase tracking-wider text-baddia-hot">
                       💬 Frase
                     </span>
-                    <span className="text-baddia-yellow text-sm">✦</span>
+                    <span className="text-baddia-yellow text-sm leading-none">✦</span>
                   </div>
-                  <p className="font-display font-black text-[14px] leading-tight text-baddia-ink">
+                  <p className="font-display font-black text-[12px] leading-[1.15] text-baddia-ink break-words">
                     "Tu trabajo no es tu personalidad."
                   </p>
-                  <p className="text-[8px] font-display font-bold uppercase tracking-widest text-baddia-ink/50">
+                  <p className="text-[7px] font-display font-bold uppercase tracking-[0.2em] text-baddia-ink/50">
                     baddia
                   </p>
                 </div>
@@ -96,25 +96,25 @@ export function WidgetsShowcase() {
               {/* Small — Glow ring */}
               <WidgetSmall bg="bg-gradient-to-br from-baddia-yellow to-baddia-hot text-baddia-ink">
                 <div className="h-full flex flex-col items-center justify-center text-center">
-                  <p className="text-[8px] font-display font-black uppercase tracking-widest opacity-80">
+                  <p className="text-[7px] font-display font-black uppercase tracking-widest opacity-80">
                     Glow
                   </p>
-                  <p className="font-display font-black text-[28px] leading-none mt-0.5">87</p>
-                  <p className="text-[8px] font-display font-bold mt-0.5 opacity-80">/100 ✨</p>
+                  <p className="font-display font-black text-[24px] leading-none mt-0.5">87</p>
+                  <p className="text-[7px] font-display font-bold mt-0.5 opacity-80">/100 ✨</p>
                 </div>
               </WidgetSmall>
 
               {/* Small — Color */}
               <WidgetSmall bg="bg-white">
-                <div className="h-full flex flex-col">
-                  <p className="text-[8px] font-display font-black uppercase tracking-widest text-baddia-ink/60">
+                <div className="h-full flex flex-col min-w-0">
+                  <p className="text-[7px] font-display font-black uppercase tracking-widest text-baddia-ink/60 truncate">
                     🎨 Color
                   </p>
                   <div
-                    className="flex-1 my-1 rounded-xl border border-baddia-ink/30"
+                    className="flex-1 my-1 rounded-lg border border-baddia-ink/30"
                     style={{ background: "linear-gradient(135deg,#FFD6E0,#FF9BAF)" }}
                   />
-                  <p className="font-display font-black text-[10px] text-baddia-ink leading-tight">
+                  <p className="font-display font-black text-[9px] text-baddia-ink leading-tight truncate">
                     Rosa cuarzo
                   </p>
                 </div>
@@ -122,56 +122,56 @@ export function WidgetsShowcase() {
 
               {/* Medium — Luna (2x1) */}
               <WidgetMedium bg="gradient-bg-baddia text-white">
-                <div className="flex items-center gap-3 h-full">
-                  <div className="relative w-12 h-12 shrink-0">
+                <div className="flex items-center gap-2 h-full min-w-0">
+                  <div className="relative w-10 h-10 shrink-0">
                     <div className="absolute inset-0 rounded-full bg-baddia-yellow" />
                     <div className="absolute inset-0 rounded-full bg-baddia-ink/80" style={{ clipPath: "inset(0 0 0 50%)" }} />
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-[8px] font-display font-black uppercase tracking-widest opacity-80">🌙 Luna</p>
-                    <p className="font-display font-black text-[13px] leading-tight">Creciente</p>
-                    <p className="text-[9px] font-semibold opacity-85 leading-tight">Día de manifestar</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[7px] font-display font-black uppercase tracking-widest opacity-80 truncate">🌙 Luna</p>
+                    <p className="font-display font-black text-[12px] leading-tight truncate">Creciente</p>
+                    <p className="text-[8px] font-semibold opacity-85 leading-tight truncate">Día de manifestar</p>
                   </div>
                 </div>
               </WidgetMedium>
 
-              {/* Small — Vibra (Lucky number) */}
+              {/* Small — Lucky number */}
               <WidgetSmall bg="bg-baddia-lime text-baddia-ink">
                 <div className="h-full flex flex-col items-center justify-center text-center">
-                  <p className="text-[8px] font-display font-black uppercase tracking-widest">Lucky</p>
-                  <p className="font-display font-black text-[34px] leading-none mt-0.5">7</p>
+                  <p className="text-[7px] font-display font-black uppercase tracking-widest">Lucky</p>
+                  <p className="font-display font-black text-[28px] leading-none mt-0.5">7</p>
                   <p className="text-[8px] font-display font-bold mt-0.5">🍀</p>
                 </div>
               </WidgetSmall>
 
               {/* Small — Horóscopo */}
               <WidgetSmall bg="bg-baddia-soft text-baddia-ink">
-                <div className="h-full flex flex-col justify-between">
-                  <p className="text-[8px] font-display font-black uppercase tracking-widest opacity-70">♎ Libra</p>
-                  <p className="font-display font-black text-[11px] leading-tight">Día de equilibrio y amor propio.</p>
-                  <p className="text-[8px] font-bold opacity-70">⭐⭐⭐⭐</p>
+                <div className="h-full flex flex-col justify-between min-w-0">
+                  <p className="text-[7px] font-display font-black uppercase tracking-widest opacity-70 truncate">♎ Libra</p>
+                  <p className="font-display font-black text-[9.5px] leading-tight break-words">Día de equilibrio y amor propio.</p>
+                  <p className="text-[7px] font-bold opacity-70">⭐⭐⭐⭐</p>
                 </div>
               </WidgetSmall>
 
               {/* Medium — Crush Energy (2x1) */}
               <WidgetMedium bg="bg-white">
-                <div className="flex items-center gap-3 h-full">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-hot border-2 border-baddia-ink flex items-center justify-center text-2xl shrink-0">
+                <div className="flex items-center gap-2 h-full min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-hot border-2 border-baddia-ink flex items-center justify-center text-lg shrink-0">
                     💘
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-[8px] font-display font-black uppercase tracking-widest text-baddia-ink/60">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[7px] font-display font-black uppercase tracking-widest text-baddia-ink/60 truncate">
                       Crush Energy
                     </p>
-                    <p className="font-display font-black text-[14px] text-baddia-ink leading-tight">Magnética 92%</p>
-                    <p className="text-[9px] font-semibold text-baddia-ink/65 leading-tight">No persigas, atrae.</p>
+                    <p className="font-display font-black text-[12px] text-baddia-ink leading-tight truncate">Magnética 92%</p>
+                    <p className="text-[8px] font-semibold text-baddia-ink/65 leading-tight truncate">No persigas, atrae.</p>
                   </div>
                 </div>
               </WidgetMedium>
             </div>
 
             {/* iOS Dock */}
-            <div className="absolute bottom-3 left-3 right-3 rounded-3xl bg-white/25 backdrop-blur-xl border border-white/30 p-2.5 flex items-center justify-around">
+            <div className="absolute bottom-3 left-3 right-3 rounded-3xl bg-white/25 backdrop-blur-xl border border-white/30 p-2 flex items-center justify-around">
               {[
                 { emoji: "✨", color: "bg-gradient-hot" },
                 { emoji: "💬", color: "bg-baddia-mint" },
@@ -180,7 +180,7 @@ export function WidgetsShowcase() {
               ].map((d, i) => (
                 <div
                   key={i}
-                  className={`w-10 h-10 rounded-xl ${d.color} flex items-center justify-center text-lg shadow-md`}
+                  className={`w-9 h-9 rounded-xl ${d.color} flex items-center justify-center text-base shadow-md`}
                 >
                   {d.emoji}
                 </div>
@@ -325,17 +325,17 @@ function PhoneCanvas({ children, wallpaper }: { children: React.ReactNode; wallp
 
   return (
     <div
-      className="relative mx-auto rounded-[36px] overflow-hidden border-[3px] border-baddia-ink shadow-[6px_8px_0_hsl(260_16%_15%)]"
-      style={{ background: bg, aspectRatio: "9/16", maxWidth: "300px" }}
+      className="relative mx-auto rounded-[38px] overflow-hidden border-[3px] border-baddia-ink shadow-[6px_8px_0_hsl(260_16%_15%)]"
+      style={{ background: bg, aspectRatio: "9/19", maxWidth: "340px" }}
     >
       {/* dynamic island */}
-      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-5 bg-baddia-ink rounded-full z-10" />
-      {/* status bar */}
-      <div className="absolute top-2.5 left-0 right-0 px-5 flex items-center justify-between text-white text-[10px] font-bold z-20">
-        <span>9:24</span>
-        <span className="flex items-center gap-1 opacity-90">
+      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-baddia-ink rounded-full z-10" />
+      {/* status bar — split around dynamic island */}
+      <div className="absolute top-3 left-0 right-0 px-6 flex items-center justify-between text-white text-[11px] font-bold z-20 pointer-events-none">
+        <span className="tracking-tight">9:24</span>
+        <span className="flex items-center gap-1.5 opacity-90 text-[10px]">
           <span>5G</span>
-          <span>🔋</span>
+          <span>▮▮▮</span>
         </span>
       </div>
       {children}
@@ -345,26 +345,26 @@ function PhoneCanvas({ children, wallpaper }: { children: React.ReactNode; wallp
 
 function LockChip({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
-    <div className="flex-1 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-1.5 text-white text-center">
-      <p className="text-[14px] leading-none">{icon}</p>
-      <p className="text-[8px] font-display font-black uppercase tracking-wider opacity-80 mt-0.5">{label}</p>
-      <p className="font-display font-black text-[10px] leading-tight">{value}</p>
+    <div className="min-w-0 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-1.5 text-white text-center">
+      <p className="text-[13px] leading-none">{icon}</p>
+      <p className="text-[7.5px] font-display font-black uppercase tracking-wider opacity-80 mt-0.5 truncate">{label}</p>
+      <p className="font-display font-black text-[10px] leading-tight truncate">{value}</p>
     </div>
   );
 }
 
 function IOSNotification({ app, title, body, time }: { app: string; title: string; body: string; time: string }) {
   return (
-    <div className="rounded-2xl bg-white/85 backdrop-blur-xl px-3 py-2 shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
-      <div className="flex items-center justify-between mb-0.5">
-        <div className="flex items-center gap-1.5">
-          <div className="w-4 h-4 rounded-md bg-gradient-hot flex items-center justify-center text-[8px]">✨</div>
-          <p className="text-[9px] font-bold text-baddia-ink uppercase tracking-wide">{app}</p>
+    <div className="rounded-2xl bg-white/90 backdrop-blur-xl px-2.5 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.15)] min-w-0">
+      <div className="flex items-center justify-between gap-2 mb-0.5">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <div className="w-3.5 h-3.5 rounded-md bg-gradient-hot flex items-center justify-center text-[7px] shrink-0">✨</div>
+          <p className="text-[8px] font-bold text-baddia-ink uppercase tracking-wide truncate">{app}</p>
         </div>
-        <p className="text-[9px] text-baddia-ink/60 font-semibold">{time}</p>
+        <p className="text-[8px] text-baddia-ink/60 font-semibold shrink-0">{time}</p>
       </div>
-      <p className="font-display font-black text-[11px] text-baddia-ink leading-tight">{title}</p>
-      <p className="text-[10px] text-baddia-ink/70 font-medium leading-snug mt-0.5">{body}</p>
+      <p className="font-display font-black text-[10px] text-baddia-ink leading-tight truncate">{title}</p>
+      <p className="text-[9px] text-baddia-ink/70 font-medium leading-snug mt-0.5 line-clamp-2">{body}</p>
     </div>
   );
 }
