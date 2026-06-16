@@ -28,7 +28,9 @@ function BackgroundDeco() {
     <>
       <div className="blob -top-20 -left-16 w-72 h-72 bg-baddia-bubble/40" />
       <div className="blob top-40 -right-20 w-64 h-64 bg-baddia-soft/55" style={{ animationDelay: "4s" }} />
-      <div className="blob bottom-0 left-10 w-56 h-56 bg-baddia-yellow/35" style={{ animationDelay: "8s" }} />
+      <div className="blob bottom-20 -left-10 w-72 h-72 bg-baddia-yellow/40" style={{ animationDelay: "8s" }} />
+      <div className="blob -bottom-16 right-0 w-80 h-80 bg-baddia-bubble/45" style={{ animationDelay: "6s" }} />
+      <div className="blob -bottom-24 left-1/3 w-72 h-72 bg-baddia-soft/45" style={{ animationDelay: "10s" }} />
     </>
   );
 }
