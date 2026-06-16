@@ -293,35 +293,87 @@ export function Onboarding() {
         {/* STEP 4 — Loading */}
         {step === 4 && (
           <div className="flex-1 flex flex-col items-center justify-center text-center animate-fade-in">
-            <div className="relative w-44 h-44 mb-8">
-              {/* glow halo */}
-              <div className="absolute inset-0 rounded-full bg-gradient-glow blur-2xl opacity-70 animate-breathe" />
+            <div className="relative w-[260px] h-[260px] mb-8">
+              {/* Outer glow halos */}
+              <div className="absolute inset-6 rounded-[42%] bg-gradient-hot blur-3xl opacity-40 animate-breathe" />
+              <div className="absolute inset-10 rounded-[42%] bg-baddia-lavender blur-2xl opacity-30 animate-breathe" style={{ animationDelay: "0.4s" }} />
 
-              {/* orbit sparkles */}
-              <div className="absolute inset-0 animate-orbit">
+              {/* Orbit ring with traveling sparkles */}
+              <div className="absolute inset-2 animate-orbit">
                 <span className="absolute top-0 left-1/2 -translate-x-1/2 text-2xl text-baddia-yellow drop-shadow-[0_0_10px_hsl(48_100%_70%/0.9)]">✦</span>
                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 text-xl text-baddia-mint">✧</span>
                 <span className="absolute top-1/2 left-0 -translate-y-1/2 text-lg text-baddia-hot">✦</span>
                 <span className="absolute top-1/2 right-0 -translate-y-1/2 text-lg text-baddia-lavender">✧</span>
               </div>
+              {/* dotted orbit guide */}
+              <div className="absolute inset-2 rounded-full border-[2px] border-dashed border-baddia-ink/15" />
 
-              {/* Crescent moon */}
-              <div className="absolute inset-4 rounded-full bg-gradient-to-br from-baddia-soft via-white to-baddia-bubble border-2 border-baddia-ink shadow-glow flex items-center justify-center overflow-hidden animate-breathe">
-                <div className="absolute -right-6 -top-2 w-28 h-28 rounded-full bg-baddia-lavender" />
-                <span className="relative z-10 text-5xl leading-none">🌙</span>
+              {/* Center squircle "crystal" card */}
+              <div className="absolute inset-10 animate-breathe">
+                <div className="relative w-full h-full rounded-[40%] bg-gradient-to-br from-baddia-soft via-white to-baddia-bubble border-[3px] border-baddia-ink shadow-[6px_8px_0_hsl(260_16%_15%)] overflow-hidden flex items-center justify-center">
+                  {/* lavender moon-shadow inside */}
+                  <div className="absolute -right-8 -top-6 w-32 h-32 rounded-full bg-baddia-lavender/80" />
+                  {/* glossy top sheen */}
+                  <div className="absolute inset-x-3 top-2 h-1/3 rounded-[40%] bg-gradient-to-b from-white/70 to-transparent" />
+
+                  {/* Crescent moon SVG */}
+                  <svg viewBox="0 0 100 100" className="relative z-10 w-[58%] h-[58%]" fill="none">
+                    <defs>
+                      <linearGradient id="moon-grad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="hsl(48 100% 72%)" />
+                        <stop offset="100%" stopColor="hsl(335 100% 65%)" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M65 12 a40 40 0 1 0 22 70 a30 30 0 1 1 -22 -70 z"
+                      fill="url(#moon-grad)"
+                      stroke="hsl(260 16% 15%)"
+                      strokeWidth="4"
+                      strokeLinejoin="round"
+                    />
+                    {/* eye + cheek for kawaii vibe */}
+                    <circle cx="55" cy="48" r="3" fill="hsl(260 16% 15%)" />
+                    <circle cx="42" cy="58" r="6" fill="hsl(335 100% 75%)" opacity="0.7" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Floating sticker — zodiac chip */}
+              <div className="absolute -top-1 -left-2 sticker-float-slow" style={{ ['--r' as any]: '-10deg' }}>
+                <div className="rounded-2xl bg-baddia-ink text-white px-2.5 py-1.5 shadow-[3px_3px_0_hsl(48_100%_59%)] flex items-center gap-1">
+                  <span className="text-sm">🌙</span>
+                  <span className="text-[10px] font-display font-bold uppercase tracking-wider">leyendo</span>
+                </div>
+              </div>
+
+              {/* Floating sticker — glow score */}
+              <div className="absolute top-6 -right-3 sticker-float" style={{ ['--r' as any]: '8deg' }}>
+                <div className="rounded-2xl bg-baddia-lime border-2 border-baddia-ink px-2.5 py-1 shadow-[3px_3px_0_hsl(260_16%_15%)]">
+                  <p className="text-[9px] uppercase tracking-wider text-baddia-ink/70 font-bold leading-none">glow</p>
+                  <p className="font-display font-bold text-baddia-ink text-sm leading-tight">87 ✦</p>
+                </div>
+              </div>
+
+              {/* Floating sticker — heart */}
+              <div className="absolute -bottom-1 -left-3 sticker-float-fast" style={{ ['--r' as any]: '6deg' }}>
+                <div className="rounded-2xl bg-white border-2 border-baddia-ink px-2.5 py-1.5 shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center gap-1 text-baddia-hot">
+                  <span className="text-sm">💖</span>
+                  <span className="text-[10px] font-display font-bold uppercase tracking-wider">crush</span>
+                </div>
               </div>
 
               {/* Floating Baddia logo sticker */}
-              <div className="absolute -bottom-3 -right-3 sticker-float-fast">
+              <div className="absolute -bottom-2 -right-2 sticker-float-fast" style={{ ['--r' as any]: '-6deg' }}>
                 <div className="bg-white border-2 border-baddia-ink rounded-2xl p-1.5 shadow-[3px_3px_0_hsl(260_16%_15%)]">
-                  <LogoMark size={34} />
+                  <LogoMark size={32} />
                 </div>
               </div>
 
               {/* Dust sparkles */}
-              <span className="absolute -top-2 left-3 text-baddia-yellow text-sm sticker-float">✨</span>
-              <span className="absolute top-6 -right-4 text-baddia-hot text-xs sticker-float-slow">✦</span>
-              <span className="absolute -bottom-2 left-6 text-baddia-lavender text-sm sticker-float-fast">✧</span>
+              <span className="absolute top-2 left-1/2 text-baddia-yellow text-base sticker-float">✨</span>
+              <span className="absolute bottom-8 left-0 text-baddia-hot text-xs sticker-float-slow">✦</span>
+              <span className="absolute top-1/2 -right-1 text-baddia-lavender text-sm sticker-float-fast">✧</span>
+              <span className="absolute -top-2 right-10 text-baddia-mint text-xs sticker-float">·</span>
             </div>
 
             <div className="min-h-[60px] flex items-center justify-center px-4">
