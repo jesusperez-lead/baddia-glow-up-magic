@@ -159,7 +159,7 @@ export function FirstReading() {
         </button>
         <div className="grid grid-cols-2 gap-3">
           <button
-            onClick={handleShare}
+            onClick={() => setShareOpen(true)}
             className="btn-sticker py-3.5 rounded-full bg-white text-baddia-ink text-sm flex items-center justify-center gap-1.5"
           >
             <Share2 size={14} /> Compartir
