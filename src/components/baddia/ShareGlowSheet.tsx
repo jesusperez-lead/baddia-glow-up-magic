@@ -120,63 +120,80 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
                 </span>
               </div>
 
-              {/* center — score ring */}
-              <div className="flex flex-col items-center text-center -mt-2">
-                <p className="text-[10px] uppercase tracking-[0.2em] font-display font-bold text-baddia-ink/60 mb-1">
-                  mi glow de hoy
-                </p>
-                <div className="relative">
-                  <svg width="140" height="140" viewBox="0 0 120 120" className="-rotate-90">
-                    <circle cx="60" cy="60" r="50" stroke="hsl(48 100% 82%)" strokeWidth="12" fill="none" />
-                    <circle
-                      cx="60" cy="60" r="50"
-                      stroke="hsl(48 100% 59%)" strokeWidth="12" fill="none" strokeLinecap="round"
-                      strokeDasharray={dash}
-                      strokeDashoffset={dash - dash * scorePct}
-                      style={{ filter: "drop-shadow(0 2px 0 hsl(260 16% 15% / 0.2))" }}
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="font-display font-black text-[44px] leading-none text-baddia-ink">
-                      {vibe.glowScore}
-                    </span>
-                    <span className="mt-1 inline-flex items-center gap-0.5 rounded-full bg-baddia-ink text-white text-[8px] font-black uppercase tracking-[0.14em] px-2 py-[2px]">
-                      <span className="text-baddia-yellow">✦</span> /100
+              {quoteMode ? (
+                <>
+                  {/* quote only — big center */}
+                  <div className="flex-1 flex flex-col items-center justify-center text-center px-2">
+                    <span className="font-serif-display text-baddia-hot text-[64px] leading-none -mb-2 select-none">"</span>
+                    <p className="font-display font-black text-[22px] leading-[1.15] text-baddia-ink">
+                      {quote}
+                    </p>
+                    <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-baddia-yellow border-2 border-baddia-ink px-2.5 py-1 text-[9px] font-display font-bold text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-2 uppercase tracking-widest">
+                      💬 frase del día
                     </span>
                   </div>
-                </div>
-                <p className="font-display font-bold text-[16px] mt-2 leading-tight">
-                  {vibe.glowLabel}
-                </p>
-              </div>
+                </>
+              ) : (
+                <>
+                  {/* center — score ring */}
+                  <div className="flex flex-col items-center text-center -mt-2">
+                    <p className="text-[10px] uppercase tracking-[0.2em] font-display font-bold text-baddia-ink/60 mb-1">
+                      mi glow de hoy
+                    </p>
+                    <div className="relative">
+                      <svg width="140" height="140" viewBox="0 0 120 120" className="-rotate-90">
+                        <circle cx="60" cy="60" r="50" stroke="hsl(48 100% 82%)" strokeWidth="12" fill="none" />
+                        <circle
+                          cx="60" cy="60" r="50"
+                          stroke="hsl(48 100% 59%)" strokeWidth="12" fill="none" strokeLinecap="round"
+                          strokeDasharray={dash}
+                          strokeDashoffset={dash - dash * scorePct}
+                          style={{ filter: "drop-shadow(0 2px 0 hsl(260 16% 15% / 0.2))" }}
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <span className="font-display font-black text-[44px] leading-none text-baddia-ink">
+                          {vibe.glowScore}
+                        </span>
+                        <span className="mt-1 inline-flex items-center gap-0.5 rounded-full bg-baddia-ink text-white text-[8px] font-black uppercase tracking-[0.14em] px-2 py-[2px]">
+                          <span className="text-baddia-yellow">✦</span> /100
+                        </span>
+                      </div>
+                    </div>
+                    <p className="font-display font-bold text-[16px] mt-2 leading-tight">
+                      {vibe.glowLabel}
+                    </p>
+                  </div>
 
-              {/* advice bubble */}
-              <div className="relative rounded-2xl bg-white border-[2.5px] border-baddia-ink px-3 py-2.5 shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-1">
-                <p className="text-[9px] uppercase tracking-widest font-display font-bold text-baddia-hot mb-0.5">
-                  💬 mood del día
-                </p>
-                <p className="font-display font-bold text-[12px] leading-snug text-baddia-ink">
-                  "{vibe.advice}"
-                </p>
-              </div>
+                  {/* advice bubble */}
+                  <div className="relative rounded-2xl bg-white border-[2.5px] border-baddia-ink px-3 py-2.5 shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-1">
+                    <p className="text-[9px] uppercase tracking-widest font-display font-bold text-baddia-hot mb-0.5">
+                      💬 mood del día
+                    </p>
+                    <p className="font-display font-bold text-[12px] leading-snug text-baddia-ink">
+                      "{vibe.advice}"
+                    </p>
+                  </div>
 
-              {/* bottom row — color + lucky */}
-              <div className="flex items-stretch gap-2">
-                <div className="flex-1 rounded-2xl bg-white border-2 border-baddia-ink p-2 shadow-[2px_2px_0_hsl(260_16%_15%)]">
-                  <p className="text-[8px] uppercase font-display font-bold tracking-wider text-baddia-ink/60">color</p>
-                  <div
-                    className="my-1 h-5 rounded-md border border-baddia-ink/70"
-                    style={{ background: `linear-gradient(135deg, ${vibe.color.from}, ${vibe.color.to})` }}
-                  />
-                  <p className="font-display font-bold text-[10px] text-baddia-ink leading-tight truncate">{vibe.color.name}</p>
-                </div>
-                <div className="w-[72px] rounded-2xl bg-baddia-lime border-2 border-baddia-ink p-2 shadow-[2px_2px_0_hsl(260_16%_15%)] flex flex-col items-center justify-center">
-                  <p className="text-[8px] uppercase font-display font-bold tracking-wider text-baddia-ink/70">lucky</p>
-                  <p className="font-display font-black text-[26px] text-baddia-ink leading-none">
-                    {vibe.luckyNumber}
-                  </p>
-                </div>
-              </div>
+                  {/* bottom row — color + lucky */}
+                  <div className="flex items-stretch gap-2">
+                    <div className="flex-1 rounded-2xl bg-white border-2 border-baddia-ink p-2 shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                      <p className="text-[8px] uppercase font-display font-bold tracking-wider text-baddia-ink/60">color</p>
+                      <div
+                        className="my-1 h-5 rounded-md border border-baddia-ink/70"
+                        style={{ background: `linear-gradient(135deg, ${vibe.color.from}, ${vibe.color.to})` }}
+                      />
+                      <p className="font-display font-bold text-[10px] text-baddia-ink leading-tight truncate">{vibe.color.name}</p>
+                    </div>
+                    <div className="w-[72px] rounded-2xl bg-baddia-lime border-2 border-baddia-ink p-2 shadow-[2px_2px_0_hsl(260_16%_15%)] flex flex-col items-center justify-center">
+                      <p className="text-[8px] uppercase font-display font-bold tracking-wider text-baddia-ink/70">lucky</p>
+                      <p className="font-display font-black text-[26px] text-baddia-ink leading-none">
+                        {vibe.luckyNumber}
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
 
               {/* footer brand */}
               <div className="flex items-center justify-center pt-1">
