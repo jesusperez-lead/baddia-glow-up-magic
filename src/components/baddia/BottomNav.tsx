@@ -87,8 +87,8 @@ export function BottomNav() {
               <span className="relative w-14 h-14 rounded-full border-[2.5px] border-baddia-ink bg-gradient-to-br from-baddia-yellow via-baddia-hot to-baddia-lavender shadow-[3px_4px_0_hsl(260_16%_15%)] flex items-center justify-center text-white transition-transform duration-300 group-hover:-translate-y-0.5 group-active:scale-90">
                 {/* glossy sheen */}
                 <span className="absolute inset-x-1.5 top-1 h-3 rounded-full bg-white/45 blur-[1px]" />
-                {/* pulse ring */}
-                <span className="pointer-events-none absolute inset-0 rounded-full border-2 border-baddia-hot/40 animate-ping" />
+                {/* subtle shimmer dot */}
+                <span className="pointer-events-none absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-baddia-yellow border-2 border-baddia-ink animate-pulse" />
                 <Sparkles size={24} strokeWidth={2.6} className="relative drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
               </span>
               <span className="mt-1 text-[10px] font-display font-black uppercase tracking-wide text-baddia-hot leading-none">
