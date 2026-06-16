@@ -82,16 +82,16 @@ export function Welcome() {
       </div>
 
       {/* CTAs */}
-      <div className="relative z-10 px-6 pb-8 space-y-3 animate-slide-up" style={{ animationDelay: "0.3s" }}>
+      <div className="relative z-10 px-6 pb-8 space-y-4 animate-slide-up" style={{ animationDelay: "0.3s" }}>
         <button
           onClick={() => go("onboarding")}
-          className="cta-glow w-full py-[18px] rounded-full bg-gradient-hot text-white font-display font-bold text-lg active:scale-[0.98] transition-transform"
+          className="btn-sticker w-full py-[18px] rounded-full bg-gradient-hot text-white text-lg"
         >
           Empezar mi glow ✨
         </button>
         <button
           onClick={() => go("daily")}
-          className="w-full py-4 rounded-full bg-white border-2 border-baddia-ink/10 text-baddia-ink font-display font-bold"
+          className="btn-sticker w-full py-4 rounded-full bg-white text-baddia-ink"
         >
           Ya tengo cuenta
         </button>
@@ -99,6 +99,7 @@ export function Welcome() {
           Lecturas creadas con IA para entretenimiento, inspiración y amor propio.
         </p>
       </div>
+
     </div>
   );
 }

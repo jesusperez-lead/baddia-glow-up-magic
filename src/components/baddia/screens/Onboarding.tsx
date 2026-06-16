@@ -335,14 +335,15 @@ function PrimaryButton({
   children, onClick, disabled,
 }: { children: React.ReactNode; onClick?: () => void; disabled?: boolean }) {
   return (
-    <button
-      disabled={disabled}
-      onClick={onClick}
-      className={`w-full py-[18px] rounded-full bg-gradient-hot text-white font-display font-bold text-lg active:scale-[0.98] transition-transform disabled:opacity-40 disabled:cursor-not-allowed ${
-        disabled ? "" : "cta-glow"
-      }`}
-    >
-      {children}
-    </button>
+    <div className="pt-6 mt-2">
+      <button
+        disabled={disabled}
+        onClick={onClick}
+        className="btn-sticker w-full py-[18px] rounded-full bg-gradient-hot text-white text-lg disabled:cursor-not-allowed"
+      >
+        <span className="relative z-10">{children}</span>
+      </button>
+    </div>
   );
 }
+
