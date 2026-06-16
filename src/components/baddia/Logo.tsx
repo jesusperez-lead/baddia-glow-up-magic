@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 type LogoVariant = "full" | "icon" | "mono";
 
 interface LogoProps {
@@ -226,5 +228,3 @@ export function LogoMark({ size = 44 }: { size?: number }) {
   return <LogoIcon size={size} />;
 }
 
-/* Tiny local useId shim to avoid React import churn */
-import { useId } from "react";
