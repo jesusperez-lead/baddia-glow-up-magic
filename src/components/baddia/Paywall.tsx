@@ -78,31 +78,18 @@ export function Paywall() {
           </div>
         </div>
 
-        {/* Pro features — sticker grid */}
-        <div className="px-5 pt-5 pb-2">
-          <div className="flex items-center gap-2 mb-3 pl-1">
-            <span
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-baddia-gold border-2 border-baddia-ink text-baddia-ink font-display font-black text-[10px] uppercase tracking-wider"
-              style={{ boxShadow: "2px 2px 0 0 hsl(var(--ink))" }}
-            >
-              ✨ Incluye
-            </span>
-            <span className="h-[2px] flex-1 bg-baddia-ink/10 rounded-full" />
-          </div>
-          <div className="grid grid-cols-2 gap-2.5">
-            {PRO_FEATURES.map((f, i) => (
-              <div
+        {/* Pro features — compact chips */}
+        <div className="px-5 pt-4 pb-1">
+          <div className="flex flex-wrap gap-1.5">
+            {PRO_FEATURES.map((f) => (
+              <span
                 key={f.label}
-                className="flex items-center gap-2 rounded-2xl bg-white border-2 border-baddia-ink px-2.5 py-2"
-                style={{ boxShadow: `${i % 2 === 0 ? "3px" : "-3px"} 3px 0 0 hsl(var(--ink))` }}
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white border-2 border-baddia-ink text-[10.5px] font-display font-black text-baddia-ink"
+                style={{ boxShadow: "2px 2px 0 0 hsl(var(--ink))" }}
               >
-                <span className="w-8 h-8 rounded-xl bg-gradient-glow border-2 border-baddia-ink flex items-center justify-center text-[15px] shrink-0">
-                  {f.icon}
-                </span>
-                <span className="text-[11.5px] font-display font-black text-baddia-ink leading-tight">
-                  {f.label}
-                </span>
-              </div>
+                <span className="text-[11px] leading-none">{f.icon}</span>
+                {f.label}
+              </span>
             ))}
           </div>
         </div>
