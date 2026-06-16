@@ -31,9 +31,9 @@ export function FirstReading() {
   };
 
   return (
-    <div className="relative min-h-full bg-baddia-pearl pb-10 overflow-hidden">
-      <div className="blob -top-20 -left-16 w-72 h-72 bg-baddia-bubble/40" />
-      <div className="blob top-60 -right-20 w-64 h-64 bg-baddia-soft/55" style={{ animationDelay: "4s" }} />
+    <div className="relative min-h-full bg-white pb-10 overflow-hidden">
+      <div className="blob -top-20 -left-16 w-72 h-72 bg-baddia-bubble/20" />
+      <div className="blob top-60 -right-20 w-64 h-64 bg-baddia-soft/25" style={{ animationDelay: "4s" }} />
       <SparklesDeco />
 
       <header className="relative z-10 px-6 pt-8 pb-2 text-center">
