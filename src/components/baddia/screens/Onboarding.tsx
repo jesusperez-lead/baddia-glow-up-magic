@@ -26,11 +26,11 @@ const LOADING_MESSAGES = [
 function BackgroundDeco() {
   return (
     <>
-      <div className="blob -top-20 -left-16 w-72 h-72 bg-baddia-bubble/40" />
-      <div className="blob top-40 -right-20 w-64 h-64 bg-baddia-soft/55" style={{ animationDelay: "4s" }} />
-      <div className="blob bottom-20 -left-10 w-72 h-72 bg-baddia-yellow/40" style={{ animationDelay: "8s" }} />
-      <div className="blob -bottom-16 right-0 w-80 h-80 bg-baddia-bubble/45" style={{ animationDelay: "6s" }} />
-      <div className="blob -bottom-24 left-1/3 w-72 h-72 bg-baddia-soft/45" style={{ animationDelay: "10s" }} />
+      <div className="blob -top-20 -left-16 w-72 h-72 bg-baddia-bubble/20" />
+      <div className="blob top-40 -right-20 w-64 h-64 bg-baddia-soft/30" style={{ animationDelay: "4s" }} />
+      <div className="blob bottom-20 -left-10 w-72 h-72 bg-baddia-yellow/20" style={{ animationDelay: "8s" }} />
+      <div className="blob -bottom-16 right-0 w-80 h-80 bg-baddia-bubble/25" style={{ animationDelay: "6s" }} />
+      <div className="blob -bottom-24 left-1/3 w-72 h-72 bg-baddia-soft/25" style={{ animationDelay: "10s" }} />
     </>
   );
 }
@@ -64,7 +64,7 @@ export function Onboarding() {
       className="relative min-h-full flex flex-col overflow-hidden isolate"
       style={{
         background:
-          "linear-gradient(180deg, hsl(333 100% 98%) 0%, hsl(325 100% 97%) 40%, hsl(257 100% 97%) 75%, hsl(48 100% 97%) 100%)",
+          "linear-gradient(180deg, hsl(333 100% 99%) 0%, hsl(325 100% 98%) 45%, hsl(257 100% 98%) 80%, hsl(48 100% 98%) 100%)",
       }}
     >
       <BackgroundDeco />
