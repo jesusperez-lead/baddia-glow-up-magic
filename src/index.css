@@ -220,6 +220,11 @@
   from { transform: translateY(28px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+@keyframes shimmer {
+  0%   { transform: translateX(-150%) skewX(-12deg); }
+  100% { transform: translateX(400%)  skewX(-12deg); }
+}
+.animate-shimmer { animation: shimmer 1.6s linear infinite; }
 .animate-breathe { animation: breathe 2.2s ease-in-out infinite; }
 .animate-orbit { animation: orbit 8s linear infinite; }
 .animate-pop-in { animation: pop-in 0.5s cubic-bezier(.34,1.56,.64,1) both; }
