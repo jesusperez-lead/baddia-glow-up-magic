@@ -39,27 +39,43 @@ export function Paywall() {
   return (
     <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-baddia-purple/40 backdrop-blur-sm animate-fade-in">
       <div className="w-full md:max-w-[420px] bg-gradient-pearl rounded-t-[2.5rem] md:rounded-[2.5rem] max-h-[94vh] overflow-y-auto scrollbar-hide animate-scale-in relative">
-        {/* Header */}
-        <div className="relative gradient-bg-baddia text-white p-6 pt-8 rounded-t-[2.5rem] overflow-hidden">
+        {/* Header — sticker style */}
+        <div className="relative px-5 pt-7 pb-6 rounded-t-[2.5rem] overflow-hidden">
+          <div className="absolute inset-0 gradient-bg-baddia opacity-90" />
+          <div className="absolute -top-10 -left-10 w-40 h-40 rounded-full bg-baddia-gold/40 blur-3xl" />
+          <div className="absolute -bottom-12 -right-8 w-44 h-44 rounded-full bg-baddia-hot/40 blur-3xl" />
+
           <button
             onClick={closePaywall}
             aria-label="Cerrar"
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center z-10"
+            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white border-2 border-baddia-ink flex items-center justify-center z-10 text-baddia-ink"
+            style={{ boxShadow: "0 3px 0 0 hsl(var(--ink))" }}
           >
-            <X size={18} />
+            <X size={16} strokeWidth={3} />
           </button>
-          <span className="sparkle top-3 right-20 text-baddia-gold text-2xl animate-twinkle">✦</span>
-          <span className="sparkle top-10 left-6 text-baddia-gold text-lg animate-twinkle" style={{ animationDelay: "0.4s" }}>✧</span>
-          <span className="sparkle bottom-3 right-10 text-baddia-gold text-xl animate-twinkle" style={{ animationDelay: "0.9s" }}>✦</span>
-          <div className="inline-flex items-center gap-1.5 chip bg-white/15 text-white mb-3">
-            <Sparkles size={12} /> Baddia Pro
+
+          <span className="sparkle top-4 right-24 text-baddia-gold text-2xl animate-twinkle">✦</span>
+          <span className="sparkle top-14 left-6 text-baddia-gold text-lg animate-twinkle" style={{ animationDelay: "0.4s" }}>✧</span>
+          <span className="sparkle bottom-5 right-20 text-baddia-gold text-xl animate-twinkle" style={{ animationDelay: "0.9s" }}>✦</span>
+
+          <div
+            className="relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border-2 border-baddia-ink mb-3 font-display font-black text-[12px] text-baddia-ink"
+            style={{ boxShadow: "3px 3px 0 0 hsl(var(--ink))" }}
+          >
+            <Crown size={13} className="text-baddia-hot" /> BADDIA PRO
           </div>
-          <h2 className="font-display font-black text-[24px] leading-tight text-white pr-10 drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
-            Desbloquea tu lectura completa
-          </h2>
-          <p className="mt-2 text-white text-sm pr-6 drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
-            Amor, dinero, suerte, futuro y crush energy completa. Tu glow sin límites ✨
-          </p>
+
+          <div
+            className="relative bg-white border-[2.5px] border-baddia-ink rounded-[24px] p-4 pr-10"
+            style={{ boxShadow: "5px 5px 0 0 hsl(var(--ink))" }}
+          >
+            <h2 className="font-display font-black text-[22px] leading-[1.05] text-baddia-ink">
+              Desbloquea tu <span className="gradient-text">lectura completa</span> ✨
+            </h2>
+            <p className="mt-2 text-[12.5px] font-semibold text-baddia-ink/75 leading-snug">
+              Amor, dinero, suerte y crush energy sin límites. Tu glow al máximo 💖
+            </p>
+          </div>
         </div>
 
         {/* Pro features */}
