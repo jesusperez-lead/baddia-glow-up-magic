@@ -57,11 +57,6 @@ export function BottomNav() {
             className={`text-[10px] font-display font-bold leading-none tracking-wide transition-colors duration-300 ${
               active ? "text-baddia-hot" : "text-baddia-ink/55"
             }`}
-          />
-          <span
-            className={`-mt-1 text-[10px] font-display font-bold leading-none tracking-wide transition-colors duration-300 ${
-              active ? "text-baddia-hot" : "text-baddia-ink/55"
-            }`}
           >
             {label}
           </span>
