@@ -64,7 +64,7 @@ export function Onboarding() {
       className="relative min-h-full flex flex-col overflow-hidden isolate"
       style={{
         background:
-          "linear-gradient(160deg, hsl(335 100% 94%) 0%, hsl(333 100% 97%) 30%, hsl(257 100% 94%) 65%, hsl(48 100% 92%) 100%)",
+          "linear-gradient(180deg, hsl(333 100% 98%) 0%, hsl(325 100% 97%) 40%, hsl(257 100% 97%) 75%, hsl(48 100% 97%) 100%)",
       }}
     >
       <BackgroundDeco />
