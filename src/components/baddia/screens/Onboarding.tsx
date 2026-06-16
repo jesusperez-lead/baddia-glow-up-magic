@@ -59,7 +59,14 @@ export function Onboarding() {
   const back = () => (step > 1 ? setStep(step - 1) : go("welcome"));
 
   return (
-    <div key={step} className="relative min-h-full flex flex-col bg-baddia-pearl overflow-hidden isolate">
+    <div
+      key={step}
+      className="relative min-h-full flex flex-col overflow-hidden isolate"
+      style={{
+        background:
+          "linear-gradient(160deg, hsl(335 100% 94%) 0%, hsl(333 100% 97%) 30%, hsl(257 100% 94%) 65%, hsl(48 100% 92%) 100%)",
+      }}
+    >
       <BackgroundDeco />
       <Sparkles />
 
