@@ -172,6 +172,9 @@ export function FirstReading() {
           </button>
         </div>
       </div>
+
+      <ShareGlowSheet open={shareOpen} onClose={() => setShareOpen(false)} />
     </div>
   );
 }
+
