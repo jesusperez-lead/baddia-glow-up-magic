@@ -36,9 +36,9 @@ const SIGN_INFO = {
 const DAILY_TEXT = "Eres Libra. Hoy tu energía pide equilibrio, belleza y límites claros. Di que sí solo a lo que te suma.";
 const WEEKLY_TEASER = "Una semana de cierres y nuevas alianzas. Tus relaciones se reordenan…";
 const COMPAT_TOP = [
-  { sign: "Géminis",     glyph: "♊", pct: 94 },
-  { sign: "Acuario",     glyph: "♒", pct: 91 },
-  { sign: "Leo",         glyph: "♌", pct: 86 },
+  { sign: "Géminis", glyph: "♊", pct: 94, element: "Aire", vibe: "Chispa mental", reason: "Te entiende sin que expliques. Conversación que enciende." },
+  { sign: "Acuario", glyph: "♒", pct: 91, element: "Aire", vibe: "Libertad", reason: "Energía de equipo. Te da espacio y planes nuevos." },
+  { sign: "Leo",     glyph: "♌", pct: 86, element: "Fuego", vibe: "Brillo mutuo", reason: "Te hace sentir vista. Drama bueno del bueno." },
 ];
 
 /* ─────────────── screen ─────────────── */
