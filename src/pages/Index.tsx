@@ -1,16 +1,48 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { BaddiaProvider, useBaddia } from "@/lib/baddia-state";
+import { PhoneFrame } from "@/components/baddia/PhoneFrame";
+import { BottomNav } from "@/components/baddia/BottomNav";
+import { Paywall } from "@/components/baddia/Paywall";
+import { Welcome } from "@/components/baddia/screens/Welcome";
+import { Onboarding } from "@/components/baddia/screens/Onboarding";
+import { FirstReading } from "@/components/baddia/screens/FirstReading";
+import { Daily } from "@/components/baddia/screens/Daily";
+import { Zodiac } from "@/components/baddia/screens/Zodiac";
+import { Palm } from "@/components/baddia/screens/Palm";
+import { Love } from "@/components/baddia/screens/Love";
+import { Profile } from "@/components/baddia/screens/Profile";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile"]);
+
+function Router() {
+  const { screen } = useBaddia();
+  let content;
+  switch (screen) {
+    case "welcome": content = <Welcome />; break;
+    case "onboarding": content = <Onboarding />; break;
+    case "first-reading": content = <FirstReading />; break;
+    case "daily": content = <Daily />; break;
+    case "zodiac": content = <Zodiac />; break;
+    case "palm": content = <Palm />; break;
+    case "love": content = <Love />; break;
+    case "profile": content = <Profile />; break;
+    default: content = <Welcome />;
+  }
+  const showNav = MAIN_SCREENS.has(screen);
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
-    </div>
+    <PhoneFrame>
+      <div key={screen} className="animate-fade-in min-h-full flex flex-col">
+        <div className="flex-1">{content}</div>
+        {showNav && <BottomNav />}
+      </div>
+      <Paywall />
+    </PhoneFrame>
   );
-};
+}
 
-const Index = PlaceholderIndex;
+const Index = () => (
+  <BaddiaProvider>
+    <Router />
+  </BaddiaProvider>
+);
 
 export default Index;
