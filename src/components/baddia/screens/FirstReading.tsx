@@ -47,36 +47,70 @@ export function FirstReading() {
       </header>
 
       <div className="relative z-10 px-5 mt-5 space-y-4">
-        {/* Glow Score */}
-        <div className="relative rounded-3xl bg-gradient-hot text-white p-5 overflow-hidden shadow-glow animate-slide-up">
-          <span className="absolute top-3 right-4 text-baddia-yellow animate-pulse">✦</span>
-          <span className="absolute bottom-3 left-4 text-white/60">✧</span>
-          <p className="text-[11px] font-display font-bold uppercase tracking-widest opacity-90">Glow Score</p>
-          <div className="my-3 flex items-center gap-5">
-            <div className="relative">
-              <svg width="110" height="110" viewBox="0 0 120 120" className="-rotate-90">
-                <circle cx="60" cy="60" r="50" stroke="rgba(255,255,255,0.25)" strokeWidth="12" fill="none" />
-                <circle
-                  cx="60" cy="60" r="50"
-                  stroke="white" strokeWidth="12" fill="none" strokeLinecap="round"
-                  strokeDasharray={dash}
-                  strokeDashoffset={dash - dash * scorePct}
-                  style={{ transition: "stroke-dashoffset 0.8s ease" }}
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="font-display font-bold text-4xl leading-none">{vibe.glowScore}</span>
-                <span className="text-[10px] uppercase tracking-wider opacity-80">cósmico</span>
+        {/* Glow Score — sticker card, high readability */}
+        <div className="relative animate-slide-up">
+          {/* Floating label chip */}
+          <div className="absolute -top-3 left-5 z-10">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-baddia-ink text-white px-3 py-1.5 text-[10px] font-display font-bold uppercase tracking-widest shadow-[2px_2px_0_hsl(48_100%_59%)]">
+              ✦ Glow Score
+            </span>
+          </div>
+
+          <div className="relative rounded-3xl bg-white border-[2.5px] border-baddia-ink p-5 pt-7 shadow-[5px_6px_0_hsl(260_16%_15%)] overflow-hidden">
+            {/* soft gradient halo behind ring */}
+            <div className="absolute -top-10 -left-10 w-44 h-44 rounded-full bg-gradient-hot opacity-20 blur-2xl pointer-events-none" />
+            <span className="absolute top-3 right-4 text-baddia-yellow text-lg animate-pulse">✦</span>
+
+            <div className="flex items-center gap-5">
+              {/* Ring */}
+              <div className="relative shrink-0">
+                <svg width="116" height="116" viewBox="0 0 120 120" className="-rotate-90">
+                  <defs>
+                    <linearGradient id="glow-ring" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor="hsl(335 100% 59%)" />
+                      <stop offset="100%" stopColor="hsl(256 90% 68%)" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="60" cy="60" r="50" stroke="hsl(333 60% 95%)" strokeWidth="14" fill="none" />
+                  <circle
+                    cx="60" cy="60" r="50"
+                    stroke="url(#glow-ring)" strokeWidth="14" fill="none" strokeLinecap="round"
+                    strokeDasharray={dash}
+                    strokeDashoffset={dash - dash * scorePct}
+                    style={{ transition: "stroke-dashoffset 0.8s ease" }}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="font-display font-bold text-[44px] leading-none text-baddia-ink">
+                    {vibe.glowScore}
+                  </span>
+                  <span className="text-[9px] uppercase tracking-[0.18em] font-bold text-baddia-ink/50 mt-0.5">
+                    de 100
+                  </span>
+                </div>
+              </div>
+
+              {/* Copy */}
+              <div className="flex-1 min-w-0">
+                <p className="font-display font-bold text-[20px] leading-tight text-baddia-ink">
+                  {vibe.glowLabel}
+                </p>
+                <p className="text-[14px] leading-snug mt-1.5 text-baddia-ink/70 font-medium">
+                  {vibe.glowMsg}
+                </p>
               </div>
             </div>
-            <div className="flex-1">
-              <p className="font-display font-bold text-lg leading-tight">{vibe.glowLabel}</p>
-              <p className="text-[13px] opacity-90 leading-snug mt-1">
-                Tu glow cósmico está en {vibe.glowScore}%. {vibe.glowMsg}
-              </p>
+
+            {/* Bottom percent tag */}
+            <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-baddia-yellow border-2 border-baddia-ink px-3 py-1 shadow-[2px_2px_0_hsl(260_16%_15%)]">
+              <span className="text-sm">💫</span>
+              <span className="text-[12px] font-display font-bold text-baddia-ink">
+                Tu glow cósmico está en {vibe.glowScore}%
+              </span>
             </div>
           </div>
         </div>
+
 
         {/* Consejo gratis del día */}
         <div className="pt-8 animate-slide-up" style={{ animationDelay: "0.08s" }}>
