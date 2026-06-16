@@ -78,21 +78,28 @@ export function Paywall() {
           </div>
         </div>
 
-        {/* Pro features */}
+        {/* Pro features — sticker grid */}
         <div className="px-5 pt-5 pb-2">
-          <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-baddia-purple/60 mb-2.5 pl-1">
-            ✨ Todo lo que incluye
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            {PRO_FEATURES.map((f) => (
+          <div className="flex items-center gap-2 mb-3 pl-1">
+            <span
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-baddia-gold border-2 border-baddia-ink text-baddia-ink font-display font-black text-[10px] uppercase tracking-wider"
+              style={{ boxShadow: "2px 2px 0 0 hsl(var(--ink))" }}
+            >
+              ✨ Incluye
+            </span>
+            <span className="h-[2px] flex-1 bg-baddia-ink/10 rounded-full" />
+          </div>
+          <div className="grid grid-cols-2 gap-2.5">
+            {PRO_FEATURES.map((f, i) => (
               <div
                 key={f.label}
-                className="flex items-center gap-2 rounded-2xl bg-white/80 border border-pink-100 px-2.5 py-2 shadow-soft"
+                className="flex items-center gap-2 rounded-2xl bg-white border-2 border-baddia-ink px-2.5 py-2"
+                style={{ boxShadow: `${i % 2 === 0 ? "3px" : "-3px"} 3px 0 0 hsl(var(--ink))` }}
               >
-                <span className="w-7 h-7 rounded-xl bg-gradient-glow flex items-center justify-center text-[14px] shrink-0 shadow-soft">
+                <span className="w-8 h-8 rounded-xl bg-gradient-glow border-2 border-baddia-ink flex items-center justify-center text-[15px] shrink-0">
                   {f.icon}
                 </span>
-                <span className="text-[11.5px] font-bold text-baddia-purple leading-tight">
+                <span className="text-[11.5px] font-display font-black text-baddia-ink leading-tight">
                   {f.label}
                 </span>
               </div>
