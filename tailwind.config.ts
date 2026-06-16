@@ -8,8 +8,9 @@ export default {
     container: { center: true, padding: "1rem", screens: { "2xl": "1400px" } },
     extend: {
       fontFamily: {
-        display: ["Fraunces", "serif"],
-        sans: ["Quicksand", "system-ui", "sans-serif"],
+        display: ["Fredoka", "Nunito", "sans-serif"],
+        sans: ["Nunito", "Quicksand", "system-ui", "sans-serif"],
+        serif: ["Fraunces", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -26,11 +27,18 @@ export default {
         card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
         baddia: {
           pink: "hsl(var(--pink-soft))",
-          hot: "hsl(var(--pink-hot))",
+          hot: "hsl(var(--hot-pink))",
+          bubble: "hsl(var(--bubble))",
           lavender: "hsl(var(--lavender))",
+          soft: "hsl(var(--soft-purple))",
           pearl: "hsl(var(--pearl))",
-          gold: "hsl(var(--gold))",
-          purple: "hsl(var(--deep-purple))",
+          cream: "hsl(var(--cream))",
+          gold: "hsl(var(--yellow))",
+          yellow: "hsl(var(--yellow))",
+          lime: "hsl(var(--lime))",
+          mint: "hsl(var(--mint))",
+          ink: "hsl(var(--ink))",
+          purple: "hsl(var(--ink))",
         },
         pink: {
           50: "hsl(340 100% 98%)",
