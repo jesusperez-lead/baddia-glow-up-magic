@@ -78,7 +78,7 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
               Compartir
             </p>
             <h2 className="font-display font-bold text-[20px] text-baddia-ink leading-tight">
-              Tu glow card de hoy ✨
+              {quoteMode ? "Tu frase del día ✨" : "Tu glow card de hoy ✨"}
             </h2>
           </div>
           <button
