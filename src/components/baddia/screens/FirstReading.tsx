@@ -65,19 +65,13 @@ export function FirstReading() {
               {/* Ring */}
               <div className="relative shrink-0">
                 <svg width="116" height="116" viewBox="0 0 120 120" className="-rotate-90">
-                  <defs>
-                    <linearGradient id="glow-ring" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stopColor="hsl(335 100% 59%)" />
-                      <stop offset="100%" stopColor="hsl(256 90% 68%)" />
-                    </linearGradient>
-                  </defs>
                   <circle cx="60" cy="60" r="50" stroke="hsl(333 60% 95%)" strokeWidth="14" fill="none" />
                   <circle
                     cx="60" cy="60" r="50"
-                    stroke="url(#glow-ring)" strokeWidth="14" fill="none" strokeLinecap="round"
+                    stroke="hsl(335 100% 59%)" strokeWidth="14" fill="none" strokeLinecap="round"
                     strokeDasharray={dash}
                     strokeDashoffset={dash - dash * scorePct}
-                    style={{ transition: "stroke-dashoffset 0.8s ease" }}
+                    style={{ transition: "stroke-dashoffset 0.8s ease", filter: "drop-shadow(0 2px 0 hsl(260 16% 15% / 0.15))" }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
