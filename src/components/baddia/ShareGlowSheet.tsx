@@ -7,9 +7,11 @@ import { X, Copy, Share2, Download } from "lucide-react";
 interface Props {
   open: boolean;
   onClose: () => void;
+  /** If provided, shares only this quote instead of the full glow card. */
+  quote?: string;
 }
 
-export function ShareGlowSheet({ open, onClose }: Props) {
+export function ShareGlowSheet({ open, onClose, quote }: Props) {
   const { user } = useBaddia();
   const vibe = computeDailyVibe(user);
   const [copied, setCopied] = useState(false);
@@ -18,8 +20,11 @@ export function ShareGlowSheet({ open, onClose }: Props) {
 
   const scorePct = vibe.glowScore / 100;
   const dash = 314;
+  const quoteMode = !!quote;
 
-  const shareText = `✨ Mi energía de hoy en Baddia\nGlow ${vibe.glowScore}/100 · ${vibe.color.name} · Lucky #${vibe.luckyNumber}\n"${vibe.advice}" 💖`;
+  const shareText = quoteMode
+    ? `"${quote}" ✨\n— Baddia`
+    : `✨ Mi energía de hoy en Baddia\nGlow ${vibe.glowScore}/100 · ${vibe.color.name} · Lucky #${vibe.luckyNumber}\n"${vibe.advice}" 💖`;
 
   const handleCopy = async () => {
     try {
