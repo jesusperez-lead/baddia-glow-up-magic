@@ -4,13 +4,13 @@ import { useState } from "react";
 
 type PlanKey = "monthly" | "yearly" | "girls";
 
-const PRO_FEATURES = [
-  "Lecturas ilimitadas ✨",
-  "Palm Reading completo 🖐️",
-  "Crush Energy completa 💘",
-  "Tarot & Aura Check completos 🔮",
-  "Reporte mensual de tu glow 🌙",
-  "Rituales personalizados 🕯️",
+const PRO_FEATURES: { icon: string; label: string }[] = [
+  { icon: "✨", label: "Lecturas ilimitadas" },
+  { icon: "🖐️", label: "Palm Reading completo" },
+  { icon: "💘", label: "Crush Energy completa" },
+  { icon: "🔮", label: "Tarot & Aura Check" },
+  { icon: "🌙", label: "Reporte mensual" },
+  { icon: "🕯️", label: "Rituales personalizados" },
 ];
 
 const GIRLS_FEATURES = [
@@ -63,14 +63,22 @@ export function Paywall() {
         </div>
 
         {/* Pro features */}
-        <div className="px-6 pt-5 pb-2">
-          <div className="grid grid-cols-2 gap-x-3 gap-y-2">
+        <div className="px-5 pt-5 pb-2">
+          <p className="text-[10px] uppercase tracking-[0.15em] font-bold text-baddia-purple/60 mb-2.5 pl-1">
+            ✨ Todo lo que incluye
+          </p>
+          <div className="grid grid-cols-2 gap-2">
             {PRO_FEATURES.map((f) => (
-              <div key={f} className="flex items-start gap-2">
-                <span className="mt-0.5 w-5 h-5 rounded-full bg-gradient-glow flex items-center justify-center shadow-soft shrink-0">
-                  <Check size={11} strokeWidth={3} className="text-white" />
+              <div
+                key={f.label}
+                className="flex items-center gap-2 rounded-2xl bg-white/80 border border-pink-100 px-2.5 py-2 shadow-soft"
+              >
+                <span className="w-7 h-7 rounded-xl bg-gradient-glow flex items-center justify-center text-[14px] shrink-0 shadow-soft">
+                  {f.icon}
                 </span>
-                <span className="text-[12px] font-semibold text-baddia-purple leading-tight">{f}</span>
+                <span className="text-[11.5px] font-bold text-baddia-purple leading-tight">
+                  {f.label}
+                </span>
               </div>
             ))}
           </div>
