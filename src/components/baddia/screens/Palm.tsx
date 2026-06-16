@@ -112,29 +112,77 @@ export function Palm() {
     }
   };
 
+  // sticker positions for ritual chamber (matches selected design v3)
+  const STICKER_POS = [
+    "absolute top-3 left-3 -rotate-6 bg-baddia-hot text-white",
+    "absolute top-10 right-3 rotate-[4deg] bg-baddia-purple text-white",
+    "absolute bottom-20 right-5 -rotate-3 bg-white text-baddia-ink",
+    "absolute bottom-24 left-5 rotate-[8deg] bg-baddia-yellow text-baddia-ink",
+  ];
+
   return (
-    <div className="relative min-h-full gradient-bg-soft pb-6">
-      <header className="px-5 pt-8 pb-4">
-        <span className="chip bg-white/80 text-baddia-purple">🤲 Lectura de mano</span>
-        <h1 className="font-display font-black text-3xl text-baddia-purple mt-2">Palm Reading</h1>
-        <p className="text-sm text-baddia-purple/70 mt-1">Tu palma, leída por Baddia ✨</p>
+    <div className="relative min-h-full gradient-bg-soft pb-6 overflow-hidden">
+      {/* glow blobs */}
+      <div className="pointer-events-none absolute -top-10 -right-10 w-64 h-64 rounded-full bg-baddia-hot/20 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-32 -left-10 w-64 h-64 rounded-full bg-baddia-purple/20 blur-3xl" />
+
+      <header className="relative z-10 px-5 pt-8 pb-4">
+        <span className="inline-block px-3 py-1 bg-baddia-yellow border-[2.5px] border-baddia-ink rounded-full shadow-[3px_3px_0_hsl(260_16%_15%)] text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink">
+          ✨ Lectura de mano
+        </span>
+        <h1 className="font-display font-black italic text-[44px] leading-[0.95] tracking-tight text-baddia-ink mt-3">
+          Palm<br />Reading
+        </h1>
+        <p className="text-[15px] font-medium italic text-baddia-ink/70 mt-2">
+          Tu palma, leída por Baddia ✨
+        </p>
       </header>
 
-      <div className="px-5 space-y-4">
-        {/* INSTRUCCIONES */}
-        {!reading && (
-          <div className="baddia-card bg-white">
-            <p className="font-display font-bold text-baddia-purple">
-              Toma una foto clara de tu palma con buena luz 📸
-            </p>
-            <div className="grid grid-cols-2 gap-2 mt-4">
-              {TIPS.map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-2 rounded-2xl bg-pink-50 px-3 py-2.5">
-                  <Icon size={16} className="text-baddia-hot shrink-0" />
-                  <span className="text-xs font-semibold text-baddia-purple">{text}</span>
-                </div>
-              ))}
+      <div className="relative z-10 px-5 space-y-5">
+        {/* RITUAL CHAMBER (pre-upload) */}
+        {!reading && !preview && (
+          <div className="relative w-full aspect-[4/5] bg-white border-[2.5px] border-baddia-ink rounded-3xl shadow-[6px_8px_0_hsl(260_16%_15%)] overflow-hidden">
+            {/* dotted pattern */}
+            <div
+              className="absolute inset-0 opacity-[0.05]"
+              style={{
+                backgroundImage: "radial-gradient(hsl(260 16% 15%) 1px, transparent 1px)",
+                backgroundSize: "12px 12px",
+              }}
+            />
+            {/* hand silhouette guide */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center opacity-50">
+              <svg
+                className="w-40 h-56 stroke-baddia-ink fill-none animate-pulse"
+                strokeWidth={2}
+                strokeDasharray="8 8"
+                viewBox="0 0 24 32"
+              >
+                <path d="M12 32C12 32 4 28 4 20C4 16 2 15 2 12C2 9 4 7 6 7C7 7 8 8 8 10C8 7 10 5 12 5C14 5 16 7 16 10C16 8 17 7 18 7C20 7 22 9 22 12C22 15 20 16 20 20C20 28 12 32 12 32Z" />
+              </svg>
+              <span className="mt-3 font-display font-black text-[11px] tracking-[0.2em] uppercase text-baddia-ink">
+                Coloca tu palma aquí
+              </span>
             </div>
+            {/* scattered sticker tips */}
+            {TIPS.map(({ icon: Icon, text }, i) => (
+              <div
+                key={text}
+                className={`${STICKER_POS[i]} px-2.5 py-1.5 border-2 border-baddia-ink rounded-xl shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center gap-1.5`}
+              >
+                <Icon size={12} />
+                <span className="font-display font-black text-[10px] uppercase tracking-wider">{text}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* RITUAL CONTEXT */}
+        {!reading && !preview && (
+          <div className="p-4 bg-white border-[2.5px] border-baddia-ink rounded-2xl shadow-[5px_5px_0_hsl(260_16%_15%)] -rotate-1">
+            <p className="text-[12px] leading-relaxed font-semibold text-baddia-ink">
+              Las líneas de tu mano revelan tu energía. Captura cada detalle para una lectura precisa ✨
+            </p>
           </div>
         )}
 
@@ -162,21 +210,27 @@ export function Palm() {
             <button
               disabled={loading}
               onClick={() => inputRef.current?.click()}
-              className="w-full py-4 rounded-2xl bg-gradient-glow text-white font-bold shadow-glow flex items-center justify-center gap-2 active:scale-[0.98] transition-transform disabled:opacity-70"
+              className="relative w-full active:translate-x-[2px] active:translate-y-[2px] transition-transform disabled:opacity-70 group"
             >
-              {loading ? (
-                <>
-                  <Sparkles size={18} className="animate-spin" />
-                  Leyendo tu palma…
-                </>
-              ) : (
-                <>
-                  <Upload size={18} /> Subir foto de mi mano
-                </>
-              )}
+              <span className="absolute inset-0 bg-baddia-ink rounded-2xl translate-x-1.5 translate-y-1.5 group-active:translate-x-0 group-active:translate-y-0 transition-transform" />
+              <span className="relative flex items-center justify-center gap-2.5 bg-gradient-glow text-white py-4 px-6 rounded-2xl border-[2.5px] border-baddia-ink">
+                {loading ? (
+                  <>
+                    <Sparkles size={18} className="animate-spin" />
+                    <span className="font-display font-black text-base uppercase tracking-wider">Leyendo tu palma…</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload size={18} strokeWidth={3} />
+                    <span className="font-display font-black text-base uppercase tracking-wider">Subir foto de mi mano</span>
+                  </>
+                )}
+              </span>
             </button>
           </>
         )}
+
+
 
         {/* RESULTADO */}
         {reading?.valid && reading.summary && (
