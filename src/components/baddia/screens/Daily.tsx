@@ -161,7 +161,7 @@ export function Daily() {
                 {saved ? <Check size={14} /> : <Bookmark size={14} />} {saved ? "Guardada" : "Guardar"}
               </button>
               <button
-                onClick={() => toast("Compartido ✨")}
+                onClick={() => setShareOpen(true)}
                 className="btn-sticker flex-1 py-2.5 rounded-full bg-gradient-hot text-white text-[12px] flex items-center justify-center gap-1.5"
               >
                 <Share2 size={14} /> Compartir
