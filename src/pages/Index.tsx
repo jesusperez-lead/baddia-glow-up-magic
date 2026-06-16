@@ -10,6 +10,7 @@ import { Zodiac } from "@/components/baddia/screens/Zodiac";
 import { Palm } from "@/components/baddia/screens/Palm";
 import { Love } from "@/components/baddia/screens/Love";
 import { Profile } from "@/components/baddia/screens/Profile";
+import { WidgetsShowcase } from "@/components/baddia/screens/WidgetsShowcase";
 
 const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile"]);
 
@@ -25,6 +26,7 @@ function Router() {
     case "palm": content = <Palm />; break;
     case "love": content = <Love />; break;
     case "profile": content = <Profile />; break;
+    case "widgets": content = <WidgetsShowcase />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);

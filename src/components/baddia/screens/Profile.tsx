@@ -1,5 +1,5 @@
 import { useBaddia } from "@/lib/baddia-state";
-import { History, Pencil, Sparkles, Shield, LogOut, ChevronRight } from "lucide-react";
+import { History, Pencil, Sparkles, Shield, LogOut, ChevronRight, LayoutGrid } from "lucide-react";
 import { toast } from "sonner";
 
 export function Profile() {
@@ -7,6 +7,7 @@ export function Profile() {
 
   const rows = [
     { icon: History, label: "Historial", onClick: () => toast("Aquí verás tus lecturas guardadas ✨") },
+    { icon: LayoutGrid, label: "Widgets para iPhone", onClick: () => go("widgets") },
     { icon: Pencil, label: "Editar perfil", onClick: () => toast("Próximamente") },
     { icon: Sparkles, label: "Baddia Pro", onClick: openPaywall, pro: true },
     { icon: Shield, label: "Privacidad", onClick: () => toast("Tu energía está protegida 🔒") },

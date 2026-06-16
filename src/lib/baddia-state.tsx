@@ -8,7 +8,8 @@ export type Screen =
   | "zodiac"
   | "palm"
   | "love"
-  | "profile";
+  | "profile"
+  | "widgets";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
