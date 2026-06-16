@@ -1,4 +1,4 @@
-import { useBaddia } from "@/lib/baddia-state";
+import { useBaddia, type BaddiaUser } from "@/lib/baddia-state";
 import { Check, Crown, Heart, Lock, Sparkles, Users, X } from "lucide-react";
 import { useState } from "react";
 
