@@ -33,39 +33,39 @@ export function WidgetsShowcase() {
         <Section emoji="🔒" label="Lock screen">
           <PhoneCanvas wallpaper="lock">
             {/* time */}
-            <div className="pt-10 text-center text-white">
-              <p className="font-semibold text-[13px] opacity-90">jueves 16 de junio</p>
-              <p className="font-display font-black text-[72px] leading-none mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
+            <div className="pt-12 text-center text-white px-4">
+              <p className="font-semibold text-[11px] opacity-90 tracking-wide">jueves 16 de junio</p>
+              <p className="font-display font-black text-[64px] leading-none mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] tracking-tight">
                 09:24
               </p>
             </div>
 
             {/* lock-screen widgets row */}
-            <div className="px-5 mt-3 flex items-center justify-center gap-2">
+            <div className="px-4 mt-3 grid grid-cols-3 gap-1.5">
               <LockChip icon="✨" label="Glow" value="87" />
-              <LockChip icon="🌙" label="Luna" value="Creciente" />
+              <LockChip icon="🌙" label="Luna" value="Crec." />
               <LockChip icon="💘" label="Crush" value="Alta" />
             </div>
 
             {/* notifications */}
-            <div className="absolute bottom-20 left-0 right-0 px-3 space-y-2">
+            <div className="absolute bottom-16 left-0 right-0 px-2.5 space-y-1.5">
               <IOSNotification
                 app="Baddia"
-                title="Tu lectura de hoy está lista ✨"
-                body='"Hoy magnetizas más de lo que crees."'
+                title="Tu lectura está lista ✨"
+                body="Hoy magnetizas más de lo que crees."
                 time="ahora"
               />
               <IOSNotification
                 app="Baddia"
                 title="🌙 La luna te dice algo"
                 body="No bajes tu energía para encajar."
-                time="hace 5m"
+                time="5m"
               />
               <IOSNotification
                 app="Baddia · Girls"
-                title="Sofi compartió su glow contigo 💖"
-                body="Compatibilidad de hoy: 92% — vibra alta."
-                time="hace 12m"
+                title="Sofi compartió su glow 💖"
+                body="Compatibilidad de hoy: 92%."
+                time="12m"
               />
             </div>
           </PhoneCanvas>
