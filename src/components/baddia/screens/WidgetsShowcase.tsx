@@ -325,17 +325,17 @@ function PhoneCanvas({ children, wallpaper }: { children: React.ReactNode; wallp
 
   return (
     <div
-      className="relative mx-auto rounded-[36px] overflow-hidden border-[3px] border-baddia-ink shadow-[6px_8px_0_hsl(260_16%_15%)]"
-      style={{ background: bg, aspectRatio: "9/16", maxWidth: "300px" }}
+      className="relative mx-auto rounded-[38px] overflow-hidden border-[3px] border-baddia-ink shadow-[6px_8px_0_hsl(260_16%_15%)]"
+      style={{ background: bg, aspectRatio: "9/19", maxWidth: "340px" }}
     >
       {/* dynamic island */}
-      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-5 bg-baddia-ink rounded-full z-10" />
-      {/* status bar */}
-      <div className="absolute top-2.5 left-0 right-0 px-5 flex items-center justify-between text-white text-[10px] font-bold z-20">
-        <span>9:24</span>
-        <span className="flex items-center gap-1 opacity-90">
+      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-baddia-ink rounded-full z-10" />
+      {/* status bar — split around dynamic island */}
+      <div className="absolute top-3 left-0 right-0 px-6 flex items-center justify-between text-white text-[11px] font-bold z-20 pointer-events-none">
+        <span className="tracking-tight">9:24</span>
+        <span className="flex items-center gap-1.5 opacity-90 text-[10px]">
           <span>5G</span>
-          <span>🔋</span>
+          <span>▮▮▮</span>
         </span>
       </div>
       {children}
@@ -345,26 +345,26 @@ function PhoneCanvas({ children, wallpaper }: { children: React.ReactNode; wallp
 
 function LockChip({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
-    <div className="flex-1 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-1.5 text-white text-center">
-      <p className="text-[14px] leading-none">{icon}</p>
-      <p className="text-[8px] font-display font-black uppercase tracking-wider opacity-80 mt-0.5">{label}</p>
-      <p className="font-display font-black text-[10px] leading-tight">{value}</p>
+    <div className="min-w-0 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 px-2 py-1.5 text-white text-center">
+      <p className="text-[13px] leading-none">{icon}</p>
+      <p className="text-[7.5px] font-display font-black uppercase tracking-wider opacity-80 mt-0.5 truncate">{label}</p>
+      <p className="font-display font-black text-[10px] leading-tight truncate">{value}</p>
     </div>
   );
 }
 
 function IOSNotification({ app, title, body, time }: { app: string; title: string; body: string; time: string }) {
   return (
-    <div className="rounded-2xl bg-white/85 backdrop-blur-xl px-3 py-2 shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
-      <div className="flex items-center justify-between mb-0.5">
-        <div className="flex items-center gap-1.5">
-          <div className="w-4 h-4 rounded-md bg-gradient-hot flex items-center justify-center text-[8px]">✨</div>
-          <p className="text-[9px] font-bold text-baddia-ink uppercase tracking-wide">{app}</p>
+    <div className="rounded-2xl bg-white/90 backdrop-blur-xl px-2.5 py-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.15)] min-w-0">
+      <div className="flex items-center justify-between gap-2 mb-0.5">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <div className="w-3.5 h-3.5 rounded-md bg-gradient-hot flex items-center justify-center text-[7px] shrink-0">✨</div>
+          <p className="text-[8px] font-bold text-baddia-ink uppercase tracking-wide truncate">{app}</p>
         </div>
-        <p className="text-[9px] text-baddia-ink/60 font-semibold">{time}</p>
+        <p className="text-[8px] text-baddia-ink/60 font-semibold shrink-0">{time}</p>
       </div>
-      <p className="font-display font-black text-[11px] text-baddia-ink leading-tight">{title}</p>
-      <p className="text-[10px] text-baddia-ink/70 font-medium leading-snug mt-0.5">{body}</p>
+      <p className="font-display font-black text-[10px] text-baddia-ink leading-tight truncate">{title}</p>
+      <p className="text-[9px] text-baddia-ink/70 font-medium leading-snug mt-0.5 line-clamp-2">{body}</p>
     </div>
   );
 }
