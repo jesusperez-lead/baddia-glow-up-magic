@@ -256,39 +256,104 @@ export function Zodiac() {
               <Users size={11} /> tu match del día
             </span>
           </div>
-          <div className="rounded-3xl bg-white border-[2.5px] border-baddia-ink p-5 pt-7 shadow-[5px_6px_0_hsl(260_16%_15%)]">
-            <p className="text-[12px] font-display font-bold text-baddia-ink/65 mb-3">Top signos contigo hoy:</p>
-            <div className="space-y-2">
-              {COMPAT_TOP.map((m, i) => {
-                const locked = isFree && i > 0;
+
+          <div className="rounded-3xl bg-white border-[2.5px] border-baddia-ink p-4 pt-7 shadow-[5px_6px_0_hsl(260_16%_15%)] space-y-3">
+            {/* HERO #1 — gratis */}
+            {(() => {
+              const m = COMPAT_TOP[0];
+              return (
+                <div className="relative overflow-hidden rounded-2xl border-2 border-baddia-ink bg-gradient-to-br from-baddia-hot/15 via-pink-100 to-baddia-soft p-4 shadow-[3px_4px_0_hsl(260_16%_15%)]">
+                  {/* sticker rank */}
+                  <span className="absolute -top-2 -left-2 w-9 h-9 rounded-full border-[2.5px] border-baddia-ink bg-baddia-yellow flex items-center justify-center font-display font-black text-[13px] text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] rotate-[-8deg]">
+                    #1
+                  </span>
+
+                  <div className="flex items-start gap-3 pl-7">
+                    {/* glyph tile */}
+                    <span className="shrink-0 w-14 h-14 rounded-2xl border-[2.5px] border-baddia-ink bg-white flex items-center justify-center text-[32px] shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                      {m.glyph}
+                    </span>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="font-display font-black text-[20px] text-baddia-ink leading-none">{m.sign}</p>
+                        <span className="rounded-full bg-white border-2 border-baddia-ink px-2 py-0.5 text-[9px] font-display font-black uppercase tracking-wider text-baddia-ink">
+                          {m.element}
+                        </span>
+                      </div>
+                      <p className="text-[11px] font-display font-black uppercase tracking-wider text-baddia-hot mt-1">
+                        ✨ {m.vibe}
+                      </p>
+                    </div>
+
+                    {/* big % */}
+                    <div className="shrink-0 flex flex-col items-center">
+                      <span className="rounded-2xl bg-baddia-hot text-white px-2.5 py-1.5 font-display font-black text-[20px] leading-none border-2 border-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                        {m.pct}
+                      </span>
+                      <span className="text-[8px] font-display font-black uppercase tracking-widest text-baddia-ink/55 mt-1">match</span>
+                    </div>
+                  </div>
+
+                  {/* progress bar */}
+                  <div className="mt-3 h-2 rounded-full border-2 border-baddia-ink bg-white overflow-hidden">
+                    <div className="h-full bg-baddia-hot" style={{ width: `${m.pct}%` }} />
+                  </div>
+
+                  {/* reason */}
+                  <p className="mt-3 text-[12.5px] font-semibold text-baddia-ink leading-snug" style={{ textWrap: "balance" as any }}>
+                    "{m.reason}"
+                  </p>
+                </div>
+              );
+            })()}
+
+            {/* OTROS — Pro / compactos */}
+            <div className="grid grid-cols-2 gap-2">
+              {COMPAT_TOP.slice(1).map((m, idx) => {
+                const rank = idx + 2;
+                const locked = isFree;
                 return (
                   <button
                     key={m.sign}
                     onClick={() => locked && openPaywall()}
-                    className="w-full flex items-center gap-3 rounded-2xl border-2 border-baddia-ink bg-baddia-soft/40 px-3 py-2 active:scale-[0.98] transition-transform"
+                    className="relative text-left rounded-2xl border-2 border-baddia-ink bg-white p-2.5 active:scale-[0.97] transition-transform shadow-[2px_3px_0_hsl(260_16%_15%)] overflow-hidden"
                   >
-                    <span className="w-9 h-9 rounded-xl border-2 border-baddia-ink bg-white flex items-center justify-center text-xl">
-                      {m.glyph}
-                    </span>
-                    <span className="flex-1 text-left">
-                      <p className="font-display font-black text-[13px] text-baddia-ink leading-none">{m.sign}</p>
-                      <p className="text-[10px] text-baddia-ink/60 font-bold uppercase tracking-wider mt-0.5">
-                        {locked ? "desbloquea con pro" : "alta vibra"}
-                      </p>
-                    </span>
-                    {locked ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-baddia-ink text-white px-2 py-1 text-[9px] font-display font-black uppercase">
-                        <Lock size={9} /> Pro
+                    <span className="absolute top-1.5 right-1.5 text-[9px] font-display font-black text-baddia-ink/40">#{rank}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="w-9 h-9 rounded-xl border-2 border-baddia-ink bg-baddia-soft/50 flex items-center justify-center text-lg shrink-0">
+                        {m.glyph}
                       </span>
-                    ) : (
-                      <span className="rounded-full bg-baddia-hot text-white px-2.5 py-1 text-[11px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-display font-black text-[12px] text-baddia-ink leading-none truncate">{m.sign}</p>
+                        <p className="text-[9px] font-display font-black uppercase tracking-wider text-baddia-ink/50 mt-0.5">{m.element}</p>
+                      </div>
+                    </div>
+                    <div className="mt-2 flex items-center justify-between gap-1.5">
+                      <span className={`font-display font-black text-[15px] leading-none ${locked ? "blur-[5px] select-none text-baddia-ink/60" : "text-baddia-hot"}`}>
                         {m.pct}%
                       </span>
-                    )}
+                      {locked ? (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-baddia-ink text-white px-1.5 py-0.5 text-[8px] font-display font-black uppercase tracking-wider">
+                          <Lock size={8} /> Pro
+                        </span>
+                      ) : (
+                        <span className="text-[9px] font-display font-black uppercase tracking-wider text-baddia-ink/60">vibra</span>
+                      )}
+                    </div>
                   </button>
                 );
               })}
             </div>
+
+            {isFree && (
+              <button
+                onClick={openPaywall}
+                className="w-full rounded-full bg-baddia-ink text-white py-2.5 text-[11px] font-display font-black uppercase tracking-widest shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5 active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+              >
+                ✨ ver tu top 12 con Pro
+              </button>
+            )}
           </div>
         </div>
 
