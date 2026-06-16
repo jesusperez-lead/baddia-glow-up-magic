@@ -61,6 +61,9 @@ export default {
         "gradient-pearl": "var(--gradient-pearl)",
         "gradient-sky": "var(--gradient-sky)",
         "gradient-night": "var(--gradient-night)",
+        "gradient-hot": "var(--gradient-hot)",
+        "gradient-mint": "var(--gradient-mint)",
+        "gradient-lime": "var(--gradient-lime)",
       },
       boxShadow: {
         soft: "0 8px 24px -8px hsl(348 80% 70% / 0.25)",
