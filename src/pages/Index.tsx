@@ -4,6 +4,7 @@ import { BottomNav } from "@/components/baddia/BottomNav";
 import { Paywall } from "@/components/baddia/Paywall";
 import { Welcome } from "@/components/baddia/screens/Welcome";
 import { Onboarding } from "@/components/baddia/screens/Onboarding";
+import { Auth } from "@/components/baddia/screens/Auth";
 import { FirstReading } from "@/components/baddia/screens/FirstReading";
 import { Daily } from "@/components/baddia/screens/Daily";
 import { Zodiac } from "@/components/baddia/screens/Zodiac";
@@ -20,6 +21,7 @@ function Router() {
   switch (screen) {
     case "welcome": content = <Welcome />; break;
     case "onboarding": content = <Onboarding />; break;
+    case "auth": content = <Auth />; break;
     case "first-reading": content = <FirstReading />; break;
     case "daily": content = <Daily />; break;
     case "zodiac": content = <Zodiac />; break;

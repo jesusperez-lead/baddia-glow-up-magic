@@ -56,7 +56,7 @@ export function Onboarding() {
     setProgress(0);
     const msgInt = setInterval(() => setMsgIdx((i) => (i + 1) % LOADING_MESSAGES.length), 900);
     const progInt = setInterval(() => setProgress((p) => Math.min(100, p + 2.5)), 100);
-    const timeout = setTimeout(() => go("first-reading"), 4200);
+    const timeout = setTimeout(() => go("auth"), 4200);
     return () => { clearInterval(msgInt); clearInterval(progInt); clearTimeout(timeout); };
   }, [step, go]);
 
