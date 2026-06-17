@@ -422,7 +422,6 @@ export function Outfit() {
                   src={preview}
                   alt="Tu outfit"
                   className="w-full h-full object-cover"
-                  crossOrigin="anonymous"
                 />
                 <div className="absolute top-3 left-3">
                   <span
