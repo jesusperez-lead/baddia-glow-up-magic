@@ -2,7 +2,7 @@
 // Combines name, birth date, sign, life number, and today's date.
 
 import type { BaddiaUser } from "./baddia-state";
-import { QUOTES } from "./baddia-state";
+import { QUOTES } from "./baddia-quotes";
 import type { Zodiac } from "./baddia-numerology";
 
 export interface DailyColor {

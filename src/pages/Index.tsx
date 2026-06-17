@@ -1,4 +1,4 @@
-import { BaddiaProvider, useBaddia } from "@/lib/baddia-state";
+import { useBaddia } from "@/lib/baddia-state";
 import { PhoneFrame } from "@/components/baddia/PhoneFrame";
 import { BottomNav } from "@/components/baddia/BottomNav";
 import { Paywall } from "@/components/baddia/Paywall";
@@ -53,10 +53,6 @@ function Router() {
   );
 }
 
-const Index = () => (
-  <BaddiaProvider>
-    <Router />
-  </BaddiaProvider>
-);
+const Index = () => <Router />;
 
 export default Index;
