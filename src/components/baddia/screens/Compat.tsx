@@ -193,6 +193,7 @@ export function Compat() {
           imageBBase64: photoB.base64,
           mimeTypeB: photoB.mime,
           relationship: rel,
+          signB: signB ?? undefined,
         },
       });
       if (error) throw error;
