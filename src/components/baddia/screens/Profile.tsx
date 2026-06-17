@@ -77,12 +77,17 @@ export function Profile() {
                 <p className="font-display font-black text-[22px] leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
                   {user.name}
                 </p>
-                <p className="text-[11px] font-semibold opacity-85 mt-1.5 flex items-center gap-1.5">
-                  <Cake size={12} /> {birth}
-                </p>
-                <p className="text-[11px] font-semibold opacity-85 mt-1 flex items-center gap-1.5">
-                  {glyph} {user.sign} · número {user.lifeNumber}
-                </p>
+                <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/90 text-baddia-ink border-2 border-white px-2.5 py-0.5 text-[10px] font-display font-bold shadow-[1.5px_1.5px_0_rgba(0,0,0,0.2)]">
+                    <Cake size={10} /> {birth}
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/90 text-baddia-ink border-2 border-white px-2.5 py-0.5 text-[10px] font-display font-bold shadow-[1.5px_1.5px_0_rgba(0,0,0,0.2)]">
+                    {glyph} {user.sign}
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-baddia-yellow/90 text-baddia-ink border-2 border-white px-2.5 py-0.5 text-[10px] font-display font-bold shadow-[1.5px_1.5px_0_rgba(0,0,0,0.2)]">
+                    <Hash size={10} /> {user.lifeNumber}
+                  </span>
+                </div>
               </div>
             </div>
 
