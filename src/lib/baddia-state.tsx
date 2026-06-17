@@ -10,7 +10,8 @@ export type Screen =
   | "palm"
   | "love"
   | "profile"
-  | "widgets";
+  | "widgets"
+  | "outfit";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
