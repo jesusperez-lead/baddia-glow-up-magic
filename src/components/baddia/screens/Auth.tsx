@@ -93,12 +93,6 @@ export function Auth() {
           {loading === "apple" ? "Conectando..." : "Continuar con Apple"}
         </button>
 
-        <button
-          onClick={() => go("first-reading")}
-          className="w-full py-3 text-[13px] font-bold text-baddia-ink/60 underline-offset-4 hover:underline"
-        >
-          Saltar por ahora
-        </button>
 
         <p className="text-[10px] text-center text-baddia-ink/50 pt-1 leading-relaxed px-6">
           Al continuar aceptas los términos y la política de privacidad de Baddia ✨
