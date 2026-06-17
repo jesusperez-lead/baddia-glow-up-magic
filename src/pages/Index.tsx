@@ -12,8 +12,9 @@ import { Palm } from "@/components/baddia/screens/Palm";
 import { Love } from "@/components/baddia/screens/Love";
 import { Profile } from "@/components/baddia/screens/Profile";
 import { WidgetsShowcase } from "@/components/baddia/screens/WidgetsShowcase";
+import { Outfit } from "@/components/baddia/screens/Outfit";
 
-const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile"]);
+const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile", "outfit"]);
 
 function Router() {
   const { screen } = useBaddia();
@@ -29,6 +30,7 @@ function Router() {
     case "love": content = <Love />; break;
     case "profile": content = <Profile />; break;
     case "widgets": content = <WidgetsShowcase />; break;
+    case "outfit": content = <Outfit />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);
