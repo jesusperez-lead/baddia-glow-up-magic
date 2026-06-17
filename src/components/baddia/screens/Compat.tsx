@@ -497,6 +497,67 @@ export function Compat() {
           Lectura energética ✨ solo entretenimiento, tú decides tu corazón 💖
         </p>
       </div>
+
+      {/* ───── Modal selector de signo ───── */}
+      {signPickerOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-baddia-ink/60 backdrop-blur-sm animate-fade-in p-4"
+          onClick={() => setSignPickerOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-sm rounded-3xl bg-white border-[2.5px] border-baddia-ink p-5 shadow-[6px_8px_0_hsl(260_16%_15%)] animate-pop-in max-h-[80vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="absolute -top-3 left-5">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-baddia-lavender text-white border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-black uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-2">
+                ✨ elige su signo
+              </span>
+            </div>
+            <button
+              onClick={() => setSignPickerOpen(false)}
+              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white border-2 border-baddia-ink flex items-center justify-center shadow-[2px_2px_0_hsl(260_16%_15%)]"
+            >
+              <X size={14} strokeWidth={3} className="text-baddia-ink" />
+            </button>
+            <p className="font-display font-black text-baddia-ink text-[18px] leading-tight mt-3">
+              Signo de tu match 💫
+            </p>
+            <p className="text-[12px] text-baddia-ink/65 font-medium mt-1 leading-snug">
+              Opcional. Si lo eliges, la lectura considera la astrología entre los dos.
+            </p>
+            <div className="grid grid-cols-3 gap-2 mt-4">
+              {ZODIAC_SIGNS.map((s) => {
+                const active = signB === s.name;
+                return (
+                  <button
+                    key={s.name}
+                    onClick={() => { setSignB(s.name); setSignPickerOpen(false); }}
+                    className={`relative rounded-2xl border-[2.5px] border-baddia-ink py-2.5 px-1 flex flex-col items-center gap-0.5 transition-all ${
+                      active
+                        ? "bg-baddia-hot text-white shadow-[3px_3px_0_hsl(260_16%_15%)] -translate-y-0.5"
+                        : "bg-white text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)]"
+                    }`}
+                  >
+                    {active && (
+                      <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-baddia-yellow border-2 border-baddia-ink flex items-center justify-center">
+                        <Check size={10} strokeWidth={4} className="text-baddia-ink" />
+                      </span>
+                    )}
+                    <span className="text-2xl leading-none">{s.glyph}</span>
+                    <span className="text-[10px] font-display font-black uppercase tracking-wider">{s.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              onClick={() => { setSignB(null); setSignPickerOpen(false); }}
+              className="mt-4 w-full py-2.5 rounded-full bg-white border-2 border-baddia-ink text-baddia-ink text-[12px] font-display font-black uppercase tracking-wider shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5 active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+            >
+              Sin signo
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
