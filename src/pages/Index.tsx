@@ -32,6 +32,7 @@ function Router() {
     case "profile": content = <Profile />; break;
     case "widgets": content = <WidgetsShowcase />; break;
     case "outfit": content = <Outfit />; break;
+    case "lucky": content = <Lucky />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);
