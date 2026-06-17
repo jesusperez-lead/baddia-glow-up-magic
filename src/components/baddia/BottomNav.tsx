@@ -31,7 +31,7 @@ const readings: Reading[] = [
   { emoji: "🔮", title: "Tarot del día",    desc: "3 cartas para tu energía hoy.",  Icon: Wand2,         color: "bg-baddia-lavender", go: "tarot" },
   { emoji: "✨", title: "Carta astral",     desc: "Tu mapa cósmico personalizado.", Icon: Star,          color: "bg-baddia-yellow",   go: "astral" },
   { emoji: "💘", title: "Compatibilidad",   desc: "Tu match con tu crush.",         Icon: HeartHandshake,color: "bg-baddia-hot",      go: "compat" },
-  { emoji: "👁️", title: "Aura Check",       desc: "Detecta tu aura del momento.",   Icon: Eye,           color: "bg-baddia-bubble",   soon: true },
+  { emoji: "👁️", title: "Aura Check",       desc: "Detecta tu aura del momento.",   Icon: Eye,           color: "bg-baddia-bubble",   go: "aura" },
 ];
 
 export function BottomNav() {
