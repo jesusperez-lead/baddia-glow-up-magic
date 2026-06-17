@@ -112,25 +112,43 @@ export function Outfit() {
     }
   };
 
-  const handleShare = async () => {
-    if (!reading?.headline) return;
-    const text = `${reading.headline} ✨\nVibe: ${reading.vibe ?? "magnética"} · Estilo: ${reading.style ?? "único"}\n— Baddia`;
+  const captureAndShare = async () => {
+    if (!shareCardRef.current || !reading) return;
+    setIsCapturing(true);
     try {
-      if (navigator.share) {
-        await navigator.share({ text, title: "Mi outfit hoy ✨" });
+      const dataUrl = await toPng(shareCardRef.current, {
+        cacheBust: true,
+        pixelRatio: 3,
+        backgroundColor: "#FFF7FB",
+      });
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], "baddia-outfit.png", { type: "image/png" });
+
+      if (
+        navigator.share &&
+        navigator.canShare?.({ files: [file] })
+      ) {
+        await navigator.share({
+          files: [file],
+          title: "Mi outfit hoy ✨",
+          text: reading.headline ?? "",
+        });
       } else {
-        await navigator.clipboard.writeText(text);
-        toast.success("Copiado ✨ pégalo donde quieras");
+        const link = document.createElement("a");
+        link.download = "baddia-outfit.png";
+        link.href = dataUrl;
+        link.click();
+        toast.success("Card descargada ✨");
       }
-    } catch {
-      try {
-        await navigator.clipboard.writeText(text);
-        toast.success("Copiado ✨");
-      } catch {
-        toast.error("No pudimos compartir");
-      }
+    } catch (e) {
+      console.error(e);
+      toast.error("No se pudo generar la card");
+    } finally {
+      setIsCapturing(false);
     }
   };
+
+  const handleShare = () => setShowShareCard(true);
 
   return (
     <div className="relative min-h-full gradient-bg-soft pb-6 overflow-hidden">
@@ -335,7 +353,7 @@ export function Outfit() {
                   className="relative border-[2.5px] border-baddia-ink rounded-2xl p-4"
                   style={{ background: `linear-gradient(135deg, ${vibe.color.from}, ${vibe.color.to})` }}
                 >
-                  <span className="inline-block px-2 py-0.5 bg-white border-2 border-baddia-ink rounded-full text-[9px] font-display font-black uppercase tracking-widest text-baddia-ink mb-2">
+                  <span className="inline-block px-2 py-0.5 bg-white border-2 text-[9px] font-display font-black uppercase tracking-widest text-baddia-ink mb-2">
                     Color de hoy · {vibe.color.name}
                   </span>
                   <p className="text-[13px] font-display font-black italic text-baddia-ink leading-snug">
@@ -376,6 +394,144 @@ export function Outfit() {
           </>
         )}
       </div>
+
+      {/* SHARE CARD MODAL */}
+      {showShareCard && reading && preview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="relative w-full max-w-[380px] flex flex-col items-center gap-4">
+            {/* Close */}
+            <button
+              onClick={() => setShowShareCard(false)}
+              className="absolute -top-12 right-0 p-2 bg-white border-2 border-baddia-ink rounded-full shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-0.5 transition-transform"
+            >
+              <X size={16} strokeWidth={3} className="text-baddia-ink" />
+            </button>
+
+            {/* The Card (capturable) */}
+            <div
+              ref={shareCardRef}
+              className="w-[340px] max-w-full overflow-hidden rounded-[28px] border-[3px] border-baddia-ink"
+              style={{
+                boxShadow: "8px 10px 0 rgb(36,32,43)",
+                background: "linear-gradient(180deg, #FFF7FB 0%, #FFF6E8 100%)",
+              }}
+            >
+              {/* Outfit photo */}
+              <div className="relative w-full h-64 border-b-[3px] border-baddia-ink overflow-hidden">
+                <img
+                  src={preview}
+                  alt="Tu outfit"
+                  className="w-full h-full object-cover"
+                  crossOrigin="anonymous"
+                />
+                <div className="absolute top-3 left-3">
+                  <span
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border-2 border-baddia-ink text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink"
+                    style={{
+                      background: "#FFD12E",
+                      boxShadow: "2px 2px 0 rgb(36,32,43)",
+                    }}
+                  >
+                    ✨ Outfit del día
+                  </span>
+                </div>
+              </div>
+
+              {/* Card body */}
+              <div className="p-5 space-y-3">
+                <p
+                  className="font-display font-black italic leading-tight"
+                  style={{ fontSize: "22px", color: "#24202B" }}
+                >
+                  {reading.headline}
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {reading.vibe && (
+                    <span
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border-2 border-baddia-ink text-[10px] font-display font-black uppercase tracking-wider text-white"
+                      style={{ background: "#24202B", boxShadow: "2px 2px 0 rgba(36,32,43,0.25)" }}
+                    >
+                      Vibe · {reading.vibe}
+                    </span>
+                  )}
+                  {reading.style && (
+                    <span
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border-2 border-baddia-ink text-[10px] font-display font-black uppercase tracking-wider text-baddia-ink"
+                      style={{ background: "#C9B6FF", boxShadow: "2px 2px 0 rgba(36,32,43,0.25)" }}
+                    >
+                      Estilo · {reading.style}
+                    </span>
+                  )}
+                  {reading.colors && reading.colors.length > 0 && (
+                    <span
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border-2 border-baddia-ink text-[10px] font-display font-black uppercase tracking-wider text-baddia-ink"
+                      style={{ background: "#FF7AC8", boxShadow: "2px 2px 0 rgba(36,32,43,0.25)" }}
+                    >
+                      Colores · {reading.colors.join(" · ")}
+                    </span>
+                  )}
+                </div>
+
+                {reading.matchToday && (
+                  <div
+                    className="rounded-xl border-2 border-baddia-ink p-3"
+                    style={{
+                      background: `linear-gradient(135deg, ${vibe.color.from}, ${vibe.color.to})`,
+                      boxShadow: "3px 3px 0 rgb(36,32,43)",
+                    }}
+                  >
+                    <span
+                      className="inline-block px-2 py-0.5 rounded-full border-2 border-baddia-ink text-[9px] font-display font-black uppercase tracking-widest text-baddia-ink mb-1"
+                      style={{ background: "#fff" }}
+                    >
+                      Color de hoy · {vibe.color.name}
+                    </span>
+                    <p
+                      className="font-display font-black italic leading-snug"
+                      style={{ fontSize: "13px", color: "#24202B" }}
+                    >
+                      {reading.matchToday}
+                    </p>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between pt-1">
+                  <span
+                    className="font-display font-black text-[12px] uppercase tracking-widest"
+                    style={{ color: "#24202B", opacity: 0.45 }}
+                  >
+                    baddia.app
+                  </span>
+                  <span style={{ color: "#FF2E75", fontSize: 18 }}>✦</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Share action button */}
+            <button
+              onClick={captureAndShare}
+              disabled={isCapturing}
+              className="relative w-full max-w-[340px] active:translate-x-[2px] active:translate-y-[2px] transition-transform disabled:opacity-70 group"
+            >
+              <span className="absolute inset-0 bg-baddia-ink rounded-2xl translate-x-1.5 translate-y-1.5 group-active:translate-x-0 group-active:translate-y-0 transition-transform" />
+              <span className="relative flex items-center justify-center gap-2.5 bg-gradient-glow text-white py-3.5 px-6 rounded-2xl border-[2.5px] border-baddia-ink">
+                {isCapturing ? (
+                  <>
+                    <Sparkles size={18} className="animate-spin" />
+                    <span className="font-display font-black text-base uppercase tracking-wider">Creando card…</span>
+                  </>
+                ) : (
+                  <>
+                    <Download size={18} strokeWidth={3} />
+                    <span className="font-display font-black text-base uppercase tracking-wider">Guardar / Compartir</span>
+                  </>
+                )}
+              </span>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
