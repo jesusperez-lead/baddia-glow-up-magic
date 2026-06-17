@@ -152,10 +152,14 @@ const SCORE_COLOR = (s: number) => {
 export function Compat() {
   const { go, user } = useBaddia();
   const [rel, setRel] = useState<Relationship>("crush");
+  const [signB, setSignB] = useState<string | null>(null);
+  const [signPickerOpen, setSignPickerOpen] = useState(false);
   const [photoA, setPhotoA] = useState<{ preview: string; base64: string; mime: string } | null>(null);
   const [photoB, setPhotoB] = useState<{ preview: string; base64: string; mime: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [reading, setReading] = useState<CompatReading | null>(null);
+
+  const signBGlyph = ZODIAC_SIGNS.find((s) => s.name === signB)?.glyph;
 
   const handlePick = async (which: "A" | "B", file: File) => {
     if (!file.type.startsWith("image/")) {
