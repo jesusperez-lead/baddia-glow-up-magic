@@ -23,7 +23,11 @@ export function Profile() {
 
   const isPro = user.plan !== "Free";
   const glyph = SIGN_GLYPH[user.sign] ?? "✦";
-  const birth = `${user.day} ${MONTHS[Number(user.month) - 1] ?? ""} ${user.year}`;
+
+  const mIdx = Number(user.month);
+  const monthLabel = mIdx >= 1 && mIdx <= 12 ? MONTHS[mIdx - 1] : null;
+  const birthParts = [user.day, monthLabel, user.year].filter(Boolean) as string[];
+  const birth = birthParts.length ? birthParts.join(" · ") : "Fecha no disponible";
 
   const onVersionTap = () => {
     const n = tapCount + 1;
