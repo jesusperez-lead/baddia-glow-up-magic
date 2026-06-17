@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sparkles, Heart, User, Moon, Hand, Star, HeartHandshake, Wand2, Eye } from "lucide-react";
+import { Sparkles, Heart, User, Moon, Hand, Star, HeartHandshake, Wand2, Eye, Shirt } from "lucide-react";
 import { Screen, useBaddia } from "@/lib/baddia-state";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
@@ -26,6 +26,7 @@ type Reading = {
 
 const readings: Reading[] = [
   { emoji: "🤚", title: "Lectura de manos", desc: "Tu palma, leída por IA.",        Icon: Hand,          color: "bg-baddia-mint",     go: "palm" },
+  { emoji: "👗", title: "Outfit Check",      desc: "Tu look leído por IA.",          Icon: Shirt,         color: "bg-baddia-bubble",   go: "outfit" },
   { emoji: "🔮", title: "Tarot del día",    desc: "3 cartas para tu energía hoy.",  Icon: Wand2,         color: "bg-baddia-lavender", soon: true },
   { emoji: "✨", title: "Carta astral",     desc: "Tu mapa cósmico personalizado.", Icon: Star,          color: "bg-baddia-yellow",   soon: true },
   { emoji: "💘", title: "Compatibilidad",   desc: "Tu match con tu crush.",         Icon: HeartHandshake,color: "bg-baddia-hot",      soon: true },
