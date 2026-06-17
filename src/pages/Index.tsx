@@ -13,8 +13,9 @@ import { Love } from "@/components/baddia/screens/Love";
 import { Profile } from "@/components/baddia/screens/Profile";
 import { WidgetsShowcase } from "@/components/baddia/screens/WidgetsShowcase";
 import { Outfit } from "@/components/baddia/screens/Outfit";
+import { Lucky } from "@/components/baddia/screens/Lucky";
 
-const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile", "outfit"]);
+const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile", "outfit", "lucky"]);
 
 function Router() {
   const { screen } = useBaddia();
