@@ -68,11 +68,15 @@ export function Outfit() {
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [reading, setReading] = useState<OutfitReading | null>(null);
+  const [showShareCard, setShowShareCard] = useState(false);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const shareCardRef = useRef<HTMLDivElement>(null);
 
   const reset = () => {
     setPreview(null);
     setReading(null);
     setLoading(false);
+    setShowShareCard(false);
     if (inputRef.current) inputRef.current.value = "";
   };
 
