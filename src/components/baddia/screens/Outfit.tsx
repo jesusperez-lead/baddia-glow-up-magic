@@ -3,9 +3,10 @@ import { useBaddia } from "@/lib/baddia-state";
 import { computeDailyVibe } from "@/lib/baddia-daily";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { toPng } from "html-to-image";
 import {
   Camera, Upload, Sparkles, RotateCcw, Shirt, Palette, Wand2,
-  Share2, Copy, ArrowLeft, Sun, Eye,
+  Share2, Copy, ArrowLeft, Sun, Eye, X, Download,
 } from "lucide-react";
 
 type OutfitReading = {
