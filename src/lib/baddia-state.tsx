@@ -12,7 +12,8 @@ export type Screen =
   | "profile"
   | "widgets"
   | "outfit"
-  | "lucky";
+  | "lucky"
+  | "tarot";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
