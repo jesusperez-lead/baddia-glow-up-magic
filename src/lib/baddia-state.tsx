@@ -13,7 +13,8 @@ export type Screen =
   | "widgets"
   | "outfit"
   | "lucky"
-  | "tarot";
+  | "tarot"
+  | "astral";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
