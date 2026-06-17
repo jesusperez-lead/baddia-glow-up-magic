@@ -4,8 +4,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import {
-  ArrowLeft, Upload, RotateCcw, Sparkles, Share2, Heart, X, Plus,
+  ArrowLeft, Upload, RotateCcw, Sparkles, Share2, Heart, X, Plus, ChevronDown, Check,
 } from "lucide-react";
+
+const ZODIAC_SIGNS: { name: string; glyph: string; range: string }[] = [
+  { name: "Aries",       glyph: "♈", range: "21 mar — 19 abr" },
+  { name: "Tauro",       glyph: "♉", range: "20 abr — 20 may" },
+  { name: "Géminis",     glyph: "♊", range: "21 may — 20 jun" },
+  { name: "Cáncer",      glyph: "♋", range: "21 jun — 22 jul" },
+  { name: "Leo",         glyph: "♌", range: "23 jul — 22 ago" },
+  { name: "Virgo",       glyph: "♍", range: "23 ago — 22 sep" },
+  { name: "Libra",       glyph: "♎", range: "23 sep — 22 oct" },
+  { name: "Escorpio",    glyph: "♏", range: "23 oct — 21 nov" },
+  { name: "Sagitario",   glyph: "♐", range: "22 nov — 21 dic" },
+  { name: "Capricornio", glyph: "♑", range: "22 dic — 19 ene" },
+  { name: "Acuario",     glyph: "♒", range: "20 ene — 18 feb" },
+  { name: "Piscis",      glyph: "♓", range: "19 feb — 20 mar" },
+];
 
 type Relationship = "crush" | "amistad" | "pareja" | "match";
 
