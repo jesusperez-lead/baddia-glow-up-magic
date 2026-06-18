@@ -18,6 +18,8 @@ import { Tarot } from "@/components/baddia/screens/Tarot";
 import { Astral } from "@/components/baddia/screens/Astral";
 import { Compat } from "@/components/baddia/screens/Compat";
 import { Aura } from "@/components/baddia/screens/Aura";
+import { Account } from "@/components/baddia/screens/Account";
+import { DeleteAccount } from "@/components/baddia/screens/DeleteAccount";
 
 const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile", "outfit", "lucky", "tarot", "astral", "compat", "aura"]);
 
@@ -41,6 +43,8 @@ function Router() {
     case "astral": content = <Astral />; break;
     case "compat": content = <Compat />; break;
     case "aura": content = <Aura />; break;
+    case "account": content = <Account />; break;
+    case "delete-account": content = <DeleteAccount />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);
