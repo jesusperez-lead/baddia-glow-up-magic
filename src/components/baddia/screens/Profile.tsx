@@ -161,8 +161,8 @@ export function Profile() {
         <SectionLabel emoji="⚙️" text="ajustes" />
         <RowGroup
           rows={[
-            { icon: UserIcon, label: "Cuenta",        caption: "Nombre, fecha de nacimiento",
-              onClick: () => setAccountOpen(true), tint: "bg-baddia-bubble" },
+            { icon: UserIcon, label: "Cuenta",        caption: "Nombre, fecha · eliminar cuenta",
+              onClick: () => go("account"), tint: "bg-baddia-bubble" },
             { icon: Settings, label: "Preferencias",  caption: "Tema, sonidos, idioma",
               onClick: () => toast("Próximamente ✨"), tint: "bg-baddia-yellow" },
             { icon: Bell,     label: "Notificaciones", caption: "Tu lectura diaria, recordatorios",
