@@ -43,6 +43,8 @@ function Router() {
     case "astral": content = <Astral />; break;
     case "compat": content = <Compat />; break;
     case "aura": content = <Aura />; break;
+    case "account": content = <Account />; break;
+    case "delete-account": content = <DeleteAccount />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);
