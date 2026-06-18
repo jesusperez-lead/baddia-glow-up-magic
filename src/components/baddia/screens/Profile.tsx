@@ -23,10 +23,9 @@ const SIGN_GLYPH: Record<string, string> = {
 const MONTHS = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 
 export function Profile() {
-  const { user, setUser, openPaywall, go } = useBaddia();
+  const { user, openPaywall, go } = useBaddia();
   const [tapCount, setTapCount] = useState(0);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
 
   const isPro = user.plan !== "Free";
   const glyph = SIGN_GLYPH[user.sign] ?? "✦";
