@@ -10,10 +10,6 @@ import { toast } from "sonner";
 
 const APP_VERSION = "1.0.0";
 
-const MONTH_NAMES = [
-  "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-  "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre",
-];
 
 const SIGN_GLYPH: Record<string, string> = {
   Aries: "♈", Tauro: "♉", Géminis: "♊", Cáncer: "♋", Leo: "♌", Virgo: "♍",
