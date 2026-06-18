@@ -250,23 +250,10 @@ export function Profile() {
         </div>
       )}
 
-      {/* ───── Modal ajustes de cuenta ───── */}
-      {accountOpen && (
-        <AccountSheet
-          initial={{ name: user.name, day: user.day, month: user.month, year: user.year }}
-          onClose={() => setAccountOpen(false)}
-          onSave={({ name, day, month, year }) => {
-            const sign = computeZodiac(day, month);
-            const lifeNumber = computeLifeNumber(day, month, year);
-            setUser({ name, day, month, year, sign, lifeNumber });
-            setAccountOpen(false);
-            toast.success("Tu glow se actualizó ✨");
-          }}
-        />
-      )}
     </div>
   );
 }
+
 
 /* ───────────── Account Sheet ───────────── */
 
