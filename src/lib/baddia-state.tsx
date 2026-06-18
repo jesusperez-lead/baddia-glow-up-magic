@@ -16,7 +16,9 @@ export type Screen =
   | "tarot"
   | "astral"
   | "compat"
-  | "aura";
+  | "aura"
+  | "account"
+  | "delete-account";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
