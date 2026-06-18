@@ -3,11 +3,10 @@ import { useBaddia } from "@/lib/baddia-state";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import {
   History, Sparkles, Shield, LogOut, ChevronRight, LayoutGrid,
-  Settings, Trash2, Cake, Star, Hash, Lock, ArrowRight, Bookmark, Bell, Globe,
-  User as UserIcon, X, Check,
+  Settings, Trash2, Cake, Hash, Lock, ArrowRight, Bookmark, Bell, Globe,
+  User as UserIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-import { computeZodiac, computeLifeNumber } from "@/lib/baddia-numerology";
 
 const APP_VERSION = "1.0.0";
 
