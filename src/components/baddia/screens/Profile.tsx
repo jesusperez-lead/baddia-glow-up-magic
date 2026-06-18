@@ -4,10 +4,17 @@ import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import {
   History, Sparkles, Shield, LogOut, ChevronRight, LayoutGrid,
   Settings, Trash2, Cake, Star, Hash, Lock, ArrowRight, Bookmark, Bell, Globe,
+  User as UserIcon, X, Check,
 } from "lucide-react";
 import { toast } from "sonner";
+import { computeZodiac, computeLifeNumber } from "@/lib/baddia-numerology";
 
 const APP_VERSION = "1.0.0";
+
+const MONTH_NAMES = [
+  "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+  "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre",
+];
 
 const SIGN_GLYPH: Record<string, string> = {
   Aries: "♈", Tauro: "♉", Géminis: "♊", Cáncer: "♋", Leo: "♌", Virgo: "♍",
@@ -17,9 +24,10 @@ const SIGN_GLYPH: Record<string, string> = {
 const MONTHS = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 
 export function Profile() {
-  const { user, openPaywall, go } = useBaddia();
+  const { user, setUser, openPaywall, go } = useBaddia();
   const [tapCount, setTapCount] = useState(0);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
 
   const isPro = user.plan !== "Free";
   const glyph = SIGN_GLYPH[user.sign] ?? "✦";
@@ -153,6 +161,8 @@ export function Profile() {
         <SectionLabel emoji="⚙️" text="ajustes" />
         <RowGroup
           rows={[
+            { icon: UserIcon, label: "Cuenta",        caption: "Nombre, fecha de nacimiento",
+              onClick: () => setAccountOpen(true), tint: "bg-baddia-bubble" },
             { icon: Settings, label: "Preferencias",  caption: "Tema, sonidos, idioma",
               onClick: () => toast("Próximamente ✨"), tint: "bg-baddia-yellow" },
             { icon: Bell,     label: "Notificaciones", caption: "Tu lectura diaria, recordatorios",
@@ -239,6 +249,177 @@ export function Profile() {
           </div>
         </div>
       )}
+
+      {/* ───── Modal ajustes de cuenta ───── */}
+      {accountOpen && (
+        <AccountSheet
+          initial={{ name: user.name, day: user.day, month: user.month, year: user.year }}
+          onClose={() => setAccountOpen(false)}
+          onSave={({ name, day, month, year }) => {
+            const sign = computeZodiac(day, month);
+            const lifeNumber = computeLifeNumber(day, month, year);
+            setUser({ name, day, month, year, sign, lifeNumber });
+            setAccountOpen(false);
+            toast.success("Tu glow se actualizó ✨");
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ───────────── Account Sheet ───────────── */
+
+function AccountSheet({
+  initial,
+  onClose,
+  onSave,
+}: {
+  initial: { name: string; day: string; month: string; year: string };
+  onClose: () => void;
+  onSave: (v: { name: string; day: string; month: string; year: string }) => void;
+}) {
+  const [name, setName] = useState(initial.name);
+  const [day, setDay] = useState(initial.day);
+  const [month, setMonth] = useState(initial.month);
+  const [year, setYear] = useState(initial.year);
+  const [monthOpen, setMonthOpen] = useState(false);
+
+  const trimmed = name.trim();
+  const dayN = Number(day);
+  const monthN = Number(month);
+  const yearN = Number(year);
+  const currentYear = new Date().getFullYear();
+  const valid =
+    trimmed.length >= 2 && trimmed.length <= 30 &&
+    dayN >= 1 && dayN <= 31 &&
+    monthN >= 1 && monthN <= 12 &&
+    yearN >= 1920 && yearN <= currentYear;
+
+  const monthLabel = monthN >= 1 && monthN <= 12 ? MONTH_NAMES[monthN - 1] : "Mes";
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-baddia-ink/60 backdrop-blur-sm animate-fade-in p-4">
+      <div className="relative w-full max-w-sm rounded-3xl bg-white border-[2.5px] border-baddia-ink p-5 shadow-[6px_8px_0_hsl(260_16%_15%)] animate-pop-in">
+        <div className="absolute -top-3 left-5">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-baddia-lavender text-white border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-black uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-2">
+            <UserIcon size={10} /> ajustes de cuenta
+          </span>
+        </div>
+        <button
+          onClick={onClose}
+          aria-label="Cerrar"
+          className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border-[2.5px] border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center justify-center active:translate-y-[2px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+        >
+          <X size={16} className="text-baddia-ink" />
+        </button>
+
+        <p className="font-display font-black text-baddia-ink text-[20px] leading-tight mt-3">
+          Edita tu identidad ✨
+        </p>
+        <p className="text-[12px] text-baddia-ink/65 font-medium mt-1 leading-snug">
+          Tu signo y número de vida se recalculan automáticamente.
+        </p>
+
+        {/* Nombre */}
+        <div className="mt-4">
+          <label className="block text-[11px] font-display font-black text-baddia-ink/70 uppercase tracking-wider mb-1.5 pl-1">
+            Tu nombre
+          </label>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={30}
+            placeholder="Sofi"
+            className="w-full rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-pearl px-4 py-3 text-[15px] font-display font-bold text-baddia-ink placeholder:text-baddia-ink/30 shadow-[3px_3px_0_hsl(260_16%_15%)] focus:outline-none focus:bg-white"
+          />
+        </div>
+
+        {/* Fecha */}
+        <div className="mt-4">
+          <label className="block text-[11px] font-display font-black text-baddia-ink/70 uppercase tracking-wider mb-1.5 pl-1">
+            Fecha de nacimiento
+          </label>
+          <div className="grid grid-cols-[1fr_1.4fr_1.1fr] gap-2">
+            <input
+              inputMode="numeric"
+              value={day}
+              onChange={(e) => setDay(e.target.value.replace(/\D/g, "").slice(0, 2))}
+              placeholder="DD"
+              className="rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-pearl px-3 py-3 text-center text-[15px] font-display font-black text-baddia-ink placeholder:text-baddia-ink/30 shadow-[3px_3px_0_hsl(260_16%_15%)] focus:outline-none focus:bg-white"
+            />
+            <button
+              type="button"
+              onClick={() => setMonthOpen(true)}
+              className="rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-pearl px-3 py-3 text-[14px] font-display font-black text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-[2px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all inline-flex items-center justify-between gap-1"
+            >
+              <span className={monthN ? "" : "text-baddia-ink/30"}>{monthLabel}</span>
+              <ChevronRight size={14} className="rotate-90 text-baddia-ink/50" />
+            </button>
+            <input
+              inputMode="numeric"
+              value={year}
+              onChange={(e) => setYear(e.target.value.replace(/\D/g, "").slice(0, 4))}
+              placeholder="AAAA"
+              className="rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-pearl px-3 py-3 text-center text-[15px] font-display font-black text-baddia-ink placeholder:text-baddia-ink/30 shadow-[3px_3px_0_hsl(260_16%_15%)] focus:outline-none focus:bg-white"
+            />
+          </div>
+        </div>
+
+        {/* Botones */}
+        <div className="mt-5 flex gap-2">
+          <button
+            onClick={onClose}
+            className="flex-1 py-3 rounded-full bg-white text-baddia-ink font-display font-black text-[13px] border-2 border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-[2px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+          >
+            Cancelar
+          </button>
+          <button
+            disabled={!valid}
+            onClick={() => valid && onSave({ name: trimmed, day, month, year })}
+            className="flex-1 py-3 rounded-full bg-baddia-hot text-white font-display font-black text-[13px] border-2 border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-[2px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all inline-flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:active:translate-y-0 disabled:active:shadow-[3px_3px_0_hsl(260_16%_15%)]"
+          >
+            <Check size={13} /> Guardar
+          </button>
+        </div>
+
+        {/* Selector de mes */}
+        {monthOpen && (
+          <div
+            className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 backdrop-blur-sm rounded-3xl p-4"
+            onClick={() => setMonthOpen(false)}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="w-full rounded-3xl bg-white border-[2.5px] border-baddia-ink p-3 shadow-[5px_6px_0_hsl(260_16%_15%)] animate-pop-in"
+            >
+              <p className="font-display font-black text-baddia-ink text-[13px] uppercase tracking-wider px-2 pt-1 pb-2">
+                Elige el mes
+              </p>
+              <div className="grid grid-cols-3 gap-2">
+                {MONTH_NAMES.map((m, i) => {
+                  const idx = String(i + 1);
+                  const active = idx === month;
+                  return (
+                    <button
+                      key={m}
+                      onClick={() => {
+                        setMonth(idx);
+                        setMonthOpen(false);
+                      }}
+                      className={`rounded-2xl border-2 border-baddia-ink py-2 text-[12px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-[2px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all ${
+                        active ? "bg-baddia-hot text-white" : "bg-baddia-pearl text-baddia-ink"
+                      }`}
+                    >
+                      {m.slice(0, 3)}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
