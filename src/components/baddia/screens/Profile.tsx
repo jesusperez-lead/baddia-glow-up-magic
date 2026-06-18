@@ -4,10 +4,17 @@ import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import {
   History, Sparkles, Shield, LogOut, ChevronRight, LayoutGrid,
   Settings, Trash2, Cake, Star, Hash, Lock, ArrowRight, Bookmark, Bell, Globe,
+  User as UserIcon, X, Check,
 } from "lucide-react";
 import { toast } from "sonner";
+import { computeZodiac, computeLifeNumber } from "@/lib/baddia-numerology";
 
 const APP_VERSION = "1.0.0";
+
+const MONTH_NAMES = [
+  "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+  "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre",
+];
 
 const SIGN_GLYPH: Record<string, string> = {
   Aries: "♈", Tauro: "♉", Géminis: "♊", Cáncer: "♋", Leo: "♌", Virgo: "♍",
