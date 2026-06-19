@@ -4,7 +4,7 @@ import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import {
   History, Sparkles, Shield, LogOut, ChevronRight, LayoutGrid,
   Settings, Trash2, Cake, Hash, Lock, ArrowRight, Bookmark, Bell, Globe,
-  User as UserIcon,
+  User as UserIcon, Store,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -148,6 +148,8 @@ export function Profile() {
               onClick: () => toast("Aquí verás tus lecturas guardadas ✨"), tint: "bg-baddia-bubble" },
             { icon: LayoutGrid, label: "Widgets para iPhone",   caption: "Glow Score en tu home",
               onClick: () => go("widgets"), tint: "bg-baddia-mint" },
+            { icon: Store,      label: "Mockups Play Store",    caption: "Vista previa estilo tienda ✨",
+              onClick: () => go("playstore"), tint: "bg-baddia-yellow" },
           ]}
         />
 

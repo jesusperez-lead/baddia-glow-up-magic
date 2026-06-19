@@ -18,7 +18,8 @@ export type Screen =
   | "compat"
   | "aura"
   | "account"
-  | "delete-account";
+  | "delete-account"
+  | "playstore";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
