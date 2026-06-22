@@ -30,12 +30,20 @@ const PLAN_LABEL: Record<PlanKey, BaddiaUser["plan"]> = {
 export function Paywall() {
   const { paywallOpen, closePaywall, setUser } = useBaddia();
   const [selected, setSelected] = useState<PlanKey>("yearly");
-  if (!paywallOpen) return null;
+  const [celebratingPlan, setCelebratingPlan] = useState<BaddiaUser["plan"] | null>(null);
 
   const activate = () => {
-    setUser({ plan: PLAN_LABEL[selected] });
+    const plan = PLAN_LABEL[selected];
+    setUser({ plan });
+    setCelebratingPlan(plan);
+  };
+
+  const finishCelebration = () => {
+    setCelebratingPlan(null);
     closePaywall();
   };
+
+  if (!paywallOpen && !celebratingPlan) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-baddia-purple/40 backdrop-blur-sm animate-fade-in">
