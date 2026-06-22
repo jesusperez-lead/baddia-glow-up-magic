@@ -145,7 +145,7 @@ export function Profile() {
         <RowGroup
           rows={[
             { icon: History,    label: "Historial de lecturas", caption: "Tus tiradas guardadas",
-              onClick: () => toast("Aquí verás tus lecturas guardadas ✨"), tint: "bg-baddia-bubble" },
+              onClick: () => go("history"), tint: "bg-baddia-bubble" },
             { icon: LayoutGrid, label: "Widgets para iPhone",   caption: "Glow Score en tu home",
               onClick: () => go("widgets"), tint: "bg-baddia-mint" },
             { icon: Store,      label: "Mockups Play Store",    caption: "Vista previa estilo tienda ✨",

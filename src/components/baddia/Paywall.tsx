@@ -1,6 +1,7 @@
 import { useBaddia, type BaddiaUser } from "@/lib/baddia-state";
 import { Check, Crown, Heart, Lock, Sparkles, Users, X } from "lucide-react";
 import { useState } from "react";
+import { PlanCelebration } from "./PlanCelebration";
 
 type PlanKey = "monthly" | "yearly" | "girls";
 
@@ -29,14 +30,24 @@ const PLAN_LABEL: Record<PlanKey, BaddiaUser["plan"]> = {
 export function Paywall() {
   const { paywallOpen, closePaywall, setUser } = useBaddia();
   const [selected, setSelected] = useState<PlanKey>("yearly");
-  if (!paywallOpen) return null;
+  const [celebratingPlan, setCelebratingPlan] = useState<BaddiaUser["plan"] | null>(null);
 
   const activate = () => {
-    setUser({ plan: PLAN_LABEL[selected] });
+    const plan = PLAN_LABEL[selected];
+    setUser({ plan });
+    setCelebratingPlan(plan);
+  };
+
+  const finishCelebration = () => {
+    setCelebratingPlan(null);
     closePaywall();
   };
 
+  if (!paywallOpen && !celebratingPlan) return null;
+
   return (
+    <>
+    {paywallOpen && (
     <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-baddia-purple/40 backdrop-blur-sm animate-fade-in">
       <div className="w-full md:max-w-[420px] bg-gradient-pearl rounded-t-[2.5rem] md:rounded-[2.5rem] max-h-[94vh] overflow-y-auto scrollbar-hide animate-scale-in relative">
         {/* Header — sticker style */}
@@ -173,6 +184,9 @@ export function Paywall() {
         </div>
       </div>
     </div>
+    )}
+    {celebratingPlan && <PlanCelebration plan={celebratingPlan} onDone={finishCelebration} />}
+    </>
   );
 }
 
