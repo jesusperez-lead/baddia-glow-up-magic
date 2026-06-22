@@ -184,6 +184,9 @@ export function Paywall() {
         </div>
       </div>
     </div>
+    )}
+    {celebratingPlan && <PlanCelebration plan={celebratingPlan} onDone={finishCelebration} />}
+    </>
   );
 }
 
