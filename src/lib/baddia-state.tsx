@@ -19,7 +19,8 @@ export type Screen =
   | "aura"
   | "account"
   | "delete-account"
-  | "playstore";
+  | "playstore"
+  | "history";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
