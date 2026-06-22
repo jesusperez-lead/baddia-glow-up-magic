@@ -21,6 +21,7 @@ import { Aura } from "@/components/baddia/screens/Aura";
 import { Account } from "@/components/baddia/screens/Account";
 import { DeleteAccount } from "@/components/baddia/screens/DeleteAccount";
 import { PlayStore } from "@/components/baddia/screens/PlayStore";
+import { History } from "@/components/baddia/screens/History";
 
 const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile", "outfit", "lucky", "tarot", "astral", "compat", "aura"]);
 
