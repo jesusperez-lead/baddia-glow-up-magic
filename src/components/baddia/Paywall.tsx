@@ -1,6 +1,7 @@
 import { useBaddia, type BaddiaUser } from "@/lib/baddia-state";
 import { Check, Crown, Heart, Lock, Sparkles, Users, X } from "lucide-react";
 import { useState } from "react";
+import { PlanCelebration } from "./PlanCelebration";
 
 type PlanKey = "monthly" | "yearly" | "girls";
 
