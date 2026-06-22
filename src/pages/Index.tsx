@@ -48,6 +48,7 @@ function Router() {
     case "account": content = <Account />; break;
     case "delete-account": content = <DeleteAccount />; break;
     case "playstore": content = <PlayStore />; break;
+    case "history": content = <History />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);
