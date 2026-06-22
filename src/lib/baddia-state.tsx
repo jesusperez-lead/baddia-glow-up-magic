@@ -53,7 +53,7 @@ const defaultUser: BaddiaUser = {
   month: "10",
   year: "2002",
   interests: ["Amor", "Crush Energy", "Amor propio"],
-  plan: "Free",
+  plan: "Pro Anual",
   sign: "Libra",
   lifeNumber: 11,
   savedQuotes: [],
