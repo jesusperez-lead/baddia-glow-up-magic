@@ -225,6 +225,35 @@
   100% { transform: translateX(400%)  skewX(-12deg); }
 }
 .animate-shimmer { animation: shimmer 1.6s linear infinite; }
+
+@keyframes float-cute {
+  0%, 100% { transform: translateY(0) rotate(-4deg); opacity: .85; }
+  50%      { transform: translateY(-8px) rotate(6deg); opacity: 1; }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-3deg); }
+  75%      { transform: rotate(3deg); }
+}
+@keyframes sparkle-spin {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.25); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+@keyframes pop-in-cute {
+  0%   { transform: translateY(14px) scale(.92); opacity: 0; }
+  60%  { transform: translateY(-2px) scale(1.02); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes pulse-slow {
+  0%, 100% { opacity: .35; transform: scale(1); }
+  50%      { opacity: .6;  transform: scale(1.1); }
+}
+.animate-float-cute   { animation: float-cute 3.4s ease-in-out infinite; }
+.animate-wiggle       { animation: wiggle 2.8s ease-in-out infinite; transform-origin: 50% 80%; }
+.animate-sparkle-spin { animation: sparkle-spin 3s ease-in-out infinite; display: inline-block; }
+.animate-pop-in-cute  { animation: pop-in-cute .5s cubic-bezier(.34,1.56,.64,1) both; }
+.animate-pulse-slow   { animation: pulse-slow 3.5s ease-in-out infinite; }
 .animate-breathe { animation: breathe 2.2s ease-in-out infinite; }
 .animate-orbit { animation: orbit 8s linear infinite; }
 .animate-pop-in { animation: pop-in 0.5s cubic-bezier(.34,1.56,.64,1) both; }
