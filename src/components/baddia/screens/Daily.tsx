@@ -6,7 +6,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export function Daily() {
-  const { user, setUser, openPaywall } = useBaddia();
+  const { user, setUser, openPaywall, go } = useBaddia();
+  const isPro = user.plan !== "Free";
   const [saved, setSaved] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [tarotFlipped, setTarotFlipped] = useState(false);
