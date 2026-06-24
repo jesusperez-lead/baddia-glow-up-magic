@@ -6,7 +6,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export function Daily() {
-  const { user, setUser, openPaywall } = useBaddia();
+  const { user, setUser, openPaywall, go } = useBaddia();
+  const isPro = user.plan !== "Free";
   const [saved, setSaved] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [tarotFlipped, setTarotFlipped] = useState(false);
@@ -278,10 +279,22 @@ export function Daily() {
 
             {/* CTA Pro */}
             <button
-              onClick={openPaywall}
-              className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 rounded-full bg-baddia-ink text-white text-[12px] font-display font-bold border-2 border-baddia-ink shadow-[3px_3px_0_hsl(48_100%_59%)] active:scale-[0.98] transition-transform"
+              onClick={() => (isPro ? go("tarot") : openPaywall())}
+              className={`mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 rounded-full text-[12px] font-display font-bold border-2 border-baddia-ink active:scale-[0.98] transition-transform ${
+                isPro
+                  ? "bg-gradient-hot text-white shadow-[3px_3px_0_hsl(260_16%_15%)]"
+                  : "bg-baddia-ink text-white shadow-[3px_3px_0_hsl(48_100%_59%)]"
+              }`}
             >
-              <Lock size={13} /> Tirada de 3 cartas · Pro <ArrowRight size={13} />
+              {isPro ? (
+                <>
+                  <span className="text-base">🔮</span> Abrir tirada de 3 cartas <ArrowRight size={13} />
+                </>
+              ) : (
+                <>
+                  <Lock size={13} /> Tirada de 3 cartas · Pro <ArrowRight size={13} />
+                </>
+              )}
             </button>
           </div>
         </div>
