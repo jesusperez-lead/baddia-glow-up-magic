@@ -3,8 +3,10 @@ import { useBaddia } from "@/lib/baddia-state";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
+import { CrushBirthdayPicker } from "../CrushBirthdayPicker";
+import { computeZodiac } from "@/lib/baddia-numerology";
 import {
-  ArrowLeft, Upload, RotateCcw, Sparkles, Share2, Heart, X, Plus, ChevronDown, Check,
+  ArrowLeft, Upload, RotateCcw, Sparkles, Share2, Heart, X, Plus, ChevronDown, Check, Cake,
 } from "lucide-react";
 
 const ZODIAC_SIGNS: { name: string; glyph: string; range: string }[] = [
