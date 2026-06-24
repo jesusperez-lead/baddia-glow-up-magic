@@ -594,6 +594,18 @@ export function Compat() {
           </div>
         </div>
       )}
+
+      {/* ───── Modal cumpleaños del crush ───── */}
+      <CrushBirthdayPicker
+        open={birthPickerOpen}
+        value={birthB}
+        onClose={() => setBirthPickerOpen(false)}
+        onSelect={(d) => {
+          setBirthB(d);
+          setSignB(computeZodiac(d.getDate(), d.getMonth() + 1));
+          setBirthPickerOpen(false);
+        }}
+      />
     </div>
   );
 }
