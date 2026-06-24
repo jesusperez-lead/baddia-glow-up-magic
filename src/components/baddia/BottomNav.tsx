@@ -142,7 +142,7 @@ export function BottomNav() {
                   }
                 }}
                 style={{ animationDelay: `${i * 60}ms` }}
-                className="group animate-pop-in-cute w-full flex items-center gap-3 rounded-2xl border-[2px] border-baddia-ink bg-white p-3 shadow-[3px_3px_0_hsl(260_16%_15%)] text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_hsl(260_16%_15%)] active:scale-[0.98] disabled:opacity-70"
+                className="group relative overflow-hidden animate-pop-in-cute w-full flex items-center gap-3 rounded-2xl border-[2px] border-baddia-ink bg-white p-3 shadow-[3px_3px_0_hsl(260_16%_15%)] text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_hsl(260_16%_15%)] active:scale-[0.98] disabled:opacity-70"
               >
                 <span className={`shrink-0 w-12 h-12 rounded-xl border-2 border-baddia-ink ${r.color} flex items-center justify-center text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-6deg]`}>
                   {r.emoji}
