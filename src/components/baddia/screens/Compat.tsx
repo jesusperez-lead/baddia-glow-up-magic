@@ -156,6 +156,8 @@ export function Compat() {
   const [rel, setRel] = useState<Relationship>("crush");
   const [signB, setSignB] = useState<string | null>(null);
   const [signPickerOpen, setSignPickerOpen] = useState(false);
+  const [birthB, setBirthB] = useState<Date | null>(null);
+  const [birthPickerOpen, setBirthPickerOpen] = useState(false);
   const [photoA, setPhotoA] = useState<{ preview: string; base64: string; mime: string } | null>(null);
   const [photoB, setPhotoB] = useState<{ preview: string; base64: string; mime: string } | null>(null);
   const [loading, setLoading] = useState(false);
