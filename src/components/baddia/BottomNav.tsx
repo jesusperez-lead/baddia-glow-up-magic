@@ -104,12 +104,25 @@ export function BottomNav() {
       </nav>
 
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="bottom" className="rounded-t-3xl border-t-[2.5px] border-baddia-ink bg-gradient-to-b from-white via-pink-50/40 to-white p-0 max-h-[85vh]">
-          <div className="px-5 pt-5 pb-2">
+        <SheetContent side="bottom" className="rounded-t-3xl border-t-[2.5px] border-baddia-ink bg-gradient-to-b from-white via-pink-50/40 to-white p-0 max-h-[85vh] overflow-hidden">
+          {/* floating cute background stickers */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+            <span className="absolute -top-2 left-6 text-2xl animate-float-cute" style={{ animationDelay: "0s" }}>✨</span>
+            <span className="absolute top-4 right-8 text-xl animate-float-cute" style={{ animationDelay: "0.6s" }}>💖</span>
+            <span className="absolute top-16 left-10 text-lg animate-float-cute" style={{ animationDelay: "1.2s" }}>⭐</span>
+            <span className="absolute top-2 right-20 text-base animate-float-cute" style={{ animationDelay: "0.3s" }}>🌙</span>
+            <span className="absolute top-20 right-4 text-lg animate-float-cute" style={{ animationDelay: "0.9s" }}>🔮</span>
+            {/* gradient blobs */}
+            <span className="absolute -top-10 -left-10 w-40 h-40 rounded-full bg-baddia-bubble/30 blur-3xl animate-pulse-slow" />
+            <span className="absolute -top-8 -right-12 w-44 h-44 rounded-full bg-baddia-lavender/30 blur-3xl animate-pulse-slow" style={{ animationDelay: "1s" }} />
+          </div>
+
+          <div className="relative px-5 pt-5 pb-2">
             <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-baddia-ink/15" />
             <SheetHeader className="text-left space-y-1">
-              <SheetTitle className="font-display font-black text-[22px] text-baddia-ink leading-tight">
-                Lecturas con IA ✨
+              <SheetTitle className="font-display font-black text-[22px] text-baddia-ink leading-tight flex items-center gap-2">
+                <span className="inline-block animate-wiggle">Lecturas con IA</span>
+                <span className="inline-block animate-sparkle-spin">✨</span>
               </SheetTitle>
               <SheetDescription className="text-[13px] text-baddia-ink/65 font-semibold">
                 Tu energía, tus cartas, tu palma — leídas por IA.
@@ -117,8 +130,8 @@ export function BottomNav() {
             </SheetHeader>
           </div>
 
-          <div className="px-4 pb-6 space-y-2.5 overflow-y-auto">
-            {readings.map((r) => (
+          <div className="relative px-4 pb-6 space-y-2.5 overflow-y-auto">
+            {readings.map((r, i) => (
               <button
                 key={r.title}
                 disabled={r.soon}
@@ -128,9 +141,10 @@ export function BottomNav() {
                     setOpen(false);
                   }
                 }}
-                className="w-full flex items-center gap-3 rounded-2xl border-[2px] border-baddia-ink bg-white p-3 shadow-[3px_3px_0_hsl(260_16%_15%)] text-left transition-transform active:scale-[0.98] disabled:opacity-70"
+                style={{ animationDelay: `${i * 60}ms` }}
+                className="group relative overflow-hidden animate-pop-in-cute w-full flex items-center gap-3 rounded-2xl border-[2px] border-baddia-ink bg-white p-3 shadow-[3px_3px_0_hsl(260_16%_15%)] text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_hsl(260_16%_15%)] active:scale-[0.98] disabled:opacity-70"
               >
-                <span className={`shrink-0 w-12 h-12 rounded-xl border-2 border-baddia-ink ${r.color} flex items-center justify-center text-2xl`}>
+                <span className={`shrink-0 w-12 h-12 rounded-xl border-2 border-baddia-ink ${r.color} flex items-center justify-center text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-6deg]`}>
                   {r.emoji}
                 </span>
                 <span className="min-w-0 flex-1">
@@ -146,6 +160,10 @@ export function BottomNav() {
                     {r.desc}
                   </span>
                 </span>
+                {/* shimmer sweep on hover */}
+                <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
+                  <span className="absolute -inset-y-4 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/60 to-transparent skew-x-12 opacity-0 group-hover:opacity-100 group-hover:animate-shimmer" />
+                </span>
               </button>
             ))}
 
@@ -155,6 +173,7 @@ export function BottomNav() {
           </div>
         </SheetContent>
       </Sheet>
+
     </>
   );
 }
