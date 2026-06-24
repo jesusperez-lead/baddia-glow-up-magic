@@ -284,6 +284,38 @@ export function Compat() {
           })}
         </div>
 
+        {/* Cumple del crush (opcional) */}
+        <SectionLabel emoji="🎂" text="su cumpleaños (opcional)" />
+        <button
+          onClick={() => setBirthPickerOpen(true)}
+          className="w-full rounded-2xl border-[2.5px] border-baddia-ink bg-white px-4 py-3 shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center gap-3 active:translate-y-0.5 active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+        >
+          <span className="w-10 h-10 rounded-xl border-2 border-baddia-ink bg-baddia-hot/20 flex items-center justify-center text-xl shrink-0">
+            {birthB ? "💖" : <Cake size={18} strokeWidth={2.5} className="text-baddia-ink" />}
+          </span>
+          <div className="flex-1 text-left min-w-0">
+            <p className="text-[9px] font-display font-black uppercase tracking-widest text-baddia-ink/55">
+              Fecha de nacimiento
+            </p>
+            <p className="font-display font-black text-[14px] text-baddia-ink leading-tight">
+              {birthB
+                ? birthB.toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" })
+                : "Selecciona (opcional)"}
+            </p>
+          </div>
+          {birthB && (
+            <span
+              role="button"
+              tabIndex={0}
+              onClick={(e) => { e.stopPropagation(); setBirthB(null); }}
+              className="w-7 h-7 rounded-full bg-white border-2 border-baddia-ink flex items-center justify-center shadow-[1.5px_1.5px_0_hsl(260_16%_15%)] cursor-pointer"
+            >
+              <X size={12} strokeWidth={3} className="text-baddia-ink" />
+            </span>
+          )}
+          <ChevronDown size={18} className="text-baddia-ink/60 shrink-0" />
+        </button>
+
         {/* Su signo (opcional) */}
         <SectionLabel emoji="✨" text="su signo (opcional)" />
         <button
