@@ -22,6 +22,8 @@ import { Account } from "@/components/baddia/screens/Account";
 import { DeleteAccount } from "@/components/baddia/screens/DeleteAccount";
 import { PlayStore } from "@/components/baddia/screens/PlayStore";
 import { History } from "@/components/baddia/screens/History";
+import { CrushInitial } from "@/components/baddia/screens/CrushInitial";
+import { WriteWeek } from "@/components/baddia/screens/WriteWeek";
 
 const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile", "outfit", "lucky", "tarot", "astral", "compat", "aura"]);
 
@@ -49,6 +51,8 @@ function Router() {
     case "delete-account": content = <DeleteAccount />; break;
     case "playstore": content = <PlayStore />; break;
     case "history": content = <History />; break;
+    case "crush-initial": content = <CrushInitial />; break;
+    case "write-week": content = <WriteWeek />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);
