@@ -65,7 +65,7 @@ const defaultUser: BaddiaUser = {
 const BaddiaCtx = createContext<Ctx | null>(null);
 
 export function BaddiaProvider({ children }: { children: ReactNode }) {
-  const [screen, setScreen] = useState<Screen>("welcome");
+  const [screen, setScreen] = useState<Screen>("daily");
   const [user, setUserState] = useState<BaddiaUser>(defaultUser);
   const [paywallOpen, setPaywallOpen] = useState(false);
 
