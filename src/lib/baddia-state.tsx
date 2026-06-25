@@ -20,7 +20,9 @@ export type Screen =
   | "account"
   | "delete-account"
   | "playstore"
-  | "history";
+  | "history"
+  | "crush-initial"
+  | "write-week";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
