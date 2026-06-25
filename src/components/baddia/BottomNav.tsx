@@ -32,6 +32,8 @@ const readings: Reading[] = [
   { emoji: "✨", title: "Carta astral",     desc: "Tu mapa cósmico personalizado.", Icon: Star,          color: "bg-baddia-yellow",   go: "astral" },
   { emoji: "💘", title: "Compatibilidad",   desc: "Tu match con tu crush.",         Icon: HeartHandshake,color: "bg-baddia-hot",      go: "compat" },
   { emoji: "👁️", title: "Aura Check",       desc: "Detecta tu aura del momento.",   Icon: Eye,           color: "bg-baddia-bubble",   go: "aura" },
+  { emoji: "💌", title: "Inicial y mensaje", desc: "La letra de su nombre + mensaje exacto.", Icon: HeartHandshake, color: "bg-baddia-hot",   go: "crush-initial" },
+  { emoji: "📱", title: "¿Te escribirá esta semana?", desc: "Probabilidad, día y horario.", Icon: Heart,    color: "bg-baddia-lavender", go: "write-week" },
 ];
 
 export function BottomNav() {
