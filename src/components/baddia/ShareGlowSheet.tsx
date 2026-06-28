@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import { computeDailyVibe } from "@/lib/baddia-daily";
 import { toast } from "@/hooks/use-toast";
-import { X, Copy, Share2, Download } from "lucide-react";
+import { X, Copy, Share2 } from "lucide-react";
 
 interface Props {
   open: boolean;
@@ -11,10 +11,191 @@ interface Props {
   quote?: string;
 }
 
+type Theme = {
+  id: string;
+  name: string;
+  emoji: string;
+  bg: string;
+  ink: string;
+  sub: string;
+  chipBg: string;
+  chipInk: string;
+  accent: string;
+  cardBg: string;
+  cardInk: string;
+  cardBorder: string;
+  deco?: "stars" | "hearts" | "sparkles" | "flowers" | "butterflies" | "none";
+  font?: "display" | "serif";
+};
+
+const THEMES: Theme[] = [
+  {
+    id: "sunset",
+    name: "Sunset",
+    emoji: "🌅",
+    bg: "linear-gradient(160deg,#FFD3A5 0%,#FD6585 55%,#A855F7 100%)",
+    ink: "#1a1024",
+    sub: "rgba(26,16,36,0.7)",
+    chipBg: "#1a1024",
+    chipInk: "#FFD3A5",
+    accent: "#FFE66D",
+    cardBg: "rgba(255,255,255,0.92)",
+    cardInk: "#1a1024",
+    cardBorder: "#1a1024",
+    deco: "sparkles",
+  },
+  {
+    id: "bubble",
+    name: "Bubblegum",
+    emoji: "🫧",
+    bg: "linear-gradient(160deg,#FFC6E0 0%,#FFB6E1 40%,#C7A8FF 100%)",
+    ink: "#3a0f3a",
+    sub: "rgba(58,15,58,0.7)",
+    chipBg: "#3a0f3a",
+    chipInk: "#FFC6E0",
+    accent: "#FFE66D",
+    cardBg: "#FFFFFF",
+    cardInk: "#3a0f3a",
+    cardBorder: "#3a0f3a",
+    deco: "hearts",
+  },
+  {
+    id: "noir",
+    name: "Y2K Noir",
+    emoji: "✦",
+    bg: "linear-gradient(160deg,#0E0B1E 0%,#1B0B2E 50%,#2D0F3A 100%)",
+    ink: "#FFE8F4",
+    sub: "rgba(255,232,244,0.7)",
+    chipBg: "#FF3DA5",
+    chipInk: "#FFFFFF",
+    accent: "#7BF1FF",
+    cardBg: "rgba(255,255,255,0.08)",
+    cardInk: "#FFE8F4",
+    cardBorder: "#FF3DA5",
+    deco: "stars",
+  },
+  {
+    id: "matcha",
+    name: "Matcha",
+    emoji: "🍵",
+    bg: "linear-gradient(160deg,#E7F0C9 0%,#BFD89B 60%,#8DB46B 100%)",
+    ink: "#1E2E15",
+    sub: "rgba(30,46,21,0.65)",
+    chipBg: "#1E2E15",
+    chipInk: "#E7F0C9",
+    accent: "#FFE66D",
+    cardBg: "#FFFCEC",
+    cardInk: "#1E2E15",
+    cardBorder: "#1E2E15",
+    deco: "flowers",
+  },
+  {
+    id: "cream",
+    name: "Coquette",
+    emoji: "🎀",
+    bg: "linear-gradient(160deg,#FFF6EF 0%,#FFE5EC 50%,#FFC9D9 100%)",
+    ink: "#5A1E36",
+    sub: "rgba(90,30,54,0.7)",
+    chipBg: "#5A1E36",
+    chipInk: "#FFE5EC",
+    accent: "#FF6FA8",
+    cardBg: "#FFFFFF",
+    cardInk: "#5A1E36",
+    cardBorder: "#5A1E36",
+    deco: "hearts",
+    font: "serif",
+  },
+  {
+    id: "ocean",
+    name: "Ocean",
+    emoji: "🌊",
+    bg: "linear-gradient(160deg,#A8E6FF 0%,#7BB7FF 50%,#5C5FE0 100%)",
+    ink: "#0B1F4D",
+    sub: "rgba(11,31,77,0.7)",
+    chipBg: "#0B1F4D",
+    chipInk: "#A8E6FF",
+    accent: "#FFE66D",
+    cardBg: "#FFFFFF",
+    cardInk: "#0B1F4D",
+    cardBorder: "#0B1F4D",
+    deco: "sparkles",
+  },
+  {
+    id: "butterfly",
+    name: "Mariposa",
+    emoji: "🦋",
+    bg: "linear-gradient(160deg,#E0C3FC 0%,#8EC5FC 100%)",
+    ink: "#2A1454",
+    sub: "rgba(42,20,84,0.7)",
+    chipBg: "#2A1454",
+    chipInk: "#E0C3FC",
+    accent: "#FF6FA8",
+    cardBg: "#FFFFFF",
+    cardInk: "#2A1454",
+    cardBorder: "#2A1454",
+    deco: "butterflies",
+  },
+  {
+    id: "fire",
+    name: "Hot Girl",
+    emoji: "🔥",
+    bg: "linear-gradient(160deg,#FF4D6D 0%,#FF0F7B 50%,#7A0BC0 100%)",
+    ink: "#FFFFFF",
+    sub: "rgba(255,255,255,0.85)",
+    chipBg: "#FFE66D",
+    chipInk: "#1a1024",
+    accent: "#FFE66D",
+    cardBg: "rgba(255,255,255,0.95)",
+    cardInk: "#3a0f3a",
+    cardBorder: "#1a1024",
+    deco: "sparkles",
+  },
+];
+
+function Deco({ kind }: { kind: Theme["deco"] }) {
+  if (!kind || kind === "none") return null;
+  const items: { c: string; top: string; left?: string; right?: string; size: string; delay: string; rot?: string }[] = [
+    { c: "", top: "8%", left: "8%", size: "22px", delay: "0s", rot: "-8deg" },
+    { c: "", top: "18%", right: "10%", size: "16px", delay: "0.4s", rot: "12deg" },
+    { c: "", top: "44%", left: "6%", size: "14px", delay: "0.8s" },
+    { c: "", top: "62%", right: "8%", size: "20px", delay: "1.1s", rot: "-6deg" },
+    { c: "", top: "78%", left: "14%", size: "12px", delay: "1.4s" },
+    { c: "", top: "30%", right: "18%", size: "10px", delay: "1.7s" },
+  ];
+  const glyph =
+    kind === "stars" ? "✦" :
+    kind === "hearts" ? "♡" :
+    kind === "flowers" ? "✿" :
+    kind === "butterflies" ? "🦋" :
+    "✧";
+  return (
+    <>
+      {items.map((it, i) => (
+        <span
+          key={i}
+          className="absolute pointer-events-none select-none animate-twinkle opacity-90"
+          style={{
+            top: it.top,
+            left: it.left,
+            right: it.right,
+            fontSize: it.size,
+            transform: `rotate(${it.rot || "0deg"})`,
+            animationDelay: it.delay,
+          }}
+        >
+          {glyph}
+        </span>
+      ))}
+    </>
+  );
+}
+
 export function ShareGlowSheet({ open, onClose, quote }: Props) {
   const { user } = useBaddia();
   const vibe = computeDailyVibe(user);
   const [copied, setCopied] = useState(false);
+  const [themeId, setThemeId] = useState<string>(THEMES[0].id);
+  const theme = THEMES.find((t) => t.id === themeId) || THEMES[0];
 
   if (!open) return null;
 
@@ -62,6 +243,8 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
     }
   };
 
+  const fontClass = theme.font === "serif" ? "font-serif-display" : "font-display";
+
   return (
     <div
       className="fixed inset-0 z-[110] flex items-end md:items-center justify-center bg-baddia-ink/50 backdrop-blur-sm animate-fade-in"
@@ -78,7 +261,7 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
               Compartir
             </p>
             <h2 className="font-display font-bold text-[20px] text-baddia-ink leading-tight">
-              {quoteMode ? "Tu frase del día ✨" : "Tu glow card de hoy ✨"}
+              {quoteMode ? "Tu frase del día ✨" : "Tu glow card ✨"}
             </h2>
           </div>
           <button
@@ -90,104 +273,153 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
           </button>
         </div>
 
-        {/* Story card preview (9:16 vibes) */}
+        {/* Theme picker */}
+        <div className="px-5 pb-3">
+          <p className="text-[10px] uppercase tracking-widest font-display font-bold text-baddia-ink/60 mb-2">
+            🎨 Elige tu vibe
+          </p>
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-1 px-1 pb-1">
+            {THEMES.map((t) => {
+              const active = t.id === themeId;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setThemeId(t.id)}
+                  className={`shrink-0 rounded-2xl px-1 pt-1 pb-1.5 border-2 transition active:translate-y-[1px] ${
+                    active
+                      ? "border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] -translate-y-[1px]"
+                      : "border-baddia-ink/30"
+                  }`}
+                  style={{ background: active ? "#FFF" : "rgba(255,255,255,0.5)" }}
+                  aria-pressed={active}
+                >
+                  <div
+                    className="w-14 h-14 rounded-xl border-2 border-baddia-ink/80 flex items-center justify-center text-lg overflow-hidden"
+                    style={{ background: t.bg }}
+                  >
+                    <span className="drop-shadow-[1px_1px_0_rgba(0,0,0,0.25)]">{t.emoji}</span>
+                  </div>
+                  <p className="mt-1 text-[9px] font-display font-bold text-center text-baddia-ink uppercase tracking-wider">
+                    {t.name}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Story card preview (9:16) */}
         <div className="px-5 pb-4">
           <div
+            key={themeId}
             id="baddia-share-card"
-            className="relative mx-auto rounded-[28px] overflow-hidden border-[3px] border-baddia-ink shadow-[6px_8px_0_hsl(260_16%_15%)]"
+            className="relative mx-auto rounded-[28px] overflow-hidden border-[3px] shadow-[6px_8px_0_hsl(260_16%_15%)] animate-scale-in"
             style={{
               aspectRatio: "9 / 16",
               maxWidth: "300px",
-              background:
-                "linear-gradient(160deg, hsl(48 100% 88%) 0%, hsl(333 100% 92%) 45%, hsl(260 90% 92%) 100%)",
+              background: theme.bg,
+              borderColor: theme.id === "noir" ? "#FF3DA5" : "#1a1024",
+              color: theme.ink,
             }}
           >
-            {/* deco blobs */}
-            <div className="absolute -top-10 -left-8 w-40 h-40 rounded-full bg-baddia-bubble/50 blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-12 -right-10 w-44 h-44 rounded-full bg-baddia-hot/30 blur-2xl pointer-events-none" />
-            <span className="absolute top-6 right-6 text-baddia-yellow text-xl animate-twinkle">✦</span>
-            <span className="absolute top-1/3 left-5 text-baddia-hot text-base animate-twinkle" style={{ animationDelay: "0.6s" }}>✧</span>
-            <span className="absolute bottom-24 right-8 text-baddia-purple text-sm animate-twinkle" style={{ animationDelay: "1.2s" }}>·</span>
+            <Deco kind={theme.deco} />
+            <div className="absolute -top-10 -left-8 w-40 h-40 rounded-full opacity-30 blur-2xl pointer-events-none" style={{ background: theme.accent }} />
+            <div className="absolute -bottom-12 -right-10 w-44 h-44 rounded-full opacity-25 blur-2xl pointer-events-none" style={{ background: theme.chipBg }} />
 
-            <div className="relative h-full flex flex-col justify-between p-5 text-baddia-ink">
+            <div className="relative h-full flex flex-col justify-between p-5">
               {/* top */}
               <div className="flex items-start justify-between">
-                <span className="inline-flex items-center gap-1 rounded-full bg-baddia-ink text-white px-2.5 py-1 text-[9px] font-display font-bold uppercase tracking-widest shadow-[2px_2px_0_hsl(48_100%_59%)]">
+                <span
+                  className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-display font-bold uppercase tracking-widest shadow-[2px_2px_0_rgba(0,0,0,0.3)]"
+                  style={{ background: theme.chipBg, color: theme.chipInk }}
+                >
                   ✦ Baddia
                 </span>
-                <span className="inline-block rounded-full bg-white border-2 border-baddia-ink px-2.5 py-1 text-[9px] font-display font-bold text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-3">
+                <span
+                  className="inline-block rounded-full border-2 px-2.5 py-1 text-[9px] font-display font-bold shadow-[2px_2px_0_rgba(0,0,0,0.25)] -rotate-3"
+                  style={{ background: theme.cardBg, color: theme.cardInk, borderColor: theme.cardBorder }}
+                >
                   {user.sign || "tu signo"}
                 </span>
               </div>
 
               {quoteMode ? (
-                <>
-                  {/* quote only — big center */}
-                  <div className="flex-1 flex flex-col items-center justify-center text-center px-2">
-                    <span className="font-serif-display text-baddia-hot text-[64px] leading-none -mb-2 select-none">"</span>
-                    <p className="font-display font-black text-[22px] leading-[1.15] text-baddia-ink">
-                      {quote}
-                    </p>
-                    <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-baddia-yellow border-2 border-baddia-ink px-2.5 py-1 text-[9px] font-display font-bold text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-2 uppercase tracking-widest">
-                      💬 frase del día
-                    </span>
-                  </div>
-                </>
+                <div className="flex-1 flex flex-col items-center justify-center text-center px-2">
+                  <span className={`${fontClass} text-[64px] leading-none -mb-2 select-none`} style={{ color: theme.accent }}>"</span>
+                  <p className={`${fontClass} font-black text-[22px] leading-[1.15]`} style={{ color: theme.ink }}>
+                    {quote}
+                  </p>
+                  <span
+                    className="mt-3 inline-flex items-center gap-1 rounded-full border-2 px-2.5 py-1 text-[9px] font-display font-bold shadow-[2px_2px_0_rgba(0,0,0,0.25)] -rotate-2 uppercase tracking-widest"
+                    style={{ background: theme.accent, color: "#1a1024", borderColor: theme.cardBorder }}
+                  >
+                    💬 frase del día
+                  </span>
+                </div>
               ) : (
                 <>
-                  {/* center — score ring */}
                   <div className="flex flex-col items-center text-center -mt-2">
-                    <p className="text-[10px] uppercase tracking-[0.2em] font-display font-bold text-baddia-ink/60 mb-1">
+                    <p className="text-[10px] uppercase tracking-[0.2em] font-display font-bold mb-1" style={{ color: theme.sub }}>
                       mi glow de hoy
                     </p>
                     <div className="relative">
                       <svg width="140" height="140" viewBox="0 0 120 120" className="-rotate-90">
-                        <circle cx="60" cy="60" r="50" stroke="hsl(48 100% 82%)" strokeWidth="12" fill="none" />
+                        <circle cx="60" cy="60" r="50" stroke={theme.cardBg} strokeOpacity="0.4" strokeWidth="12" fill="none" />
                         <circle
                           cx="60" cy="60" r="50"
-                          stroke="hsl(48 100% 59%)" strokeWidth="12" fill="none" strokeLinecap="round"
+                          stroke={theme.accent} strokeWidth="12" fill="none" strokeLinecap="round"
                           strokeDasharray={dash}
                           strokeDashoffset={dash - dash * scorePct}
-                          style={{ filter: "drop-shadow(0 2px 0 hsl(260 16% 15% / 0.2))" }}
+                          style={{ filter: "drop-shadow(0 2px 0 rgba(0,0,0,0.2))" }}
                         />
                       </svg>
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="font-display font-black text-[44px] leading-none text-baddia-ink">
+                        <span className={`${fontClass} font-black text-[44px] leading-none`} style={{ color: theme.ink }}>
                           {vibe.glowScore}
                         </span>
-                        <span className="mt-1 inline-flex items-center gap-0.5 rounded-full bg-baddia-ink text-white text-[8px] font-black uppercase tracking-[0.14em] px-2 py-[2px]">
-                          <span className="text-baddia-yellow">✦</span> /100
+                        <span
+                          className="mt-1 inline-flex items-center gap-0.5 rounded-full text-[8px] font-black uppercase tracking-[0.14em] px-2 py-[2px]"
+                          style={{ background: theme.chipBg, color: theme.chipInk }}
+                        >
+                          <span style={{ color: theme.accent }}>✦</span> /100
                         </span>
                       </div>
                     </div>
-                    <p className="font-display font-bold text-[16px] mt-2 leading-tight">
+                    <p className={`${fontClass} font-bold text-[16px] mt-2 leading-tight`} style={{ color: theme.ink }}>
                       {vibe.glowLabel}
                     </p>
                   </div>
 
-                  {/* advice bubble */}
-                  <div className="relative rounded-2xl bg-white border-[2.5px] border-baddia-ink px-3 py-2.5 shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-1">
-                    <p className="text-[9px] uppercase tracking-widest font-display font-bold text-baddia-hot mb-0.5">
+                  <div
+                    className="relative rounded-2xl border-[2.5px] px-3 py-2.5 shadow-[3px_3px_0_rgba(0,0,0,0.25)] -rotate-1"
+                    style={{ background: theme.cardBg, borderColor: theme.cardBorder, color: theme.cardInk }}
+                  >
+                    <p className="text-[9px] uppercase tracking-widest font-display font-bold mb-0.5" style={{ color: theme.chipBg }}>
                       💬 mood del día
                     </p>
-                    <p className="font-display font-bold text-[12px] leading-snug text-baddia-ink">
+                    <p className={`${fontClass} font-bold text-[12px] leading-snug`}>
                       "{vibe.advice}"
                     </p>
                   </div>
 
-                  {/* bottom row — color + lucky */}
                   <div className="flex items-stretch gap-2">
-                    <div className="flex-1 rounded-2xl bg-white border-2 border-baddia-ink p-2 shadow-[2px_2px_0_hsl(260_16%_15%)]">
-                      <p className="text-[8px] uppercase font-display font-bold tracking-wider text-baddia-ink/60">color</p>
+                    <div
+                      className="flex-1 rounded-2xl border-2 p-2 shadow-[2px_2px_0_rgba(0,0,0,0.25)]"
+                      style={{ background: theme.cardBg, borderColor: theme.cardBorder, color: theme.cardInk }}
+                    >
+                      <p className="text-[8px] uppercase font-display font-bold tracking-wider opacity-70">color</p>
                       <div
-                        className="my-1 h-5 rounded-md border border-baddia-ink/70"
-                        style={{ background: `linear-gradient(135deg, ${vibe.color.from}, ${vibe.color.to})` }}
+                        className="my-1 h-5 rounded-md border"
+                        style={{ background: `linear-gradient(135deg, ${vibe.color.from}, ${vibe.color.to})`, borderColor: theme.cardBorder }}
                       />
-                      <p className="font-display font-bold text-[10px] text-baddia-ink leading-tight truncate">{vibe.color.name}</p>
+                      <p className="font-display font-bold text-[10px] leading-tight truncate">{vibe.color.name}</p>
                     </div>
-                    <div className="w-[72px] rounded-2xl bg-baddia-lime border-2 border-baddia-ink p-2 shadow-[2px_2px_0_hsl(260_16%_15%)] flex flex-col items-center justify-center">
-                      <p className="text-[8px] uppercase font-display font-bold tracking-wider text-baddia-ink/70">lucky</p>
-                      <p className="font-display font-black text-[26px] text-baddia-ink leading-none">
+                    <div
+                      className="w-[72px] rounded-2xl border-2 p-2 shadow-[2px_2px_0_rgba(0,0,0,0.25)] flex flex-col items-center justify-center"
+                      style={{ background: theme.accent, borderColor: theme.cardBorder, color: "#1a1024" }}
+                    >
+                      <p className="text-[8px] uppercase font-display font-bold tracking-wider opacity-70">lucky</p>
+                      <p className={`${fontClass} font-black text-[26px] leading-none`}>
                         {vibe.luckyNumber}
                       </p>
                     </div>
@@ -195,9 +427,8 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
                 </>
               )}
 
-              {/* footer brand */}
               <div className="flex items-center justify-center pt-1">
-                <span className="text-[9px] font-display font-bold uppercase tracking-[0.22em] text-baddia-ink/70">
+                <span className="text-[9px] font-display font-bold uppercase tracking-[0.22em]" style={{ color: theme.sub }}>
                   baddia.app · {user.name || "babe"}
                 </span>
               </div>
