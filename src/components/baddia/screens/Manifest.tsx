@@ -533,7 +533,7 @@ export function Manifest() {
               <button
                 onClick={() => completedToday ? null : setStep("ritual")}
                 disabled={completedToday}
-                className={`relative w-full rounded-2xl border-[3px] border-baddia-ink py-5 font-display font-black text-[18px] shadow-[5px_5px_0_hsl(260_16%_15%)] active:scale-95 overflow-hidden whitespace-nowrap ${completedToday ? "bg-baddia-mint text-baddia-ink" : "bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white"}`}
+                className={`relative w-full mt-3 rounded-2xl border-[3px] border-baddia-ink py-3.5 font-display font-black text-[16px] shadow-[5px_5px_0_hsl(260_16%_15%)] active:scale-95 overflow-hidden whitespace-nowrap ${completedToday ? "bg-baddia-mint text-baddia-ink" : "bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white"}`}
               >
                 {!completedToday && (
                   <span className="absolute inset-0 opacity-40 pointer-events-none animate-shimmer"
