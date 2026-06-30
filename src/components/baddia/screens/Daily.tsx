@@ -99,14 +99,17 @@ export function Daily() {
             </div>
             <div className="rounded-3xl bg-white border-[2.5px] border-baddia-ink p-3 pt-5 shadow-[5px_6px_0_hsl(260_16%_15%)] h-full flex flex-col items-center text-center">
               <div
-                className="w-14 h-14 rounded-2xl border-[2.5px] border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] mb-2"
-                style={{ background: "linear-gradient(135deg,#FFD6E0,#FF9BAF)" }}
-              />
+                className="w-14 h-14 rounded-2xl border-[2.5px] border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] mb-2 relative overflow-hidden animate-pulse-slow"
+                style={{ background: "linear-gradient(135deg, hsl(335 100% 59%), hsl(325 100% 74%))" }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/30 via-transparent to-white/10" />
+                <div className="absolute -inset-3 rounded-full bg-baddia-hot/40 blur-xl pointer-events-none" />
+              </div>
               <p className="font-display font-black text-[15px] text-baddia-ink leading-tight">
-                Rosa cuarzo
+                Rosa neon
               </p>
               <p className="text-[10.5px] text-baddia-ink/65 font-semibold mt-1 leading-tight">
-                Ropa, uñas, makeup o wallpaper.
+                Viste tu energía: ropa, uñas, makeup o wallpaper.
               </p>
             </div>
           </div>
