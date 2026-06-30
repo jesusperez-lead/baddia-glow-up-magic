@@ -154,8 +154,6 @@ export function Profile() {
               onClick: () => go("history"), tint: "bg-baddia-bubble" },
             { icon: LayoutGrid, label: "Widgets para iPhone",   caption: "Glow Score en tu home",
               onClick: () => go("widgets"), tint: "bg-baddia-mint" },
-            { icon: Store,      label: "Mockups Play Store",    caption: "Vista previa estilo tienda ✨",
-              onClick: () => go("playstore"), tint: "bg-baddia-yellow" },
           ]}
         />
 
