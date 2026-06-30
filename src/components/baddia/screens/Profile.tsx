@@ -4,7 +4,7 @@ import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import {
   History, Sparkles, Shield, LogOut, ChevronRight, LayoutGrid,
   Settings, Trash2, Cake, Hash, Lock, ArrowRight, Bookmark, Bell, Globe,
-  User as UserIcon, Store,
+  User as UserIcon, Heart, Gift, Star,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -30,6 +30,12 @@ export function Profile() {
   const monthLabel = mIdx >= 1 && mIdx <= 12 ? MONTHS[mIdx - 1] : null;
   const birthParts = [user.day, monthLabel, user.year].filter(Boolean) as string[];
   const birth = birthParts.length ? birthParts.join(" · ") : "Fecha no disponible";
+
+  // 🎂 Detectar si hoy es su cumpleaños
+  const today = new Date();
+  const isBirthday =
+    Number(user.day) === today.getDate() &&
+    Number(user.month) === today.getMonth() + 1;
 
   const onVersionTap = () => {
     const n = tapCount + 1;
@@ -62,6 +68,55 @@ export function Profile() {
       </header>
 
       <div className="relative z-10 px-5 mt-5 space-y-5">
+        {/* ───── 🎂 HAPPY BIRTHDAY CARD ───── */}
+        {isBirthday && (
+          <div className="relative animate-pop-in">
+            <div className="absolute -top-3 left-5 z-20">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-baddia-hot text-white border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-black uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-2">
+                <Gift size={11} /> es tu día
+              </span>
+            </div>
+            <div className="absolute -top-2 -right-2 z-20 rotate-12">
+              <span className="inline-block rounded-full bg-baddia-yellow text-baddia-ink border-2 border-baddia-ink px-2.5 py-1 text-[10px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                ✨ +1 año glow
+              </span>
+            </div>
+            <div className="relative rounded-[28px] border-[2.5px] border-baddia-ink p-5 pt-8 shadow-[5px_6px_0_hsl(260_16%_15%)] overflow-hidden bg-gradient-to-br from-baddia-bubble via-baddia-soft to-baddia-lavender/70">
+              {/* confetti dots */}
+              <span className="absolute top-3 right-10 text-2xl animate-pulse">🎀</span>
+              <span className="absolute bottom-4 right-6 text-3xl">🧁</span>
+              <span className="absolute top-10 left-2 text-xl opacity-70">✦</span>
+              <span className="absolute bottom-2 left-6 text-lg opacity-60">⋆</span>
+              <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-baddia-yellow/40 blur-2xl" />
+
+              <div className="relative flex items-start gap-3">
+                <div className="shrink-0 w-14 h-14 rounded-2xl bg-white border-[2.5px] border-baddia-ink flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)] rotate-[-6deg]">
+                  <Cake size={26} className="text-baddia-hot" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-display font-black text-baddia-ink text-[22px] leading-[1.05] drop-shadow-[0_1px_0_rgba(255,255,255,0.6)]">
+                    ¡Feliz cumple,<br/>
+                    <span className="gradient-text">{user.name}</span>! 🎂
+                  </p>
+                  <p className="text-[13px] text-baddia-ink/80 font-semibold mt-2 leading-snug">
+                    Hoy el universo brilla por ti. Que este año te traiga magia, amor propio y muchas bendiciones ✨
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative mt-4 flex items-center gap-2 flex-wrap">
+                <span className="inline-flex items-center gap-1 rounded-full bg-white text-baddia-ink border-2 border-baddia-ink px-2.5 py-1 text-[10px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                  <Heart size={10} className="text-baddia-hot fill-baddia-hot" /> birthday glow
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-baddia-yellow text-baddia-ink border-2 border-baddia-ink px-2.5 py-1 text-[10px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] rotate-1">
+                  <Star size={10} className="fill-baddia-ink" /> tu día sagrado
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+
         {/* ───── HERO: avatar + plan ───── */}
         <div className="relative animate-slide-up">
           <div className="absolute -top-3 left-5 z-10">
@@ -148,8 +203,6 @@ export function Profile() {
               onClick: () => go("history"), tint: "bg-baddia-bubble" },
             { icon: LayoutGrid, label: "Widgets para iPhone",   caption: "Glow Score en tu home",
               onClick: () => go("widgets"), tint: "bg-baddia-mint" },
-            { icon: Store,      label: "Mockups Play Store",    caption: "Vista previa estilo tienda ✨",
-              onClick: () => go("playstore"), tint: "bg-baddia-yellow" },
           ]}
         />
 
