@@ -12,7 +12,7 @@ export function Daily() {
   const [saved, setSaved] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [tarotFlipped, setTarotFlipped] = useState(false);
-  const quote = "Tu trabajo no es tu personalidad.";
+  const quote = "Lo que es para mí, me encuentra con claridad, paz y abundancia.";
   const scorePct = 0.87;
   const dash = 314;
 
