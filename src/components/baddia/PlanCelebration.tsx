@@ -216,8 +216,15 @@ function CelebrationCard({
           )}
         </div>
 
-        <h2 className="font-display font-black text-[24px] leading-[1.05] text-baddia-ink">
-          {isGirls ? "Bienvenidas, Baddia Girls" : `Bienvenida a Baddia ${plan}`}
+        <h2 className="font-display font-black text-[22px] leading-[1.05] text-baddia-ink">
+          {isGirls ? (
+            "Bienvenidas, Baddia Girls"
+          ) : (
+            <>
+              Bienvenida a{" "}
+              <span className="whitespace-nowrap">Baddia {plan}</span>
+            </>
+          )}
         </h2>
 
         <p className="text-[13px] font-semibold text-baddia-ink/70 mt-2.5 leading-snug">
