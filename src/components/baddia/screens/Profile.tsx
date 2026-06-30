@@ -212,7 +212,7 @@ export function Profile() {
             { icon: Settings, label: "Preferencias",  caption: "Tema, sonidos, idioma",
               onClick: () => toast("Próximamente ✨"), tint: "bg-baddia-yellow" },
             { icon: Bell,     label: "Notificaciones", caption: "Tu lectura diaria, recordatorios",
-              onClick: () => toast("Próximamente ✨"), tint: "bg-baddia-hot" },
+              onClick: () => go("notifications"), tint: "bg-baddia-hot" },
             { icon: Globe,    label: "Idioma",         caption: "Español · ES",
               onClick: () => toast("Próximamente ✨"), tint: "bg-baddia-lavender" },
           ]}

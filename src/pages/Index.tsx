@@ -25,6 +25,7 @@ import { History } from "@/components/baddia/screens/History";
 import { CrushInitial } from "@/components/baddia/screens/CrushInitial";
 import { WriteWeek } from "@/components/baddia/screens/WriteWeek";
 import { Manifest } from "@/components/baddia/screens/Manifest";
+import { Notifications } from "@/components/baddia/screens/Notifications";
 
 const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile", "outfit", "lucky", "tarot", "astral", "compat", "aura", "manifest"]);
 
@@ -55,6 +56,7 @@ function Router() {
     case "crush-initial": content = <CrushInitial />; break;
     case "write-week": content = <WriteWeek />; break;
     case "manifest": content = <Manifest />; break;
+    case "notifications": content = <Notifications />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);
