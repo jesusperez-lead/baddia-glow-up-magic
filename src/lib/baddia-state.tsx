@@ -22,7 +22,8 @@ export type Screen =
   | "playstore"
   | "history"
   | "crush-initial"
-  | "write-week";
+  | "write-week"
+  | "manifest";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
