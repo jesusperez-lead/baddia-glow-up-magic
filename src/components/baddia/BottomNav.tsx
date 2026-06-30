@@ -25,7 +25,6 @@ type Reading = {
 };
 
 const readings: Reading[] = [
-  { emoji: "🌸", title: "Manifest Mode",     desc: "Crea tu Racha Glow diaria.",     Icon: Sparkles,      color: "bg-baddia-bubble",   go: "manifest" },
   { emoji: "🤚", title: "Lectura de manos", desc: "Tu palma, leída por IA.",        Icon: Hand,          color: "bg-baddia-mint",     go: "palm" },
   { emoji: "👗", title: "Outfit Check",      desc: "Tu look leído por IA.",          Icon: Shirt,         color: "bg-baddia-bubble",   go: "outfit" },
   { emoji: "🎲", title: "Déjalo a la suerte", desc: "Sí o No con un dado cute.",     Icon: Dices,         color: "bg-baddia-lavender", go: "lucky" },

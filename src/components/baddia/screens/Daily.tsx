@@ -1,9 +1,10 @@
 import { useBaddia } from "@/lib/baddia-state";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import { ShareGlowSheet } from "../ShareGlowSheet";
-import { Share2, Bookmark, Lock, Check, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { Share2, Bookmark, Lock, Check, ArrowRight, Flame, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
 
 export function Daily() {
   const { user, setUser, openPaywall, go } = useBaddia();
@@ -38,9 +39,13 @@ export function Daily() {
       </header>
 
       <div className="relative z-10 px-5 mt-5 space-y-5">
-        {/* Glow Score — sticker card */}
+        {/* ───── Section: racha glow ───── */}
+        <SectionLabel emoji="🌸" text="tu racha glow" />
+        <ManifestCTA onOpen={() => go("manifest")} />
+
         {/* ───── Section: tu energía ───── */}
         <SectionLabel emoji="✨" text="tu energía de hoy" />
+
 
         {/* Glow Score */}
         <div className="relative animate-slide-up">
@@ -342,3 +347,111 @@ function SectionLabel({ emoji, text }: { emoji: string; text: string }) {
     </div>
   );
 }
+
+/* ─────────── Manifest CTA card (Racha Glow) ─────────── */
+const MANIFEST_KEY = "baddia.manifest.v1";
+const todayKey = () => new Date().toISOString().slice(0, 10);
+
+function ManifestCTA({ onOpen }: { onOpen: () => void }) {
+  const [state, setState] = useState<{
+    intention?: string;
+    streak: number;
+    doneToday: boolean;
+  }>({ streak: 0, doneToday: false });
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(MANIFEST_KEY);
+      if (!raw) return;
+      const m = JSON.parse(raw);
+      const days: string[] = m?.daysCompleted ?? [];
+      const today = todayKey();
+      // streak = consecutive days ending today/yesterday
+      const set = new Set(days);
+      let streak = 0;
+      const d = new Date();
+      if (!set.has(today)) d.setDate(d.getDate() - 1);
+      while (set.has(d.toISOString().slice(0, 10))) {
+        streak++;
+        d.setDate(d.getDate() - 1);
+      }
+      setState({
+        intention: m?.intention,
+        streak,
+        doneToday: set.has(today),
+      });
+    } catch {}
+  }, []);
+
+  const hasIntention = !!state.intention;
+
+  return (
+    <button
+      onClick={onOpen}
+      className="relative w-full text-left active:scale-[0.99] transition-transform animate-slide-up"
+    >
+      <div className="absolute -top-3 left-5 z-10">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-baddia-bubble text-baddia-ink px-3 py-1.5 text-[10px] font-display font-black uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-2 border-2 border-baddia-ink">
+          🌸 racha glow
+        </span>
+      </div>
+      {/* floating sticker */}
+      <span className="absolute -top-4 right-4 z-10 text-2xl rotate-12 animate-float-cute select-none">✨</span>
+
+      <div className="relative rounded-3xl border-[2.5px] border-baddia-ink p-5 pt-7 shadow-[5px_6px_0_hsl(260_16%_15%)] overflow-hidden bg-gradient-to-br from-pink-100 via-white to-baddia-lavender/30">
+        <span className="absolute -bottom-10 -right-8 w-44 h-44 rounded-full bg-baddia-hot/15 blur-2xl pointer-events-none" />
+
+        {hasIntention ? (
+          <>
+            <div className="flex items-start gap-3 relative">
+              <div className="shrink-0 relative w-14 h-14 rounded-2xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-baddia-yellow to-baddia-hot shadow-[3px_3px_0_hsl(260_16%_15%)] flex flex-col items-center justify-center">
+                <Flame size={18} className="text-white drop-shadow-[0_1px_0_rgba(0,0,0,0.3)]" />
+                <span className="font-display font-black text-[14px] text-white leading-none mt-0.5">
+                  {state.streak}
+                </span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-display font-black uppercase tracking-wider text-baddia-ink/55">
+                  tu intención
+                </p>
+                <p className="font-display font-bold text-[14px] text-baddia-ink leading-snug mt-0.5 line-clamp-2">
+                  "{state.intention}"
+                </p>
+              </div>
+            </div>
+            <div className="mt-4 flex items-center justify-between gap-2">
+              <p className="text-[12px] font-display font-bold text-baddia-ink/70">
+                {state.doneToday ? (
+                  <>Ritual de hoy ✅</>
+                ) : (
+                  <>Tu ritual de hoy te espera 💖</>
+                )}
+              </p>
+              <span className="inline-flex items-center gap-1 rounded-full bg-baddia-ink text-white px-3 py-1.5 text-[11px] font-display font-bold shadow-[2px_2px_0_hsl(48_100%_59%)]">
+                Abrir <ArrowRight size={12} />
+              </span>
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="font-display font-black text-[20px] text-baddia-ink leading-tight">
+              Manifiesta tu <span className="gradient-text">glow</span> ✨
+            </p>
+            <p className="text-[12.5px] text-baddia-ink/70 font-semibold mt-1.5 leading-snug">
+              Escribe lo que quieres atraer y arma una racha diaria de afirmaciones, visualización y rituales cute.
+            </p>
+            <div className="mt-4 flex items-center gap-2">
+              <span className="btn-sticker py-2.5 px-4 rounded-full bg-gradient-hot text-white text-[12px] flex items-center gap-1.5">
+                <Sparkles size={13} /> Empezar mi racha <ArrowRight size={13} />
+              </span>
+              <span className="text-[11px] font-display font-bold text-baddia-ink/55">
+                3 pasos · 2 min al día
+              </span>
+            </div>
+          </>
+        )}
+      </div>
+    </button>
+  );
+}
+
