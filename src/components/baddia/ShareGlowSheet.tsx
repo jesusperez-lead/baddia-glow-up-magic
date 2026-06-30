@@ -1,14 +1,27 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import { computeDailyVibe } from "@/lib/baddia-daily";
 import { toast } from "@/hooks/use-toast";
-import { X, Copy, Share2 } from "lucide-react";
+import { X, Copy, Share2, Download } from "lucide-react";
+import { toPng } from "html-to-image";
+
+interface AuraData {
+  headline?: string;
+  auraColor?: string;
+  vibe?: string;
+  score?: number;
+  chakra?: string;
+  energy?: string;
+  advice?: string;
+}
 
 interface Props {
   open: boolean;
   onClose: () => void;
   /** If provided, shares only this quote instead of the full glow card. */
   quote?: string;
+  /** If provided, shares an aura reading card. */
+  aura?: AuraData;
 }
 
 type Theme = {
@@ -190,22 +203,26 @@ function Deco({ kind }: { kind: Theme["deco"] }) {
   );
 }
 
-export function ShareGlowSheet({ open, onClose, quote }: Props) {
+export function ShareGlowSheet({ open, onClose, quote, aura }: Props) {
   const { user } = useBaddia();
   const vibe = computeDailyVibe(user);
   const [copied, setCopied] = useState(false);
   const [themeId, setThemeId] = useState<string>(THEMES[0].id);
   const theme = THEMES.find((t) => t.id === themeId) || THEMES[0];
+  const cardRef = useRef<HTMLDivElement>(null);
 
   if (!open) return null;
 
   const scorePct = vibe.glowScore / 100;
   const dash = 314;
-  const quoteMode = !!quote;
+  const quoteMode = !!quote && !aura;
+  const auraMode = !!aura;
 
-  const shareText = quoteMode
-    ? `"${quote}" ✨\n— Baddia`
-    : `✨ Mi energía de hoy en Baddia\nGlow ${vibe.glowScore}/100 · ${vibe.color.name} · Lucky #${vibe.luckyNumber}\n"${vibe.advice}" 💖`;
+  const shareText = auraMode
+    ? `✨ Mi aura hoy en Baddia\n${aura!.auraColor || "Aura"} · ${aura!.headline || ""}\nBrillo ${aura!.score ?? "—"}/100 · Chakra ${aura!.chakra || "—"}\n${aura!.advice || ""} 💖`
+    : quoteMode
+      ? `"${quote}" ✨\n— Baddia`
+      : `✨ Mi energía de hoy en Baddia\nGlow ${vibe.glowScore}/100 · ${vibe.color.name} · Lucky #${vibe.luckyNumber}\n"${vibe.advice}" 💖`;
 
   const handleCopy = async () => {
     try {
@@ -218,19 +235,6 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
     }
   };
 
-  const handleWhatsApp = () => {
-    const url = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-    window.open(url, "_blank");
-  };
-
-  const handleInstagram = async () => {
-    await handleCopy();
-    toast({
-      title: "Listo para Instagram 💖",
-      description: "Tu glow está copiado — pégalo en tu historia o post.",
-    });
-  };
-
   const handleNativeShare = async () => {
     try {
       if (typeof navigator !== "undefined" && (navigator as any).share) {
@@ -240,6 +244,36 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
       }
     } catch {
       /* user cancelled */
+    }
+  };
+
+  const handleDownloadImage = async () => {
+    if (!cardRef.current) return;
+    try {
+      const dataUrl = await toPng(cardRef.current, { cacheBust: true, pixelRatio: 2 });
+      const link = document.createElement("a");
+      link.download = `baddia-${auraMode ? "aura" : "glow"}-${Date.now()}.png`;
+      link.href = dataUrl;
+      link.click();
+      toast({ title: "Guardado ✨", description: "La imagen se descargó para que la compartas." });
+    } catch {
+      toast({ title: "Ups", description: "No pudimos generar la imagen." });
+    }
+  };
+
+  const handleShareImage = async () => {
+    if (!cardRef.current) return handleNativeShare();
+    try {
+      const dataUrl = await toPng(cardRef.current, { cacheBust: true, pixelRatio: 2 });
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], `baddia-${auraMode ? "aura" : "glow"}.png`, { type: "image/png" });
+      if (typeof navigator !== "undefined" && (navigator as any).canShare && (navigator as any).canShare({ files: [file] })) {
+        await (navigator as any).share({ files: [file], title: "Mi energía Baddia", text: shareText });
+      } else {
+        await handleDownloadImage();
+      }
+    } catch {
+      handleNativeShare();
     }
   };
 
@@ -261,7 +295,7 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
               Compartir
             </p>
             <h2 className="font-display font-bold text-[20px] text-baddia-ink leading-tight">
-              {quoteMode ? "Tu frase del día ✨" : "Tu glow card ✨"}
+              {auraMode ? "Tu aura card ✨" : quoteMode ? "Tu frase del día ✨" : "Tu glow card ✨"}
             </h2>
           </div>
           <button
@@ -313,6 +347,7 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
           <div
             key={themeId}
             id="baddia-share-card"
+            ref={cardRef}
             className="relative mx-auto rounded-[28px] overflow-hidden border-[3px] shadow-[6px_8px_0_hsl(260_16%_15%)] animate-scale-in"
             style={{
               aspectRatio: "9 / 16",
@@ -343,7 +378,70 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
                 </span>
               </div>
 
-              {quoteMode ? (
+              {auraMode ? (
+                <div className="flex-1 flex flex-col justify-center gap-3 px-1 -mt-2">
+                  <div className="text-center">
+                    <p className="text-[10px] uppercase tracking-[0.2em] font-display font-bold mb-1" style={{ color: theme.sub }}>
+                      mi aura de hoy
+                    </p>
+                    <p className={`${fontClass} font-black text-[32px] leading-tight`} style={{ color: theme.ink }}>
+                      {aura!.auraColor}
+                    </p>
+                    <p className={`${fontClass} font-bold text-[14px] mt-1 leading-tight`} style={{ color: theme.ink }}>
+                      {aura!.headline}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div
+                      className="rounded-2xl border-2 p-2 shadow-[2px_2px_0_rgba(0,0,0,0.25)]"
+                      style={{ background: theme.cardBg, borderColor: theme.cardBorder, color: theme.cardInk }}
+                    >
+                      <p className="text-[8px] uppercase font-display font-bold tracking-wider opacity-70">brillo</p>
+                      <p className={`${fontClass} font-black text-[26px] leading-none`}>
+                        {aura!.score ?? "—"}<span className="text-[12px]">/100</span>
+                      </p>
+                    </div>
+                    <div
+                      className="rounded-2xl border-2 p-2 shadow-[2px_2px_0_rgba(0,0,0,0.25)] flex flex-col justify-center"
+                      style={{ background: theme.accent, borderColor: theme.cardBorder, color: "#1a1024" }}
+                    >
+                      <p className="text-[8px] uppercase font-display font-bold tracking-wider opacity-70">chakra</p>
+                      <p className={`${fontClass} font-black text-[14px] leading-tight capitalize`}>
+                        {aura!.chakra || "—"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {aura!.energy && (
+                    <div
+                      className="relative rounded-2xl border-[2.5px] px-3 py-2.5 shadow-[3px_3px_0_rgba(0,0,0,0.25)] -rotate-1"
+                      style={{ background: theme.cardBg, borderColor: theme.cardBorder, color: theme.cardInk }}
+                    >
+                      <p className="text-[9px] uppercase tracking-widest font-display font-bold mb-0.5" style={{ color: theme.chipBg }}>
+                        ✦ energía
+                      </p>
+                      <p className={`${fontClass} font-bold text-[12px] leading-snug`}>
+                        {aura!.energy}
+                      </p>
+                    </div>
+                  )}
+
+                  {aura!.advice && (
+                    <div
+                      className="relative rounded-2xl border-[2.5px] px-3 py-2.5 shadow-[3px_3px_0_rgba(0,0,0,0.25)] rotate-1"
+                      style={{ background: theme.cardBg, borderColor: theme.cardBorder, color: theme.cardInk }}
+                    >
+                      <p className="text-[9px] uppercase tracking-widest font-display font-bold mb-0.5" style={{ color: theme.chipBg }}>
+                        ✦ consejo
+                      </p>
+                      <p className={`${fontClass} font-bold text-[12px] leading-snug`}>
+                        "{aura!.advice}"
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : quoteMode ? (
                 <div className="flex-1 flex flex-col items-center justify-center text-center px-2">
                   <span className={`${fontClass} text-[64px] leading-none -mb-2 select-none`} style={{ color: theme.accent }}>"</span>
                   <p className={`${fontClass} font-black text-[22px] leading-[1.15]`} style={{ color: theme.ink }}>
@@ -353,7 +451,7 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
                     className="mt-3 inline-flex items-center gap-1 rounded-full border-2 px-2.5 py-1 text-[9px] font-display font-bold shadow-[2px_2px_0_rgba(0,0,0,0.25)] -rotate-2 uppercase tracking-widest"
                     style={{ background: theme.accent, color: "#1a1024", borderColor: theme.cardBorder }}
                   >
-                    💬 frase del día
+                    ✦ frase del día
                   </span>
                 </div>
               ) : (
@@ -395,7 +493,7 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
                     style={{ background: theme.cardBg, borderColor: theme.cardBorder, color: theme.cardInk }}
                   >
                     <p className="text-[9px] uppercase tracking-widest font-display font-bold mb-0.5" style={{ color: theme.chipBg }}>
-                      💬 mood del día
+                      ✦ mood del día
                     </p>
                     <p className={`${fontClass} font-bold text-[12px] leading-snug`}>
                       "{vibe.advice}"
@@ -436,7 +534,7 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
           </div>
 
           <p className="text-center text-[11px] text-baddia-ink/70 font-display font-bold mt-3">
-            Toma una captura 📸 y súbela a tus historias ✨
+            Toma una captura y súbela a tus historias ✨
           </p>
         </div>
 
@@ -444,7 +542,7 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
         <div className="px-5 pb-6 space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <button
-              onClick={handleInstagram}
+              onClick={handleShareImage}
               className="relative py-3 rounded-2xl border-[2.5px] border-baddia-ink shadow-[3px_4px_0_hsl(260_16%_15%)] active:translate-y-[1px] active:shadow-[2px_2px_0_hsl(260_16%_15%)] transition flex items-center justify-center gap-2 text-white font-display font-bold text-sm"
               style={{ background: "linear-gradient(135deg,#feda75,#fa7e1e 30%,#d62976 60%,#962fbf 85%,#4f5bd5)" }}
             >
@@ -456,13 +554,10 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
               Instagram
             </button>
             <button
-              onClick={handleWhatsApp}
-              className="py-3 rounded-2xl border-[2.5px] border-baddia-ink shadow-[3px_4px_0_hsl(260_16%_15%)] active:translate-y-[1px] active:shadow-[2px_2px_0_hsl(260_16%_15%)] transition flex items-center justify-center gap-2 bg-[#25D366] text-white font-display font-bold text-sm"
+              onClick={handleDownloadImage}
+              className="py-3 rounded-2xl border-[2.5px] border-baddia-ink shadow-[3px_4px_0_hsl(260_16%_15%)] active:translate-y-[1px] active:shadow-[2px_2px_0_hsl(260_16%_15%)] transition flex items-center justify-center gap-2 bg-baddia-lavender text-baddia-ink font-display font-bold text-sm"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479c0 1.462 1.065 2.876 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.04 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.002-5.45 4.436-9.884 9.889-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884zm8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.488-8.413z" />
-              </svg>
-              WhatsApp
+              <Download size={18} /> Guardar
             </button>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -470,7 +565,7 @@ export function ShareGlowSheet({ open, onClose, quote }: Props) {
               onClick={handleCopy}
               className="py-3 rounded-2xl border-[2.5px] border-baddia-ink shadow-[3px_4px_0_hsl(260_16%_15%)] active:translate-y-[1px] active:shadow-[2px_2px_0_hsl(260_16%_15%)] transition flex items-center justify-center gap-2 bg-white text-baddia-ink font-display font-bold text-sm"
             >
-              <Copy size={14} /> {copied ? "Copiado ✓" : "Copiar"}
+              <Copy size={14} /> {copied ? "Copiado" : "Copiar"}
             </button>
             <button
               onClick={handleNativeShare}

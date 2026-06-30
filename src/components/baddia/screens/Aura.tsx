@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ShareGlowSheet } from "@/components/baddia/ShareGlowSheet";
 import {
   Camera, Upload, Sparkles, RotateCcw, Eye, Sun, Share2,
   ArrowLeft, Heart, Wand2,
@@ -68,6 +69,7 @@ export function Aura() {
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [reading, setReading] = useState<AuraReading | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const reset = () => {
     setPreview(null);
@@ -108,16 +110,9 @@ export function Aura() {
     }
   };
 
-  const handleShare = async () => {
+  const handleShare = () => {
     if (!reading) return;
-    const text = `Mi aura hoy: ${reading.auraColor} ✨ ${reading.headline}`;
-    try {
-      if (navigator.share) await navigator.share({ title: "Mi aura ✨", text });
-      else {
-        await navigator.clipboard.writeText(text);
-        toast.success("Copiado ✨");
-      }
-    } catch {}
+    setShareOpen(true);
   };
 
   const hex1 = reading?.auraHex || "#A78BFA";
@@ -356,11 +351,29 @@ export function Aura() {
             )}
 
             <p className="text-[11px] text-center text-baddia-ink/55 font-semibold pt-1 leading-relaxed">
-              Powered by IA · solo para entretenimiento 💖
+              Powered by IA · solo para entretenimiento
             </p>
           </>
         )}
       </div>
+
+      <ShareGlowSheet
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        aura={
+          reading?.valid
+            ? {
+                headline: reading.headline,
+                auraColor: reading.auraColor,
+                vibe: reading.vibe,
+                score: reading.score,
+                chakra: reading.chakra,
+                energy: reading.energy,
+                advice: reading.advice,
+              }
+            : undefined
+        }
+      />
     </div>
   );
 }
