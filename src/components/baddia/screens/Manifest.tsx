@@ -617,33 +617,6 @@ export function Manifest() {
               </p>
             </section>
 
-            {/* Main CTA */}
-            <button
-              onClick={() => completedToday ? null : setStep("ritual")}
-              disabled={completedToday}
-              className={`relative w-full rounded-2xl border-[2.5px] border-baddia-ink py-4 font-display font-black text-[16px] shadow-[4px_4px_0_hsl(260_16%_15%)] active:scale-95 overflow-hidden ${completedToday ? "bg-baddia-mint text-baddia-ink" : "bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white"}`}
-            >
-              {!completedToday && (
-                <span className="absolute inset-0 opacity-30 pointer-events-none animate-shimmer"
-                  style={{ background: "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.6) 50%, transparent 70%)", backgroundSize: "200% 100%" }}
-                />
-              )}
-              <span className="relative inline-flex items-center justify-center gap-2">
-                {completedToday ? (
-                  <>
-                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white border-[2px] border-baddia-ink">
-                      <Check size={12} strokeWidth={3} className="text-baddia-ink" />
-                    </span>
-                    Día completado · vuelve mañana
-                  </>
-                ) : (
-                  <>
-                    Manifestar hoy
-                    <Sparkles size={16} className="text-white" />
-                  </>
-                )}
-              </span>
-            </button>
 
             {/* Reminder + share row */}
             <div className="grid grid-cols-2 gap-2">
