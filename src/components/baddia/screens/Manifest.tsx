@@ -600,8 +600,20 @@ export function Manifest() {
                   style={{ background: "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.6) 50%, transparent 70%)", backgroundSize: "200% 100%" }}
                 />
               )}
-              <span className="relative">
-                {completedToday ? "✅ Día completado · vuelve mañana" : "Manifestar hoy ✨"}
+              <span className="relative inline-flex items-center justify-center gap-2">
+                {completedToday ? (
+                  <>
+                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white border-[2px] border-baddia-ink">
+                      <Check size={12} strokeWidth={3} className="text-baddia-ink" />
+                    </span>
+                    Día completado · vuelve mañana
+                  </>
+                ) : (
+                  <>
+                    Manifestar hoy
+                    <Sparkles size={16} className="text-white" />
+                  </>
+                )}
               </span>
             </button>
 

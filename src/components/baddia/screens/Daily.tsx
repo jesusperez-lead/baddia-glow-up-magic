@@ -420,11 +420,19 @@ function ManifestCTA({ onOpen }: { onOpen: () => void }) {
               </div>
             </div>
             <div className="mt-4 flex items-center justify-between gap-2">
-              <p className="text-[12px] font-display font-bold text-baddia-ink/70">
+              <p className="text-[12px] font-display font-bold text-baddia-ink/70 inline-flex items-center gap-1.5">
                 {state.doneToday ? (
-                  <>Ritual de hoy ✅</>
+                  <>
+                    <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-baddia-mint border-[1.5px] border-baddia-ink">
+                      <Check size={10} strokeWidth={3} className="text-baddia-ink" />
+                    </span>
+                    Ritual de hoy completo
+                  </>
                 ) : (
-                  <>Tu ritual de hoy te espera 💖</>
+                  <>
+                    <Sparkles size={12} className="text-baddia-hot" />
+                    Tu ritual de hoy te espera
+                  </>
                 )}
               </p>
               <span className="inline-flex items-center gap-1 rounded-full bg-baddia-ink text-white px-3 py-1.5 text-[11px] font-display font-bold shadow-[2px_2px_0_hsl(48_100%_59%)]">
