@@ -1,6 +1,10 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useBaddia } from "@/lib/baddia-state";
-import { ArrowLeft, Sparkles, Heart, RotateCcw, Share2, Check, Pencil, Lock } from "lucide-react";
+import {
+  ArrowLeft, Sparkles, RotateCcw, Share2, Check, Pencil, Lock, Bell, BellOff, Trophy, Flame, Download,
+} from "lucide-react";
+import { toast } from "sonner";
+import * as htmlToImage from "html-to-image";
 
 /* ─────────── Types & constants ─────────── */
 type Category =
@@ -75,8 +79,9 @@ type Manifest = {
   raw: string;
   category: Category;
   intention: string;
-  createdAt: string; // ISO date
-  daysCompleted: string[]; // YYYY-MM-DD
+  createdAt: string;
+  daysCompleted: string[];
+  remind?: boolean;
 };
 
 const KEY = "baddia.manifest.v1";
@@ -88,6 +93,62 @@ const saveManifest = (m: Manifest | null) => {
   if (!m) localStorage.removeItem(KEY);
   else localStorage.setItem(KEY, JSON.stringify(m));
 };
+
+/* ─────────── Decorations: notebook paper + scrapbook deco ─────────── */
+function PaperBackground() {
+  return (
+    <>
+      {/* base wash */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#fdf6ec] via-[#fff9f1] to-[#fbe9e7]" />
+      {/* paper grain */}
+      <div
+        className="absolute inset-0 opacity-[0.18] mix-blend-multiply"
+        style={{
+          backgroundImage:
+            "radial-gradient(rgba(120,80,60,0.18) 0.5px, transparent 0.5px), radial-gradient(rgba(120,80,60,0.12) 0.5px, transparent 0.5px)",
+          backgroundSize: "5px 5px, 9px 9px",
+          backgroundPosition: "0 0, 2px 3px",
+        }}
+      />
+      {/* notebook lines */}
+      <div
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage: "repeating-linear-gradient(to bottom, transparent 0, transparent 31px, rgba(110,140,200,0.35) 32px)",
+        }}
+      />
+      {/* left margin */}
+      <div className="absolute top-0 bottom-0 left-9 w-px bg-baddia-hot/40" />
+    </>
+  );
+}
+
+function ScrapbookDeco() {
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      {/* pressed flowers / leaves corners */}
+      <span className="absolute -top-3 right-2 text-5xl rotate-12 opacity-90 select-none">🌼</span>
+      <span className="absolute top-12 right-10 text-3xl -rotate-12 opacity-80 select-none">🌿</span>
+      <span className="absolute -bottom-2 -left-2 text-6xl -rotate-12 opacity-85 select-none">🌱</span>
+      <span className="absolute bottom-32 -right-3 text-4xl rotate-6 opacity-80 select-none">💐</span>
+      {/* tape pieces */}
+      <span className="absolute top-3 left-16 w-14 h-5 bg-white/70 border border-baddia-ink/10 rotate-[-8deg] shadow-sm" />
+      <span className="absolute top-44 right-6 w-12 h-4 bg-pink-200/70 border border-baddia-ink/10 rotate-[14deg] shadow-sm" />
+    </div>
+  );
+}
+
+/* Washi-tape style label */
+function WashiLabel({ children, color = "bg-baddia-bubble", rot = -3 }: { children: React.ReactNode; color?: string; rot?: number }) {
+  return (
+    <span
+      className={`inline-block px-3 py-1 ${color} text-baddia-ink text-[11px] font-display font-black uppercase tracking-widest border-y border-baddia-ink/20`}
+      style={{ transform: `rotate(${rot}deg)`, boxShadow: "0 1px 0 rgba(0,0,0,0.08)" }}
+    >
+      {children}
+    </span>
+  );
+}
 
 /* ─────────── Helpers ─────────── */
 function SectionLabel({ emoji, text }: { emoji: string; text: string }) {
@@ -119,6 +180,12 @@ function pickFor(text: string): Category {
   return "Glow up";
 }
 
+/* fun social proof — purely cosmetic */
+function socialCountToday() {
+  const seed = new Date().getDate() + new Date().getMonth() * 31;
+  return 1280 + (seed * 137) % 4200;
+}
+
 /* ─────────── Main ─────────── */
 type Step = "intro" | "category" | "intention" | "streak" | "ritual" | "celebrate";
 
@@ -134,6 +201,7 @@ export function Manifest() {
   const [intention, setIntention] = useState("");
   const [intentionIdx, setIntentionIdx] = useState(0);
   const [editing, setEditing] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   useEffect(() => { saveManifest(data); }, [data]);
 
@@ -147,6 +215,7 @@ export function Manifest() {
     () => MILESTONES.find((m) => streak < m.days) ?? null,
     [streak]
   );
+  const glowPoints = streak * 25;
 
   /* Step transitions */
   const handleCreate = () => {
@@ -199,20 +268,21 @@ export function Manifest() {
     setStep("intro");
   };
 
+  const toggleRemind = () => {
+    if (!data) return;
+    const next = !data.remind;
+    setData({ ...data, remind: next });
+    toast.success(next ? "Te recordaremos cada día a las 9:00 ✨" : "Recordatorio desactivado");
+  };
+
   /* ─────────── Render ─────────── */
   return (
-    <div className="relative min-h-full bg-gradient-to-b from-pink-50/70 via-white to-purple-50/60 overflow-hidden">
-      {/* floating deco */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <span className="absolute top-10 left-4 text-xl animate-float-cute">✨</span>
-        <span className="absolute top-24 right-6 text-lg animate-float-cute" style={{animationDelay:"0.6s"}}>🌸</span>
-        <span className="absolute top-1/2 left-3 text-base animate-float-cute" style={{animationDelay:"1.2s"}}>💫</span>
-        <span className="absolute -top-8 -right-10 w-40 h-40 rounded-full bg-baddia-bubble/30 blur-3xl" />
-        <span className="absolute top-40 -left-12 w-44 h-44 rounded-full bg-baddia-lavender/30 blur-3xl" />
-      </div>
+    <div className="relative min-h-full overflow-hidden">
+      <PaperBackground />
+      <ScrapbookDeco />
 
       {/* Header */}
-      <header className="relative px-4 pt-4 pb-3 flex items-center gap-3">
+      <header className="relative px-4 pt-4 pb-3 flex items-center gap-3 z-10">
         <button
           onClick={() => (step === "ritual" || step === "celebrate" ? setStep("streak") : go("daily"))}
           className="w-10 h-10 rounded-2xl border-2 border-baddia-ink bg-white shadow-[2px_2px_0_hsl(260_16%_15%)] flex items-center justify-center active:scale-95"
@@ -221,28 +291,30 @@ export function Manifest() {
           <ArrowLeft size={18} />
         </button>
         <div className="flex-1">
-          <h1 className="font-display font-black text-[22px] text-baddia-ink leading-none flex items-center gap-2">
-            Manifest Mode <span className="animate-sparkle-spin">✨</span>
+          <h1 className="font-display font-black text-[24px] text-baddia-ink leading-none flex items-center gap-2">
+            <span className="gradient-text">Manifest</span> Mode
+            <span className="animate-sparkle-spin">✨</span>
           </h1>
-          <p className="text-[12px] text-baddia-ink/65 font-semibold mt-0.5">Racha Glow · tu intención, cada día</p>
+          <p className="text-[11.5px] text-baddia-ink/65 font-semibold mt-1">tu diario de manifestación · racha glow</p>
         </div>
         {data && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border-2 border-baddia-ink bg-baddia-yellow shadow-[2px_2px_0_hsl(260_16%_15%)] font-display font-black text-[12px]">
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border-2 border-baddia-ink bg-baddia-yellow shadow-[2px_2px_0_hsl(260_16%_15%)] font-display font-black text-[13px]">
             🔥 {streak}
           </span>
         )}
       </header>
 
-      <main className="relative px-4 pb-8 space-y-4">
+      <main className="relative z-10 px-4 pb-10 space-y-4">
         {/* INTRO */}
         {step === "intro" && (
           <>
-            <section className="relative rounded-3xl border-[2.5px] border-baddia-ink bg-white p-5 shadow-[4px_4px_0_hsl(260_16%_15%)]">
-              <span className="absolute -top-3 -left-2 px-2.5 py-1 rounded-full border-2 border-baddia-ink bg-baddia-bubble text-[11px] font-display font-black -rotate-3 shadow-[2px_2px_0_hsl(260_16%_15%)]">
-                ¿qué quieres atraer?
-              </span>
-              <p className="font-display font-black text-[18px] text-baddia-ink leading-snug mt-2">
-                Dile a Baddia qué quieres manifestar y vuelve cada día para mantener tu Racha Glow.
+            <section className="relative rounded-3xl border-[2.5px] border-baddia-ink bg-white/95 backdrop-blur p-5 pt-7 shadow-[4px_4px_0_hsl(260_16%_15%)]">
+              {/* tape */}
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-6 bg-pink-200/80 border border-baddia-ink/20 -rotate-3 shadow-sm" />
+              <span className="absolute -top-3 -left-2"><WashiLabel color="bg-baddia-bubble" rot={-6}>diario glow</WashiLabel></span>
+              <p className="font-display font-black text-[19px] text-baddia-ink leading-snug">
+                Escribe lo que quieres atraer.<br/>
+                <span className="gradient-text">Baddia lo cuida contigo</span> cada día ✨
               </p>
               <textarea
                 value={raw}
@@ -260,6 +332,18 @@ export function Manifest() {
                 Crear mi manifestación ✨
               </button>
             </section>
+
+            {/* Social proof */}
+            <div className="rounded-2xl border-2 border-baddia-ink bg-white/80 backdrop-blur px-3 py-2.5 shadow-[2px_2px_0_hsl(260_16%_15%)] flex items-center gap-2">
+              <div className="flex -space-x-2">
+                {["🌸","💗","✨","🌿"].map((e,i)=>(
+                  <span key={i} className="w-7 h-7 rounded-full border-2 border-baddia-ink bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center text-sm">{e}</span>
+                ))}
+              </div>
+              <p className="text-[11.5px] font-display font-bold text-baddia-ink/80 leading-tight">
+                <span className="font-black">{socialCountToday().toLocaleString()}</span> girls están manifestando hoy
+              </p>
+            </div>
 
             <SectionLabel emoji="🌷" text="ideas para empezar" />
             <div className="grid grid-cols-2 gap-2">
@@ -280,12 +364,12 @@ export function Manifest() {
         {/* CATEGORY */}
         {step === "category" && category && (
           <>
-            <section className="rounded-3xl border-[2.5px] border-baddia-ink bg-white p-5 shadow-[4px_4px_0_hsl(260_16%_15%)]">
-              <p className="text-[12px] font-display font-black uppercase tracking-widest text-baddia-ink/60">Tu manifestación vibra con</p>
+            <section className="relative rounded-3xl border-[2.5px] border-baddia-ink bg-white/95 p-5 pt-6 shadow-[4px_4px_0_hsl(260_16%_15%)]">
+              <span className="absolute -top-3 left-4"><WashiLabel color="bg-baddia-yellow" rot={-3}>vibra</WashiLabel></span>
               <p className="mt-1 font-display font-black text-[20px] text-baddia-ink leading-tight">
                 {CATEGORIES.find(c=>c.id===category)?.emoji} {category}
               </p>
-              <p className="mt-2 text-[13px] text-baddia-ink/70 font-semibold italic">“{raw}”</p>
+              <p className="mt-2 text-[13px] text-baddia-ink/70 font-semibold italic">"{raw}"</p>
             </section>
 
             <SectionLabel emoji="🌈" text="¿prefieres otra categoría?" />
@@ -317,10 +401,11 @@ export function Manifest() {
         {/* INTENTION */}
         {step === "intention" && category && (
           <>
-            <section className="rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-white via-pink-50 to-purple-50 p-5 shadow-[4px_4px_0_hsl(260_16%_15%)]">
+            <section className="relative rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-white via-pink-50 to-purple-50 p-5 pt-7 shadow-[4px_4px_0_hsl(260_16%_15%)]">
+              <span className="absolute -top-3 left-4"><WashiLabel color="bg-baddia-bubble" rot={-4}>tu intención</WashiLabel></span>
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-xl">{CATEGORIES.find(c=>c.id===category)?.emoji}</span>
-                <p className="text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink/60">Tu intención poderosa</p>
+                <p className="text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink/60">{category}</p>
               </div>
               {editing ? (
                 <textarea
@@ -331,7 +416,7 @@ export function Manifest() {
                 />
               ) : (
                 <p className="font-display font-black text-[17px] text-baddia-ink leading-snug">
-                  “{intention}”
+                  "{intention}"
                 </p>
               )}
               <div className="mt-3 flex gap-2">
@@ -356,84 +441,151 @@ export function Manifest() {
         {/* STREAK (home) */}
         {step === "streak" && data && (
           <>
-            {/* Intention card */}
-            <section className="relative rounded-3xl border-[2.5px] border-baddia-ink bg-white p-5 shadow-[4px_4px_0_hsl(260_16%_15%)]">
-              <span className="absolute -top-3 left-4 px-2.5 py-1 rounded-full border-2 border-baddia-ink bg-baddia-yellow text-[10px] font-display font-black -rotate-2 shadow-[2px_2px_0_hsl(260_16%_15%)] uppercase tracking-widest">
-                {CATEGORIES.find(c=>c.id===data.category)?.emoji} {data.category}
-              </span>
-              <p className="font-display font-black text-[16px] text-baddia-ink leading-snug mt-1">
-                “{data.intention}”
+            {/* HERO Streak card — irresistible polaroid */}
+            <section className="relative rounded-[28px] border-[2.5px] border-baddia-ink bg-white p-4 pt-5 shadow-[6px_8px_0_hsl(260_16%_15%)] overflow-hidden">
+              {/* tape strips */}
+              <span className="absolute -top-3 left-10 w-16 h-6 bg-yellow-200/80 border border-baddia-ink/20 -rotate-6 shadow-sm" />
+              <span className="absolute -top-3 right-10 w-16 h-6 bg-pink-200/80 border border-baddia-ink/20 rotate-6 shadow-sm" />
+              {/* corner deco */}
+              <span className="absolute -top-2 -right-1 text-3xl rotate-12 select-none">🌸</span>
+              <span className="absolute -bottom-2 -left-1 text-2xl -rotate-12 select-none">🌿</span>
+
+              {/* category chip */}
+              <div className="flex justify-center mb-2">
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full border-2 border-baddia-ink bg-baddia-yellow text-[11px] font-display font-black uppercase tracking-widest -rotate-2 shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                  {CATEGORIES.find(c=>c.id===data.category)?.emoji} {data.category}
+                </span>
+              </div>
+
+              {/* Big number ring */}
+              <div className="relative mx-auto w-44 h-44">
+                {/* halo */}
+                <span className="absolute inset-0 rounded-full bg-gradient-to-br from-baddia-bubble/40 via-baddia-yellow/30 to-baddia-lavender/40 blur-xl" />
+                <svg viewBox="0 0 120 120" className="absolute inset-0 -rotate-90">
+                  <circle cx="60" cy="60" r="52" fill="none" stroke="hsl(260 16% 15% / 0.08)" strokeWidth="10" />
+                  <circle
+                    cx="60" cy="60" r="52" fill="none" strokeLinecap="round" strokeWidth="10"
+                    stroke="url(#g1)"
+                    strokeDasharray={326}
+                    strokeDashoffset={326 - 326 * Math.min(1, (nextMilestone ? streak / nextMilestone.days : 1))}
+                    style={{ transition: "stroke-dashoffset .9s ease", filter: "drop-shadow(0 2px 0 hsl(260 16% 15% / 0.15))" }}
+                  />
+                  <defs>
+                    <linearGradient id="g1" x1="0" x2="1">
+                      <stop offset="0%" stopColor="hsl(338 90% 68%)" />
+                      <stop offset="50%" stopColor="hsl(340 100% 80%)" />
+                      <stop offset="100%" stopColor="hsl(256 90% 78%)" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-[44px] leading-none drop-shadow-[1px_2px_0_hsl(48_100%_70%)]">{currentMilestone?.emoji ?? "🌱"}</span>
+                  <span className="mt-1 font-display font-black text-[40px] leading-none text-baddia-ink">{streak}</span>
+                  <span className="text-[10px] font-display font-black uppercase tracking-[0.18em] text-baddia-ink/60 mt-1">
+                    {streak===1?"día glow":"días glow"}
+                  </span>
+                </div>
+              </div>
+
+              {/* milestone caption */}
+              <div className="text-center mt-3">
+                <p className="font-display font-black text-[17px] text-baddia-ink leading-tight">
+                  {currentMilestone?.name ?? "Listo para empezar"}
+                </p>
+                <p className="text-[12px] text-baddia-ink/65 font-semibold italic mt-0.5 px-3">
+                  {currentMilestone?.phrase ?? "Tu primera intención está lista."}
+                </p>
+              </div>
+
+              {/* progress bar */}
+              {nextMilestone && (
+                <div className="mt-3 px-1">
+                  <div className="h-2.5 rounded-full border-2 border-baddia-ink bg-white overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender transition-all duration-700"
+                      style={{ width: `${Math.min(100,(streak/nextMilestone.days)*100)}%` }}
+                    />
+                  </div>
+                  <p className="text-[11px] text-baddia-ink/70 font-display font-bold mt-1.5 text-center">
+                    {nextMilestone.days - streak} {nextMilestone.days - streak === 1 ? "día" : "días"} para {nextMilestone.emoji} <span className="text-baddia-hot">{nextMilestone.name}</span>
+                  </p>
+                </div>
+              )}
+
+              {/* glow points + share */}
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <div className="rounded-xl border-2 border-baddia-ink bg-baddia-yellow px-3 py-2 shadow-[2px_2px_0_hsl(260_16%_15%)] flex items-center gap-2">
+                  <Trophy size={16} className="text-baddia-ink"/>
+                  <div className="min-w-0">
+                    <p className="font-display font-black text-[14px] leading-none text-baddia-ink">{glowPoints} pts</p>
+                    <p className="text-[9.5px] font-display font-black uppercase tracking-widest text-baddia-ink/60 mt-0.5">glow points</p>
+                  </div>
+                </div>
+                <button
+                  onClick={()=>setShareOpen(true)}
+                  className="rounded-xl border-2 border-baddia-ink bg-baddia-ink text-white px-3 py-2 shadow-[2px_2px_0_hsl(338_90%_68%)] flex items-center justify-center gap-1.5 active:scale-95"
+                >
+                  <Share2 size={14}/> <span className="font-display font-black text-[12px]">Compartir racha</span>
+                </button>
+              </div>
+            </section>
+
+            {/* Intention card — sticky note */}
+            <section
+              className="relative rounded-2xl border-2 border-baddia-ink bg-[#fff8b0] p-4 pt-5 shadow-[4px_4px_0_hsl(260_16%_15%)]"
+              style={{ transform: "rotate(-1deg)" }}
+            >
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-5 bg-white/70 border border-baddia-ink/20 rotate-2 shadow-sm" />
+              <p className="text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink/60">tu intención</p>
+              <p className="font-display font-black text-[15px] text-baddia-ink leading-snug mt-1">
+                "{data.intention}"
               </p>
             </section>
 
-            {/* Streak ring */}
-            <section className="rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-baddia-bubble/30 via-white to-baddia-lavender/30 p-5 shadow-[4px_4px_0_hsl(260_16%_15%)]">
-              <div className="flex items-center gap-4">
-                <div className="relative w-24 h-24 shrink-0">
-                  <div className="absolute inset-0 rounded-full border-[3px] border-baddia-ink bg-white flex flex-col items-center justify-center">
-                    <span className="text-3xl">{currentMilestone?.emoji ?? "🌱"}</span>
-                  </div>
-                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full border-2 border-baddia-ink bg-baddia-hot text-white text-[10px] font-display font-black shadow-[1px_1px_0_hsl(260_16%_15%)]">
-                    {streak} {streak===1?"día":"días"}
-                  </span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-display font-black text-[14px] text-baddia-ink leading-tight">
-                    {currentMilestone?.name ?? "Listo para empezar"}
-                  </p>
-                  <p className="text-[12px] text-baddia-ink/70 font-semibold mt-0.5">
-                    {currentMilestone?.phrase ?? "Tu primera intención está lista."}
-                  </p>
-                  {nextMilestone && (
-                    <div className="mt-2">
-                      <div className="h-2 rounded-full border border-baddia-ink/30 bg-white overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender"
-                          style={{ width: `${Math.min(100,(streak/nextMilestone.days)*100)}%` }}
-                        />
-                      </div>
-                      <p className="text-[10px] text-baddia-ink/60 font-semibold mt-1">
-                        {nextMilestone.days - streak} días para {nextMilestone.emoji} {nextMilestone.name}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
+            {/* 30-day flower garden */}
+            <SectionLabel emoji="🌷" text="tu jardín de 30 días" />
+            <section className="rounded-2xl border-2 border-baddia-ink bg-white/95 p-3 shadow-[3px_3px_0_hsl(260_16%_15%)]">
+              <FlowerGarden completed={data.daysCompleted} createdAt={data.createdAt} />
+              <p className="text-[10.5px] text-baddia-ink/60 font-display font-bold text-center mt-2">
+                cada día que vuelves, florece una flor 🌸
+              </p>
             </section>
 
-            {/* Week calendar */}
-            <SectionLabel emoji="📅" text="esta semana" />
-            <section className="rounded-2xl border-2 border-baddia-ink bg-white p-3 shadow-[3px_3px_0_hsl(260_16%_15%)]">
-              <div className="grid grid-cols-7 gap-1.5">
-                {(() => {
-                  const today = new Date();
-                  const dow = (today.getDay() + 6) % 7; // Mon=0
-                  const monday = new Date(today); monday.setDate(today.getDate() - dow);
-                  const labels = ["L","M","M","J","V","S","D"];
-                  return Array.from({length:7}).map((_,i) => {
-                    const d = new Date(monday); d.setDate(monday.getDate()+i);
-                    const k = d.toISOString().slice(0,10);
-                    const done = data.daysCompleted.includes(k);
-                    const isToday = k === todayKey();
-                    return (
-                      <div key={i} className="flex flex-col items-center gap-1">
-                        <span className="text-[10px] font-display font-black text-baddia-ink/60">{labels[i]}</span>
-                        <div className={`w-9 h-9 rounded-xl border-2 border-baddia-ink flex items-center justify-center text-base ${done ? "bg-gradient-to-br from-baddia-hot to-baddia-bubble" : isToday ? "bg-baddia-yellow" : "bg-white"} ${isToday?"ring-2 ring-baddia-ink/40":""}`}>
-                          {done ? "✨" : isToday ? "·" : ""}
+            {/* Week + energy split */}
+            <div className="grid grid-cols-1 gap-3">
+              <section className="rounded-2xl border-2 border-baddia-ink bg-white p-3 shadow-[3px_3px_0_hsl(260_16%_15%)]">
+                <p className="text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink/60 mb-2 pl-1">📅 esta semana</p>
+                <div className="grid grid-cols-7 gap-1.5">
+                  {(() => {
+                    const today = new Date();
+                    const dow = (today.getDay() + 6) % 7;
+                    const monday = new Date(today); monday.setDate(today.getDate() - dow);
+                    const labels = ["L","M","M","J","V","S","D"];
+                    return Array.from({length:7}).map((_,i) => {
+                      const d = new Date(monday); d.setDate(monday.getDate()+i);
+                      const k = d.toISOString().slice(0,10);
+                      const done = data.daysCompleted.includes(k);
+                      const isToday = k === todayKey();
+                      return (
+                        <div key={i} className="flex flex-col items-center gap-1">
+                          <span className="text-[10px] font-display font-black text-baddia-ink/60">{labels[i]}</span>
+                          <div className={`w-9 h-9 rounded-xl border-2 border-baddia-ink flex items-center justify-center text-base shadow-[1.5px_1.5px_0_hsl(260_16%_15%)] ${done ? "bg-gradient-to-br from-baddia-hot to-baddia-bubble" : isToday ? "bg-baddia-yellow" : "bg-white"} ${isToday?"ring-2 ring-baddia-ink/40":""}`}>
+                            {done ? "🌸" : isToday ? "·" : ""}
+                          </div>
+                          <span className="text-[9px] text-baddia-ink/50 font-semibold">{d.getDate()}</span>
                         </div>
-                        <span className="text-[9px] text-baddia-ink/50 font-semibold">{d.getDate()}</span>
-                      </div>
-                    );
-                  });
-                })()}
-              </div>
-            </section>
+                      );
+                    });
+                  })()}
+                </div>
+              </section>
+            </div>
 
             {/* Today's energy */}
-            <section className="rounded-2xl border-2 border-baddia-ink bg-baddia-mint p-4 shadow-[3px_3px_0_hsl(260_16%_15%)]">
-              <p className="text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink/70">Tu energía de hoy</p>
-              <p className="mt-1 font-display font-black text-[16px] text-baddia-ink leading-snug">
-                “{AFFIRMATIONS[streak % AFFIRMATIONS.length]}”
+            <section className="relative rounded-2xl border-2 border-baddia-ink bg-baddia-mint p-4 pt-5 shadow-[3px_3px_0_hsl(260_16%_15%)]">
+              <span className="absolute -top-3 left-4"><WashiLabel color="bg-white" rot={-2}>energía de hoy</WashiLabel></span>
+              <p className="font-display font-black text-[16px] text-baddia-ink leading-snug">
+                "{AFFIRMATIONS[streak % AFFIRMATIONS.length]}"
               </p>
             </section>
 
@@ -441,10 +593,71 @@ export function Manifest() {
             <button
               onClick={() => completedToday ? null : setStep("ritual")}
               disabled={completedToday}
-              className={`w-full rounded-2xl border-[2.5px] border-baddia-ink py-4 font-display font-black text-[16px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:scale-95 ${completedToday ? "bg-baddia-mint text-baddia-ink" : "bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white"}`}
+              className={`relative w-full rounded-2xl border-[2.5px] border-baddia-ink py-4 font-display font-black text-[16px] shadow-[4px_4px_0_hsl(260_16%_15%)] active:scale-95 overflow-hidden ${completedToday ? "bg-baddia-mint text-baddia-ink" : "bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white"}`}
             >
-              {completedToday ? "✅ Día completado · vuelve mañana" : "Manifestar hoy ✨"}
+              {!completedToday && (
+                <span className="absolute inset-0 opacity-30 pointer-events-none animate-shimmer"
+                  style={{ background: "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.6) 50%, transparent 70%)", backgroundSize: "200% 100%" }}
+                />
+              )}
+              <span className="relative">
+                {completedToday ? "✅ Día completado · vuelve mañana" : "Manifestar hoy ✨"}
+              </span>
             </button>
+
+            {/* Reminder + share row */}
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={toggleRemind}
+                className={`rounded-2xl border-2 border-baddia-ink p-3 shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center gap-2 active:scale-95 ${data.remind ? "bg-baddia-bubble" : "bg-white"}`}
+              >
+                {data.remind ? <Bell size={16}/> : <BellOff size={16}/>}
+                <span className="text-left">
+                  <span className="block font-display font-black text-[11.5px] text-baddia-ink leading-tight">Recordatorio diario</span>
+                  <span className="block text-[9.5px] text-baddia-ink/65 font-semibold">{data.remind ? "Activo · 9:00am" : "Toca para activar"}</span>
+                </span>
+              </button>
+              <button
+                onClick={()=>setShareOpen(true)}
+                className="rounded-2xl border-2 border-baddia-ink bg-white p-3 shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center gap-2 active:scale-95"
+              >
+                <span className="w-7 h-7 rounded-lg border-2 border-baddia-ink bg-baddia-yellow flex items-center justify-center">🌸</span>
+                <span className="text-left">
+                  <span className="block font-display font-black text-[11.5px] text-baddia-ink leading-tight">Postear mi racha</span>
+                  <span className="block text-[9.5px] text-baddia-ink/65 font-semibold">para stories ✨</span>
+                </span>
+              </button>
+            </div>
+
+            {/* Social proof */}
+            <div className="rounded-2xl border-2 border-baddia-ink bg-white/90 px-3 py-2.5 shadow-[2px_2px_0_hsl(260_16%_15%)] flex items-center gap-2">
+              <div className="flex -space-x-2">
+                {["🌸","💗","✨","🌿"].map((e,i)=>(
+                  <span key={i} className="w-7 h-7 rounded-full border-2 border-baddia-ink bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center text-sm">{e}</span>
+                ))}
+              </div>
+              <p className="text-[11.5px] font-display font-bold text-baddia-ink/80 leading-tight">
+                <span className="font-black">{socialCountToday().toLocaleString()}</span> girls manifestando hoy contigo
+              </p>
+            </div>
+
+            {/* Milestones rail */}
+            <SectionLabel emoji="🏆" text="badges que vienen" />
+            <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-none">
+              {MILESTONES.map((m) => {
+                const reached = streak >= m.days;
+                return (
+                  <div
+                    key={m.days}
+                    className={`shrink-0 w-[110px] rounded-2xl border-2 border-baddia-ink p-3 shadow-[3px_3px_0_hsl(260_16%_15%)] text-center ${reached ? "bg-gradient-to-br from-baddia-yellow to-baddia-bubble" : "bg-white/80"}`}
+                  >
+                    <div className="text-3xl">{reached ? m.emoji : "🔒"}</div>
+                    <p className="font-display font-black text-[11px] text-baddia-ink mt-1 leading-tight">{m.name}</p>
+                    <p className="text-[9.5px] text-baddia-ink/60 font-display font-bold mt-0.5">día {m.days}</p>
+                  </div>
+                );
+              })}
+            </div>
 
             {/* Pro hint */}
             {!isPro && (
@@ -483,8 +696,8 @@ export function Manifest() {
         {step === "celebrate" && data && (
           <section className="relative rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-baddia-yellow via-baddia-bubble to-baddia-lavender p-6 shadow-[4px_4px_0_hsl(260_16%_15%)] text-center overflow-hidden">
             <div aria-hidden className="pointer-events-none absolute inset-0">
-              {["✨","💖","🌸","⭐","💫"].map((e,i)=>(
-                <span key={i} className="absolute text-2xl animate-float-cute" style={{left:`${10+i*18}%`, top:`${10+(i%3)*25}%`, animationDelay:`${i*0.2}s`}}>{e}</span>
+              {["✨","💖","🌸","⭐","💫","🌿","🌼"].map((e,i)=>(
+                <span key={i} className="absolute text-2xl animate-float-cute" style={{left:`${5+i*13}%`, top:`${10+(i%3)*25}%`, animationDelay:`${i*0.2}s`}}>{e}</span>
               ))}
             </div>
             <p className="relative font-display font-black text-[28px] text-white drop-shadow-[2px_2px_0_hsl(260_16%_15%)]">
@@ -496,21 +709,188 @@ export function Manifest() {
             <div className="relative mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border-2 border-baddia-ink bg-white shadow-[2px_2px_0_hsl(260_16%_15%)]">
               <span className="text-xl">{currentMilestone?.emoji ?? "🌱"}</span>
               <span className="font-display font-black text-[13px] text-baddia-ink">{currentMilestone?.name ?? "Semilla"}</span>
+              <span className="text-baddia-ink/30">·</span>
+              <span className="font-display font-black text-[12px] text-baddia-hot">+25 glow pts</span>
             </div>
             <p className="relative text-[12px] text-white/90 font-semibold mt-4 leading-relaxed">
               Baddia guardó tu energía de hoy.<br/>Vuelve mañana para no romper tu Racha Glow.
             </p>
             <div className="relative mt-5 grid grid-cols-2 gap-2">
-              <button onClick={()=>setStep("streak")} className="rounded-xl border-2 border-baddia-ink bg-white px-3 py-2.5 text-[12px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] active:scale-95">
-                Ver mi progreso
+              <button onClick={()=>setShareOpen(true)} className="rounded-xl border-2 border-baddia-ink bg-white px-3 py-2.5 text-[12px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] active:scale-95 inline-flex items-center justify-center gap-1.5">
+                <Share2 size={14}/> Compartir
               </button>
-              <button onClick={()=>go("daily")} className="rounded-xl border-2 border-baddia-ink bg-baddia-ink text-white px-3 py-2.5 text-[12px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] active:scale-95">
-                Ir a Daily
+              <button onClick={()=>setStep("streak")} className="rounded-xl border-2 border-baddia-ink bg-baddia-ink text-white px-3 py-2.5 text-[12px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] active:scale-95">
+                Ver mi progreso
               </button>
             </div>
           </section>
         )}
       </main>
+
+      {/* Share sheet */}
+      {shareOpen && data && (
+        <ShareSheet
+          onClose={()=>setShareOpen(false)}
+          intention={data.intention}
+          category={data.category}
+          streak={streak}
+          milestone={currentMilestone}
+          name={user.name}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ─────────── Flower garden 30 days ─────────── */
+function FlowerGarden({ completed, createdAt }: { completed: string[]; createdAt: string }) {
+  const start = new Date(createdAt);
+  const flowers = ["🌸","🌷","🌼","🌺","💐","🌻"];
+  const done = new Set(completed);
+  return (
+    <div className="grid grid-cols-10 gap-1.5">
+      {Array.from({length:30}).map((_,i)=>{
+        const d = new Date(start); d.setDate(start.getDate()+i);
+        const k = d.toISOString().slice(0,10);
+        const isDone = done.has(k);
+        const isToday = k === todayKey();
+        const f = flowers[i % flowers.length];
+        return (
+          <div
+            key={i}
+            className={`relative aspect-square rounded-lg border border-baddia-ink/70 flex items-center justify-center text-base transition-all
+              ${isDone
+                ? "bg-gradient-to-br from-baddia-bubble/60 to-baddia-yellow/60 scale-100"
+                : "bg-white/60 grayscale opacity-40 scale-90"}
+              ${isToday ? "ring-2 ring-baddia-hot ring-offset-1 ring-offset-white" : ""}
+            `}
+            title={`Día ${i+1}`}
+          >
+            <span className={isDone ? "animate-float-cute" : ""} style={{animationDelay:`${(i%6)*0.15}s`}}>
+              {isDone ? f : "·"}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ─────────── Share Sheet ─────────── */
+function ShareSheet({
+  onClose, intention, category, streak, milestone, name,
+}: {
+  onClose: () => void;
+  intention: string;
+  category: Category;
+  streak: number;
+  milestone: { name: string; emoji: string; phrase: string } | null;
+  name: string;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [busy, setBusy] = useState(false);
+  const cat = CATEGORIES.find(c=>c.id===category);
+
+  const handleShare = async () => {
+    if (!cardRef.current) return;
+    setBusy(true);
+    try {
+      const dataUrl = await htmlToImage.toPng(cardRef.current, { pixelRatio: 2, cacheBust: true });
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], "racha-glow.png", { type: "image/png" });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title: "Mi Racha Glow ✨" });
+      } else {
+        const a = document.createElement("a");
+        a.href = dataUrl; a.download = "racha-glow.png"; a.click();
+        toast.success("Imagen descargada ✨");
+      }
+    } catch {
+      toast.error("No se pudo compartir");
+    } finally { setBusy(false); }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-baddia-ink/60 backdrop-blur-sm flex items-end sm:items-center justify-center" onClick={onClose}>
+      <div
+        className="relative w-full max-w-md rounded-t-3xl sm:rounded-3xl bg-white border-t-[3px] sm:border-[3px] border-baddia-ink p-5 max-h-[90vh] overflow-y-auto"
+        onClick={(e)=>e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-3">
+          <p className="font-display font-black text-[16px] text-baddia-ink">Compartir mi racha ✨</p>
+          <button onClick={onClose} className="text-baddia-ink/60 font-display font-black">✕</button>
+        </div>
+
+        {/* Shareable card preview */}
+        <div className="mx-auto" style={{ width: 320 }}>
+          <div
+            ref={cardRef}
+            className="relative w-[320px] aspect-[9/16] rounded-3xl overflow-hidden"
+            style={{
+              background: "linear-gradient(160deg, #fde8ef 0%, #fff5d6 45%, #e7d8ff 100%)",
+            }}
+          >
+            {/* paper grain */}
+            <div className="absolute inset-0 opacity-25 mix-blend-multiply"
+              style={{ backgroundImage: "radial-gradient(rgba(120,80,60,0.25) 0.5px, transparent 0.5px)", backgroundSize: "6px 6px" }} />
+            {/* deco */}
+            <span className="absolute -top-2 -right-2 text-6xl rotate-12">🌼</span>
+            <span className="absolute top-12 right-6 text-3xl -rotate-12">🌿</span>
+            <span className="absolute -bottom-4 -left-3 text-7xl -rotate-12">💐</span>
+            <span className="absolute bottom-24 right-3 text-2xl rotate-6">✨</span>
+            {/* tape */}
+            <span className="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-6 bg-white/70 border border-baddia-ink/15 -rotate-3 shadow-sm" />
+
+            <div className="relative h-full flex flex-col p-6 pt-12">
+              <p className="font-display font-black text-[12px] uppercase tracking-[0.25em] text-baddia-ink/70 text-center">my racha glow</p>
+              <p className="text-center font-display font-black text-[28px] text-baddia-ink mt-1">
+                <span className="bg-gradient-to-r from-baddia-hot to-baddia-lavender bg-clip-text text-transparent">
+                  manifestando
+                </span>
+              </p>
+
+              <div className="mt-3 mx-auto px-3 py-1 rounded-full border-2 border-baddia-ink bg-white text-[11px] font-display font-black -rotate-2 shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                {cat?.emoji} {category}
+              </div>
+
+              {/* big number */}
+              <div className="flex-1 flex flex-col items-center justify-center">
+                <span className="text-[64px] leading-none">{milestone?.emoji ?? "🌱"}</span>
+                <p className="font-display font-black text-[100px] leading-none text-baddia-ink mt-2 drop-shadow-[2px_4px_0_rgba(255,255,255,0.7)]">{streak}</p>
+                <p className="font-display font-black text-[14px] uppercase tracking-[0.25em] text-baddia-ink/70 mt-1">
+                  {streak===1?"día glow":"días glow"}
+                </p>
+              </div>
+
+              {/* intention sticker */}
+              <div
+                className="rounded-xl border-2 border-baddia-ink bg-[#fff8b0] p-3 shadow-[3px_3px_0_hsl(260_16%_15%)]"
+                style={{ transform: "rotate(-1.5deg)" }}
+              >
+                <p className="text-[9px] font-display font-black uppercase tracking-widest text-baddia-ink/60">mi intención</p>
+                <p className="font-display font-black text-[12.5px] text-baddia-ink leading-snug mt-0.5 line-clamp-3">
+                  "{intention}"
+                </p>
+              </div>
+
+              <p className="text-center text-[10px] font-display font-black uppercase tracking-[0.25em] text-baddia-ink/60 mt-3">
+                @{name.toLowerCase().replace(/\s+/g,"")} · baddia ✨
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <button
+          onClick={handleShare}
+          disabled={busy}
+          className="mt-4 w-full rounded-2xl border-[2.5px] border-baddia-ink bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white font-display font-black py-3 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:scale-95 inline-flex items-center justify-center gap-2 disabled:opacity-60"
+        >
+          {busy ? "Preparando…" : (<><Download size={16}/> Guardar / Compartir</>)}
+        </button>
+        <p className="text-center text-[10.5px] text-baddia-ink/60 font-display font-bold mt-2">
+          Súbela a tu story y etiqueta a @baddia.app 💗
+        </p>
+      </div>
     </div>
   );
 }
@@ -542,7 +922,7 @@ function Ritual({ category, intention, onDone }: { category: Category; intention
           <p className="text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink/60">Paso 1 · Afirmación</p>
           <p className="mt-3 text-[14px] text-baddia-ink/70 font-semibold">Repite 3 veces, despacito:</p>
           <p className="mt-3 font-display font-black text-[18px] text-baddia-ink leading-snug animate-pulse-slow">
-            “{affirmation}”
+            "{affirmation}"
           </p>
           <button onClick={()=>setS(2)} className="mt-5 w-full rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-hot text-white font-display font-black py-3 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:scale-95">
             Ya la repetí ✨
@@ -561,7 +941,7 @@ function Ritual({ category, intention, onDone }: { category: Category; intention
               {secs}s
             </div>
           </div>
-          <p className="mt-4 text-[12px] text-baddia-ink/70 font-semibold italic">“{intention}”</p>
+          <p className="mt-4 text-[12px] text-baddia-ink/70 font-semibold italic">"{intention}"</p>
           <button
             onClick={()=>setS(3)}
             disabled={secs>0}
