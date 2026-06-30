@@ -4,7 +4,7 @@ import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import {
   History, Sparkles, Shield, LogOut, ChevronRight, LayoutGrid,
   Settings, Trash2, Cake, Hash, Lock, ArrowRight, Bookmark, Bell, Globe,
-  User as UserIcon, Store,
+  User as UserIcon, Heart, Gift, Star,
 } from "lucide-react";
 import { toast } from "sonner";
 
