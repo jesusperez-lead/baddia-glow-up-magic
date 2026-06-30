@@ -1,9 +1,10 @@
 import { useBaddia } from "@/lib/baddia-state";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import { ShareGlowSheet } from "../ShareGlowSheet";
-import { Share2, Bookmark, Lock, Check, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { Share2, Bookmark, Lock, Check, ArrowRight, Flame, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
 
 export function Daily() {
   const { user, setUser, openPaywall, go } = useBaddia();
