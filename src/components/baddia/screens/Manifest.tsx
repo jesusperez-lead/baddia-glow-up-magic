@@ -528,6 +528,34 @@ export function Manifest() {
                   <Share2 size={14}/> <span className="font-display font-black text-[12px]">Compartir racha</span>
                 </button>
               </div>
+
+              {/* Main CTA — big, right under pts + share */}
+              <button
+                onClick={() => completedToday ? null : setStep("ritual")}
+                disabled={completedToday}
+                className={`relative w-full rounded-2xl border-[3px] border-baddia-ink py-5 font-display font-black text-[18px] shadow-[5px_5px_0_hsl(260_16%_15%)] active:scale-95 overflow-hidden whitespace-nowrap ${completedToday ? "bg-baddia-mint text-baddia-ink" : "bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white"}`}
+              >
+                {!completedToday && (
+                  <span className="absolute inset-0 opacity-40 pointer-events-none animate-shimmer"
+                    style={{ background: "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.7) 50%, transparent 70%)", backgroundSize: "200% 100%" }}
+                  />
+                )}
+                <span className="relative inline-flex items-center justify-center gap-2">
+                  {completedToday ? (
+                    <>
+                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white border-[2px] border-baddia-ink">
+                        <Check size={14} strokeWidth={3} className="text-baddia-ink" />
+                      </span>
+                      Día completado · vuelve mañana
+                    </>
+                  ) : (
+                    <>
+                      Manifestar hoy
+                      <Sparkles size={18} className="text-white animate-pulse" />
+                    </>
+                  )}
+                </span>
+              </button>
             </section>
 
             {/* Intention card — sticky note */}
