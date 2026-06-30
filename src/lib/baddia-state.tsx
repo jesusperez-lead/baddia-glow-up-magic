@@ -23,7 +23,8 @@ export type Screen =
   | "history"
   | "crush-initial"
   | "write-week"
-  | "manifest";
+  | "manifest"
+  | "notifications";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
