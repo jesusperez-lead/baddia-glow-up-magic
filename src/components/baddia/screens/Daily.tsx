@@ -38,9 +38,13 @@ export function Daily() {
       </header>
 
       <div className="relative z-10 px-5 mt-5 space-y-5">
-        {/* Glow Score — sticker card */}
+        {/* ───── Section: racha glow ───── */}
+        <SectionLabel emoji="🌸" text="tu racha glow" />
+        <ManifestCTA onOpen={() => go("manifest")} />
+
         {/* ───── Section: tu energía ───── */}
         <SectionLabel emoji="✨" text="tu energía de hoy" />
+
 
         {/* Glow Score */}
         <div className="relative animate-slide-up">
