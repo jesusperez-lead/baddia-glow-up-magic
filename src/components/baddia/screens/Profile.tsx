@@ -31,6 +31,12 @@ export function Profile() {
   const birthParts = [user.day, monthLabel, user.year].filter(Boolean) as string[];
   const birth = birthParts.length ? birthParts.join(" · ") : "Fecha no disponible";
 
+  // 🎂 Detectar si hoy es su cumpleaños
+  const today = new Date();
+  const isBirthday =
+    Number(user.day) === today.getDate() &&
+    Number(user.month) === today.getMonth() + 1;
+
   const onVersionTap = () => {
     const n = tapCount + 1;
     setTapCount(n);
