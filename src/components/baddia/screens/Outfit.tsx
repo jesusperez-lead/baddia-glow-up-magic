@@ -696,26 +696,58 @@ export function Outfit() {
             </div>
           </div>
 
-          {/* theme picker */}
-          <div className="px-3 py-3 bg-baddia-ink/40 backdrop-blur">
-            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+          {/* theme picker dock */}
+          <div className="relative bg-gradient-to-b from-baddia-ink/70 to-baddia-ink backdrop-blur-xl border-t-[3px] border-baddia-yellow/80 rounded-t-[28px] px-4 pt-4 pb-5 shadow-[0_-10px_30px_-10px_rgba(0,0,0,0.5)]">
+            {/* handle */}
+            <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-10 h-1 rounded-full bg-white/30" />
+
+            {/* section header */}
+            <div className="flex items-center justify-between mb-3 mt-1">
+              <span className="inline-flex items-center gap-1.5 bg-baddia-yellow text-baddia-ink px-2.5 py-1 rounded-full border-2 border-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] font-display font-black text-[10px] uppercase tracking-widest -rotate-2">
+                <Sparkles size={11} strokeWidth={3} /> Elige tu vibe
+              </span>
+              <span className="font-display font-bold text-[10px] uppercase tracking-widest text-white/60">
+                {THEMES.findIndex((t) => t.id === themeId) + 1}/{THEMES.length}
+              </span>
+            </div>
+
+            {/* swatches */}
+            <div className="flex gap-2.5 overflow-x-auto scrollbar-hide pb-3 -mx-1 px-1">
               {THEMES.map((t) => {
                 const active = t.id === themeId;
                 return (
                   <button
                     key={t.id}
                     onClick={() => setThemeId(t.id)}
-                    className={`shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-2xl border-[2.5px] transition-all ${
-                      active
-                        ? "border-baddia-yellow shadow-[3px_3px_0_hsl(48_100%_59%)] -translate-y-0.5"
-                        : "border-white/30"
+                    aria-pressed={active}
+                    className={`shrink-0 flex flex-col items-center gap-1.5 transition-all ${
+                      active ? "-translate-y-1 scale-[1.04]" : "opacity-80 hover:opacity-100"
                     }`}
-                    style={{ background: t.bg, minWidth: 78 }}
                   >
-                    <span className="text-lg">{t.emoji}</span>
+                    <div
+                      className={`relative w-14 h-14 rounded-2xl border-[2.5px] flex items-center justify-center overflow-hidden ${
+                        active
+                          ? "border-baddia-yellow shadow-[0_0_0_2px_hsl(260_16%_15%),0_6px_18px_-4px_hsl(48_100%_59%/0.7)]"
+                          : "border-white/20"
+                      }`}
+                      style={{ background: t.bg }}
+                    >
+                      <span
+                        className="text-2xl drop-shadow-[1px_1px_0_rgba(0,0,0,0.35)] leading-none"
+                        style={{ filter: active ? "none" : "saturate(0.9)" }}
+                      >
+                        {t.emoji}
+                      </span>
+                      {active && (
+                        <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-baddia-yellow border-2 border-baddia-ink flex items-center justify-center">
+                          <span className="w-1.5 h-1.5 rounded-full bg-baddia-ink" />
+                        </span>
+                      )}
+                    </div>
                     <span
-                      className="font-display font-black text-[9px] uppercase tracking-widest"
-                      style={{ color: t.textColor }}
+                      className={`font-display font-black text-[9px] uppercase tracking-[0.14em] ${
+                        active ? "text-baddia-yellow" : "text-white/70"
+                      }`}
                     >
                       {t.name}
                     </span>
@@ -724,22 +756,27 @@ export function Outfit() {
               })}
             </div>
 
+            {/* divider */}
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent mb-3" />
+
+            {/* share button */}
             <button
               onClick={captureAndShare}
               disabled={isCapturing}
-              className="relative w-full active:translate-x-[2px] active:translate-y-[2px] transition-transform disabled:opacity-70 group mt-1"
+              className="relative w-full active:translate-x-[2px] active:translate-y-[2px] transition-transform disabled:opacity-70 group"
             >
-              <span className="absolute inset-0 bg-black rounded-2xl translate-x-1.5 translate-y-1.5 group-active:translate-x-0 group-active:translate-y-0 transition-transform" />
-              <span className="relative flex items-center justify-center gap-2.5 bg-gradient-glow text-white py-3.5 px-6 rounded-2xl border-[2.5px] border-baddia-ink">
+              <span className="absolute inset-0 bg-baddia-yellow rounded-2xl translate-x-1.5 translate-y-1.5 group-active:translate-x-0 group-active:translate-y-0 transition-transform" />
+              <span className="relative flex items-center justify-center gap-2.5 bg-gradient-glow text-white py-3.5 px-6 rounded-2xl border-[2.5px] border-baddia-ink overflow-hidden">
+                <span className="absolute inset-0 bg-[linear-gradient(110deg,transparent_35%,rgba(255,255,255,0.35)_50%,transparent_65%)] bg-[length:200%_100%] animate-shimmer pointer-events-none" />
                 {isCapturing ? (
                   <>
-                    <Sparkles size={18} className="animate-spin" />
-                    <span className="font-display font-black text-base uppercase tracking-wider">Creando…</span>
+                    <Sparkles size={18} className="animate-spin relative z-10" />
+                    <span className="relative z-10 font-display font-black text-base uppercase tracking-wider">Creando magia…</span>
                   </>
                 ) : (
                   <>
-                    <Download size={18} strokeWidth={3} />
-                    <span className="font-display font-black text-base uppercase tracking-wider">Guardar / Compartir</span>
+                    <Download size={18} strokeWidth={3} className="relative z-10" />
+                    <span className="relative z-10 font-display font-black text-base uppercase tracking-wider">Guardar / Compartir</span>
                   </>
                 )}
               </span>
