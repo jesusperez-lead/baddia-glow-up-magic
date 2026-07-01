@@ -1,8 +1,13 @@
 import { useBaddia } from "@/lib/baddia-state";
-import { ArrowLeft, Sparkles, Moon, Heart, Flame, Hand, Star, Calendar, Users, Music, Bell, Lock } from "lucide-react";
+import { ArrowLeft, Sparkles, Moon, Heart, Flame, Hand, Star, Calendar, Users, Music, Bell, Lock, Wand2 } from "lucide-react";
+import { computeDailyVibe } from "@/lib/baddia-daily";
+import { ZODIAC_EMOJI, type Zodiac } from "@/lib/baddia-numerology";
 
 export function WidgetsShowcase() {
-  const { go } = useBaddia();
+  const { go, user } = useBaddia();
+  const vibe = computeDailyVibe(user);
+  const glyph = ZODIAC_EMOJI[user.sign as Zodiac] ?? "✦";
+  const shortQuote = vibe.advice.length > 42 ? vibe.advice.slice(0, 40).trim() + "…" : vibe.advice;
 
   return (
     <div className="relative min-h-full bg-gradient-pearl pb-10">
