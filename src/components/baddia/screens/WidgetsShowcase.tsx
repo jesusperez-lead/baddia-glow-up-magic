@@ -1,8 +1,13 @@
 import { useBaddia } from "@/lib/baddia-state";
-import { ArrowLeft, Sparkles, Moon, Heart, Flame, Hand, Star, Calendar, Users, Music, Bell, Lock } from "lucide-react";
+import { ArrowLeft, Sparkles, Moon, Heart, Flame, Hand, Star, Calendar, Users, Music, Bell, Lock, Wand2 } from "lucide-react";
+import { computeDailyVibe } from "@/lib/baddia-daily";
+import { ZODIAC_EMOJI, type Zodiac } from "@/lib/baddia-numerology";
 
 export function WidgetsShowcase() {
-  const { go } = useBaddia();
+  const { go, user } = useBaddia();
+  const vibe = computeDailyVibe(user);
+  const glyph = ZODIAC_EMOJI[user.sign as Zodiac] ?? "✦";
+  const shortQuote = vibe.advice.length > 42 ? vibe.advice.slice(0, 40).trim() + "…" : vibe.advice;
 
   return (
     <div className="relative min-h-full bg-gradient-pearl pb-10">
@@ -70,9 +75,92 @@ export function WidgetsShowcase() {
             </div>
           </PhoneCanvas>
         </Section>
+        {/* ───── LOCK SCREEN iOS 16+ ───── */}
+        <Section emoji="🔓" label="Lock Screen · iOS 16+">
+          <p className="text-[12px] text-baddia-ink/70 font-semibold leading-snug px-1 -mt-1">
+            Widgets nuevos que viven arriba y debajo de tu hora. Todo se actualiza con tu lectura del día.
+          </p>
+
+          <PhoneCanvas wallpaper="lock">
+            {/* Inline widget — arriba del reloj */}
+            <div className="pt-11 px-6">
+              <div className="mx-auto w-fit max-w-full flex items-center gap-1.5 rounded-full bg-white/18 backdrop-blur-md border border-white/25 px-3 py-1 text-white text-[10.5px] font-display font-bold tracking-tight shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
+                <span className="text-[11px] leading-none">✨</span>
+                <span className="truncate">
+                  Hoy: {vibe.color.name} · Nº {vibe.luckyNumber}
+                </span>
+              </div>
+            </div>
+
+            {/* Fecha + hora */}
+            <div className="mt-1.5 text-center text-white px-4">
+              <p className="font-semibold text-[11px] opacity-90 tracking-wide">jueves 16 de junio</p>
+              <p className="font-display font-black text-[60px] leading-none mt-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] tracking-tight">
+                09:24
+              </p>
+            </div>
+
+            {/* Row de widgets bajo el reloj */}
+            <div className="px-5 mt-3 flex items-center justify-center gap-2">
+              <div className="w-11 h-11 rounded-full bg-white/18 backdrop-blur-md border border-white/25 flex items-center justify-center text-white shadow-[0_2px_8px_rgba(0,0,0,0.25)]">
+                <span className="font-display font-black text-[20px] leading-none">{glyph}</span>
+              </div>
+
+              <div className="flex-1 max-w-[180px] h-11 rounded-2xl bg-white/18 backdrop-blur-md border border-white/25 px-2.5 py-1 text-white shadow-[0_2px_8px_rgba(0,0,0,0.25)] flex flex-col justify-center min-w-0">
+                <p className="text-[7px] font-display font-black uppercase tracking-widest opacity-80 leading-none">✦ baddia</p>
+                <p className="font-display font-bold italic text-[10px] leading-tight mt-0.5 truncate">"Deja que tu energía hable ✨"</p>
+              </div>
+
+              <div className="w-11 h-11 rounded-full bg-white/18 backdrop-blur-md border border-white/25 flex flex-col items-center justify-center text-white shadow-[0_2px_8px_rgba(0,0,0,0.25)]">
+                <span className="text-[6px] font-display font-black uppercase tracking-widest opacity-80 leading-none">Glow</span>
+                <span className="font-display font-black text-[13px] leading-none mt-0.5">{vibe.glowScore}</span>
+              </div>
+            </div>
+
+            {/* Ritual card estilo Live Activity */}
+            <div className="absolute bottom-14 left-3 right-3">
+              <div className="rounded-2xl bg-white/92 backdrop-blur-xl px-3 py-2.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)]">
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <div className="w-4 h-4 rounded-md bg-gradient-hot flex items-center justify-center shrink-0">
+                      <Wand2 size={9} className="text-white" strokeWidth={3} />
+                    </div>
+                    <p className="text-[8px] font-display font-black text-baddia-ink uppercase tracking-wider truncate">
+                      Baddia · Ritual de hoy
+                    </p>
+                  </div>
+                  <p className="text-[8px] text-baddia-ink/55 font-semibold shrink-0">ahora</p>
+                </div>
+                <div className="flex items-end justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="font-display font-black text-[11px] text-baddia-ink leading-tight">
+                      Tu manifestación te espera ✨
+                    </p>
+                    <p className="text-[9px] text-baddia-ink/65 font-semibold leading-snug mt-0.5">
+                      3 min · no rompas tu racha
+                    </p>
+                  </div>
+                  <button className="shrink-0 rounded-full bg-baddia-ink text-white text-[9px] font-display font-black uppercase tracking-wider px-2.5 py-1.5 shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
+                    Manifestar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </PhoneCanvas>
+
+          {/* Leyenda */}
+          <div className="grid grid-cols-2 gap-2.5 mt-3">
+            <LockLegend chip="Inline" title="Vibe del día" desc="Color energético + número de la suerte." />
+            <LockLegend chip="Circular" title="Tu signo" desc="Glifo grande, listo a un vistazo." />
+            <LockLegend chip="Rectangular" title="Mini frase" desc="Un mantra corto arriba de tus apps." />
+            <LockLegend chip="Live Activity" title="Ritual hoy" desc='Botón "Manifestar" en el lock.' />
+          </div>
+        </Section>
 
         {/* ───── HOME SCREEN MOCKUP ───── */}
         <Section emoji="📱" label="Home screen">
+
+
           <PhoneCanvas wallpaper="home">
             <div className="pt-12 px-3 grid grid-cols-4 gap-2">
               {/* Large widget — Frase del día (2x2) */}
@@ -403,6 +491,18 @@ function WidgetIdea({
       </span>
       <p className="font-display font-black text-[13px] text-baddia-ink leading-tight">{title}</p>
       <p className="text-[10.5px] font-semibold text-baddia-ink/65 leading-snug mt-1">{desc}</p>
+    </div>
+  );
+}
+
+function LockLegend({ chip, title, desc }: { chip: string; title: string; desc: string }) {
+  return (
+    <div className="rounded-2xl bg-white border-[2.5px] border-baddia-ink p-2.5 shadow-[3px_4px_0_hsl(260_16%_15%)]">
+      <span className="inline-block rounded-full bg-baddia-ink text-white text-[8px] font-display font-black uppercase tracking-widest px-2 py-0.5 mb-1.5">
+        {chip}
+      </span>
+      <p className="font-display font-black text-[11.5px] text-baddia-ink leading-tight">{title}</p>
+      <p className="text-[10px] font-semibold text-baddia-ink/65 leading-snug mt-0.5">{desc}</p>
     </div>
   );
 }
