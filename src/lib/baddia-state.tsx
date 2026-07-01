@@ -50,6 +50,9 @@ interface Ctx {
   paywallOpen: boolean;
   openPaywall: () => void;
   closePaywall: () => void;
+  celebratingPlan: BaddiaUser["plan"] | null;
+  triggerCelebration: (plan: BaddiaUser["plan"]) => void;
+  clearCelebration: () => void;
 }
 
 const defaultUser: BaddiaUser = {
