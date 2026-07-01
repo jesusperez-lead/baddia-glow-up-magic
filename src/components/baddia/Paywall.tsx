@@ -28,18 +28,17 @@ const PLAN_LABEL: Record<PlanKey, BaddiaUser["plan"]> = {
 };
 
 export function Paywall() {
-  const { paywallOpen, closePaywall, setUser } = useBaddia();
+  const { paywallOpen, closePaywall, setUser, celebratingPlan, triggerCelebration, clearCelebration } = useBaddia();
   const [selected, setSelected] = useState<PlanKey>("yearly");
-  const [celebratingPlan, setCelebratingPlan] = useState<BaddiaUser["plan"] | null>(null);
 
   const activate = () => {
     const plan = PLAN_LABEL[selected];
     setUser({ plan });
-    setCelebratingPlan(plan);
+    triggerCelebration(plan);
   };
 
   const finishCelebration = () => {
-    setCelebratingPlan(null);
+    clearCelebration();
     closePaywall();
   };
 
