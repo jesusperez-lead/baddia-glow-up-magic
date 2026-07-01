@@ -75,10 +75,6 @@ export function WidgetsShowcase() {
             </div>
           </PhoneCanvas>
         </Section>
-
-        {/* ───── HOME SCREEN MOCKUP ───── */}
-        </Section>
-
         {/* ───── LOCK SCREEN iOS 16+ ───── */}
         <Section emoji="🔓" label="Lock Screen · iOS 16+">
           <p className="text-[12px] text-baddia-ink/70 font-semibold leading-snug px-1 -mt-1">
@@ -104,24 +100,17 @@ export function WidgetsShowcase() {
               </p>
             </div>
 
-            {/* Row de widgets bajo el reloj: circular + rectangular + circular */}
+            {/* Row de widgets bajo el reloj */}
             <div className="px-5 mt-3 flex items-center justify-center gap-2">
-              {/* Circular · glifo signo */}
               <div className="w-11 h-11 rounded-full bg-white/18 backdrop-blur-md border border-white/25 flex items-center justify-center text-white shadow-[0_2px_8px_rgba(0,0,0,0.25)]">
                 <span className="font-display font-black text-[20px] leading-none">{glyph}</span>
               </div>
 
-              {/* Rectangular · mini frase */}
               <div className="flex-1 max-w-[180px] h-11 rounded-2xl bg-white/18 backdrop-blur-md border border-white/25 px-2.5 py-1 text-white shadow-[0_2px_8px_rgba(0,0,0,0.25)] flex flex-col justify-center min-w-0">
-                <p className="text-[7px] font-display font-black uppercase tracking-widest opacity-80 leading-none">
-                  ✦ baddia
-                </p>
-                <p className="font-display font-bold italic text-[10px] leading-tight mt-0.5 truncate">
-                  "Deja que tu energía hable ✨"
-                </p>
+                <p className="text-[7px] font-display font-black uppercase tracking-widest opacity-80 leading-none">✦ baddia</p>
+                <p className="font-display font-bold italic text-[10px] leading-tight mt-0.5 truncate">"Deja que tu energía hable ✨"</p>
               </div>
 
-              {/* Circular · glow score */}
               <div className="w-11 h-11 rounded-full bg-white/18 backdrop-blur-md border border-white/25 flex flex-col items-center justify-center text-white shadow-[0_2px_8px_rgba(0,0,0,0.25)]">
                 <span className="text-[6px] font-display font-black uppercase tracking-widest opacity-80 leading-none">Glow</span>
                 <span className="font-display font-black text-[13px] leading-none mt-0.5">{vibe.glowScore}</span>
@@ -133,7 +122,7 @@ export function WidgetsShowcase() {
               <div className="rounded-2xl bg-white/92 backdrop-blur-xl px-3 py-2.5 shadow-[0_6px_18px_rgba(0,0,0,0.25)]">
                 <div className="flex items-center justify-between gap-2 mb-1">
                   <div className="flex items-center gap-1.5 min-w-0">
-                    <div className="w-4 h-4 rounded-md bg-gradient-hot flex items-center justify-center text-[8px] shrink-0">
+                    <div className="w-4 h-4 rounded-md bg-gradient-hot flex items-center justify-center shrink-0">
                       <Wand2 size={9} className="text-white" strokeWidth={3} />
                     </div>
                     <p className="text-[8px] font-display font-black text-baddia-ink uppercase tracking-wider truncate">
@@ -159,7 +148,7 @@ export function WidgetsShowcase() {
             </div>
           </PhoneCanvas>
 
-          {/* Leyenda de los 4 widgets */}
+          {/* Leyenda */}
           <div className="grid grid-cols-2 gap-2.5 mt-3">
             <LockLegend chip="Inline" title="Vibe del día" desc="Color energético + número de la suerte." />
             <LockLegend chip="Circular" title="Tu signo" desc="Glifo grande, listo a un vistazo." />
@@ -168,12 +157,9 @@ export function WidgetsShowcase() {
           </div>
         </Section>
 
-        {/* ───── HIDE ORIGINAL DUPLICATE ───── */}
-        <div className="hidden">
-          {/* placeholder to preserve indent for next section */}
-        </div>
-        {/* fallthrough */}
+        {/* ───── HOME SCREEN MOCKUP ───── */}
         <Section emoji="📱" label="Home screen">
+
 
           <PhoneCanvas wallpaper="home">
             <div className="pt-12 px-3 grid grid-cols-4 gap-2">
