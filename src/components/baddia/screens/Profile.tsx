@@ -116,10 +116,18 @@ export function Profile() {
 
         {/* ───── HERO: avatar + plan ───── */}
         <div className="relative animate-slide-up">
-          <div className="absolute -top-3 left-5 z-10">
+          <div className="absolute -top-3 left-5 z-10 flex items-center gap-2">
             <span className={`inline-flex items-center gap-1.5 rounded-full ${isPro ? "bg-baddia-gold text-baddia-ink" : "bg-baddia-ink text-white"} border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-black uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-1`}>
               {isPro ? <>✨ Baddia {user.plan}</> : <>● Plan Free</>}
             </span>
+            {isPro && (
+              <button
+                onClick={() => triggerCelebration(user.plan)}
+                className="inline-flex items-center gap-1 rounded-full bg-white text-baddia-ink border-2 border-baddia-ink px-2.5 py-1 text-[9.5px] font-display font-black uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] rotate-2 active:translate-y-[1px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+              >
+                <Gift size={10} /> Ver celebración
+              </button>
+            )}
           </div>
           <div className="relative rounded-3xl border-[2.5px] border-baddia-ink p-5 pt-8 shadow-[5px_6px_0_hsl(260_16%_15%)] overflow-hidden gradient-bg-baddia text-white">
             <span className="absolute -top-3 -right-2 text-7xl opacity-20 select-none">{glyph}</span>
