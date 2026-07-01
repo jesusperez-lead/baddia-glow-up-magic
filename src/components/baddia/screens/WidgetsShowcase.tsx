@@ -494,3 +494,15 @@ function WidgetIdea({
     </div>
   );
 }
+
+function LockLegend({ chip, title, desc }: { chip: string; title: string; desc: string }) {
+  return (
+    <div className="rounded-2xl bg-white border-[2.5px] border-baddia-ink p-2.5 shadow-[3px_4px_0_hsl(260_16%_15%)]">
+      <span className="inline-block rounded-full bg-baddia-ink text-white text-[8px] font-display font-black uppercase tracking-widest px-2 py-0.5 mb-1.5">
+        {chip}
+      </span>
+      <p className="font-display font-black text-[11.5px] text-baddia-ink leading-tight">{title}</p>
+      <p className="text-[10px] font-semibold text-baddia-ink/65 leading-snug mt-0.5">{desc}</p>
+    </div>
+  );
+}
