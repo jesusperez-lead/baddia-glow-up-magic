@@ -73,6 +73,7 @@ export function BaddiaProvider({ children }: { children: ReactNode }) {
   const [screen, setScreen] = useState<Screen>("daily");
   const [user, setUserState] = useState<BaddiaUser>(defaultUser);
   const [paywallOpen, setPaywallOpen] = useState(false);
+  const [celebratingPlan, setCelebratingPlan] = useState<BaddiaUser["plan"] | null>(null);
 
   const setUser = (u: Partial<BaddiaUser>) => setUserState((p) => ({ ...p, ...u }));
 
@@ -86,6 +87,9 @@ export function BaddiaProvider({ children }: { children: ReactNode }) {
         paywallOpen,
         openPaywall: () => setPaywallOpen(true),
         closePaywall: () => setPaywallOpen(false),
+        celebratingPlan,
+        triggerCelebration: (plan) => setCelebratingPlan(plan),
+        clearCelebration: () => setCelebratingPlan(null),
       }}
     >
       {children}
