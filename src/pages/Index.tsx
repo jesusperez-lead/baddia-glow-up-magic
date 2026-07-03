@@ -58,6 +58,7 @@ function Router() {
     case "write-week": content = <WriteWeek />; break;
     case "manifest": content = <Manifest />; break;
     case "notifications": content = <Notifications />; break;
+    case "journal": content = <Journal />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);
