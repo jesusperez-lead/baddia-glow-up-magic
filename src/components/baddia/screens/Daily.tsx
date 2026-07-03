@@ -30,12 +30,37 @@ export function Daily() {
         <span className="inline-block rounded-full bg-baddia-yellow border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-bold text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2 mb-3 uppercase tracking-wider">
           ✨ baddia daily
         </span>
-        <h1 className="font-display font-bold text-[26px] text-baddia-ink leading-tight">
-          Hola, <span className="gradient-text">{user.name}</span> ✨
-        </h1>
-        <p className="text-[14px] text-baddia-ink/70 font-medium mt-1.5">
-          Baddia leyó tu energía de hoy.
-        </p>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <h1 className="font-display font-bold text-[26px] text-baddia-ink leading-tight">
+              Hola, <span className="gradient-text">{user.name}</span> ✨
+            </h1>
+            <p className="text-[14px] text-baddia-ink/70 font-medium mt-1.5">
+              Baddia leyó tu energía de hoy.
+            </p>
+          </div>
+          <button
+            onClick={() => (isPro ? go("journal") : openPaywall())}
+            aria-label="Abrir mi diario"
+            className="shrink-0 relative group"
+          >
+            <span className="absolute -top-2 -right-2 z-10 inline-flex items-center justify-center rounded-full bg-baddia-hot text-white border-2 border-baddia-ink w-6 h-6 text-[9px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] rotate-[8deg]">
+              {isPro ? "✎" : <Lock size={9} />}
+            </span>
+            <div
+              className="w-[62px] h-[68px] rounded-xl border-[2.5px] border-baddia-ink shadow-[4px_5px_0_hsl(260_16%_15%)] flex flex-col items-center justify-center gap-0.5 -rotate-[6deg] active:translate-y-[2px] active:shadow-[2px_2px_0_hsl(260_16%_15%)] transition-all"
+              style={{
+                background:
+                  "repeating-linear-gradient(to bottom, #fffdf7 0px, #fffdf7 9px, hsl(335 60% 85% / 0.55) 10px)",
+              }}
+            >
+              <span className="text-[22px] leading-none">📓</span>
+              <span className="font-display font-black text-[8px] uppercase tracking-wider text-baddia-ink">
+                diario
+              </span>
+            </div>
+          </button>
+        </div>
       </header>
 
       <div className="relative z-10 px-5 mt-5 space-y-5">
