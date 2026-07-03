@@ -25,9 +25,9 @@ type Reading = {
 };
 
 const readings: Reading[] = [
-  { emoji: "🤚", title: "Lectura de manos", desc: "Tu palma, leída por IA.",        Icon: Hand,          color: "bg-baddia-mint",     go: "palm" },
-  { emoji: "👗", title: "Outfit Check",      desc: "Tu look leído por IA.",          Icon: Shirt,         color: "bg-baddia-bubble",   go: "outfit" },
-  { emoji: "🎲", title: "Déjalo a la suerte", desc: "Sí o No con un dado cute.",     Icon: Dices,         color: "bg-baddia-lavender", go: "lucky" },
+  { emoji: "🤚", title: "Lectura de manos", desc: "Tu palma, tu mapa, tu brillo. La IA lo lee todo.",        Icon: Hand,          color: "bg-baddia-mint",     go: "palm" },
+  { emoji: "👗", title: "Outfit Check",      desc: "¿Tu look dice lo que sientes? Descúbrelo con IA.",          Icon: Shirt,         color: "bg-baddia-bubble",   go: "outfit" },
+  { emoji: "🎲", title: "Déjalo a la suerte", desc: "Sí o No con un dado cute. El universo responde.",     Icon: Dices,         color: "bg-baddia-lavender", go: "lucky" },
   { emoji: "🔮", title: "Tarot del día",    desc: "3 cartas para tu energía hoy.",  Icon: Wand2,         color: "bg-baddia-lavender", go: "tarot" },
   { emoji: "✨", title: "Carta astral",     desc: "Tu mapa cósmico personalizado.", Icon: Star,          color: "bg-baddia-yellow",   go: "astral" },
   { emoji: "💘", title: "Compatibilidad",   desc: "Tu match con tu crush.",         Icon: HeartHandshake,color: "bg-baddia-hot",      go: "compat" },
@@ -123,11 +123,11 @@ export function BottomNav() {
             <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-baddia-ink/15" />
             <SheetHeader className="text-left space-y-1">
               <SheetTitle className="font-display font-black text-[22px] text-baddia-ink leading-tight flex items-center gap-2">
-                <span className="inline-block animate-wiggle">Lecturas con IA</span>
+                <span className="inline-block animate-wiggle">Tu glow con IA</span>
                 <span className="inline-block animate-sparkle-spin">✨</span>
               </SheetTitle>
               <SheetDescription className="text-[13px] text-baddia-ink/65 font-semibold">
-                Tu energía, tus cartas, tu palma — leídas por IA.
+                Palma, outfit, tarot, crush… tu energía, leída por IA.
               </SheetDescription>
             </SheetHeader>
           </div>
