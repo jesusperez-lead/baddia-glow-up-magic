@@ -31,6 +31,7 @@ import { Flags } from "@/components/baddia/screens/Flags";
 import { Dream } from "@/components/baddia/screens/Dream";
 import { ShareCards } from "@/components/baddia/screens/ShareCards";
 import { Bestie } from "@/components/baddia/screens/Bestie";
+import { PhoneVerify } from "@/components/baddia/screens/PhoneVerify";
 
 const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile", "outfit", "lucky", "tarot", "astral", "compat", "aura", "manifest"]);
 
@@ -67,6 +68,7 @@ function Router() {
     case "dream": content = <Dream />; break;
     case "share": content = <ShareCards />; break;
     case "bestie": content = <Bestie />; break;
+    case "phone-verify": content = <PhoneVerify />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);

@@ -87,7 +87,7 @@ export function Welcome() {
           Empezar mi glow ✨
         </button>
         <button
-          onClick={() => go("daily")}
+          onClick={() => { sessionStorage.setItem("baddia_welcome_glitter", "1"); go("daily"); }}
           className="btn-sticker w-full py-4 rounded-full bg-white text-baddia-ink"
         >
           Ya tengo cuenta
