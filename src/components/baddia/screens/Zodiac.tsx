@@ -44,7 +44,7 @@ const COMPAT_TOP = [
 /* ─────────────── screen ─────────────── */
 
 export function Zodiac() {
-  const { user, openPaywall } = useBaddia();
+  const { user, openPaywall, go } = useBaddia();
   const isFree = user.plan === "Free";
   const [openCard, setOpenCard] = useState<string | null>("amor");
   const [openDaily, setOpenDaily] = useState(true);
@@ -67,13 +67,37 @@ export function Zodiac() {
         <span className="inline-block rounded-full bg-baddia-lavender text-white border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-bold shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2 mb-3 uppercase tracking-wider">
           🌙 zodiac mood
         </span>
-        <h1 className="font-display font-bold text-[26px] text-baddia-ink leading-tight">
-          Tu <span className="gradient-text">Zodiac Mood</span> ✨
-        </h1>
-        <p className="text-[14px] text-baddia-ink/70 font-medium mt-1.5">
-          Tu signo, tu mood, tu semana — leído para ti.
-        </p>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <h1 className="font-display font-bold text-[26px] text-baddia-ink leading-tight">
+              Tu <span className="gradient-text">Zodiac Mood</span> ✨
+            </h1>
+            <p className="text-[14px] text-baddia-ink/70 font-medium mt-1.5">
+              Tu signo, tu mood, tu semana — leído para ti.
+            </p>
+          </div>
+          <button
+            onClick={() => go("dream")}
+            aria-label="Interpreta tu sueño"
+            className="shrink-0 relative group"
+          >
+            <span className="absolute -top-2 -right-2 z-10 inline-flex items-center justify-center rounded-full bg-baddia-yellow text-baddia-ink border-2 border-baddia-ink w-6 h-6 text-[10px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] rotate-[10deg] animate-pulse">
+              ✦
+            </span>
+            <div
+              className="relative w-[64px] h-[70px] rounded-2xl border-[2.5px] border-baddia-ink shadow-[4px_5px_0_hsl(260_16%_15%)] flex flex-col items-center justify-center gap-0.5 -rotate-[6deg] active:translate-y-[2px] active:shadow-[2px_2px_0_hsl(260_16%_15%)] transition-all overflow-hidden gradient-bg-baddia"
+            >
+              <span className="absolute top-1 left-1.5 text-[9px] text-white/80 animate-pulse">✧</span>
+              <span className="absolute bottom-1.5 right-1.5 text-[8px] text-white/70 animate-pulse" style={{ animationDelay: "0.6s" }}>✦</span>
+              <span className="text-[22px] leading-none animate-float-cute drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]">🌙</span>
+              <span className="font-display font-black text-[8.5px] uppercase tracking-wider text-white drop-shadow-[0_1px_0_rgba(0,0,0,0.4)]">
+                sueños
+              </span>
+            </div>
+          </button>
+        </div>
       </header>
+
 
       <div className="relative z-10 px-5 mt-5 space-y-5">
         {/* ───── HERO: Signo solar + mood ───── */}
