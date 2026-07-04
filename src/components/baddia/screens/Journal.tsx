@@ -74,16 +74,97 @@ export function Journal() {
   const [mood, setMood] = useState<MoodKey | null>(null);
   const [text, setText] = useState("");
 
+  // Lock state
+  const [lock, setLockState] = useState<LockConfig | null>(null);
+  const [unlocked, setUnlocked] = useState(false);
+  const [attemptPw, setAttemptPw] = useState("");
+  const [attempts, setAttempts] = useState(0);
+  const [showAttemptPw, setShowAttemptPw] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  // Setup / manage modals
+  const [setupMode, setSetupMode] = useState<null | "create" | "manage" | "change" | "remove">(null);
+  const [pw1, setPw1] = useState("");
+  const [pw2, setPw2] = useState("");
+  const [hintDraft, setHintDraft] = useState("");
+  const [currentPwDraft, setCurrentPwDraft] = useState("");
+  const [showPw1, setShowPw1] = useState(false);
+
   // Load from localStorage
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setEntries(JSON.parse(raw));
     } catch {}
+    try {
+      const rawLock = localStorage.getItem(LOCK_KEY);
+      if (rawLock) setLockState(JSON.parse(rawLock));
+    } catch {}
   }, []);
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); } catch {}
   }, [entries]);
+
+  const persistLock = (l: LockConfig | null) => {
+    setLockState(l);
+    try {
+      if (l) localStorage.setItem(LOCK_KEY, JSON.stringify(l));
+      else localStorage.removeItem(LOCK_KEY);
+    } catch {}
+  };
+
+  const resetSetup = () => {
+    setSetupMode(null);
+    setPw1(""); setPw2(""); setHintDraft(""); setCurrentPwDraft(""); setShowPw1(false);
+  };
+
+  const submitCreate = () => {
+    if (pw1.length < 4) { toast("Mínimo 4 caracteres ✨"); return; }
+    if (pw1 !== pw2) { toast("Las contraseñas no coinciden 💔"); return; }
+    if (!hintDraft.trim()) { toast("Escribe una palabra de pista 🗝️"); return; }
+    const salt = makeSalt();
+    persistLock({ hash: hashPw(pw1, salt), salt, hint: hintDraft.trim() });
+    setUnlocked(true);
+    resetSetup();
+    toast.success("Tu diario ahora está protegido 🔒💗");
+  };
+
+  const submitChange = () => {
+    if (!lock) return;
+    if (hashPw(currentPwDraft, lock.salt) !== lock.hash) { toast("Contraseña actual incorrecta"); return; }
+    if (pw1.length < 4) { toast("Mínimo 4 caracteres ✨"); return; }
+    if (pw1 !== pw2) { toast("Las contraseñas no coinciden 💔"); return; }
+    if (!hintDraft.trim()) { toast("Escribe una palabra de pista 🗝️"); return; }
+    const salt = makeSalt();
+    persistLock({ hash: hashPw(pw1, salt), salt, hint: hintDraft.trim() });
+    resetSetup();
+    toast.success("Contraseña actualizada ✨");
+  };
+
+  const submitRemove = () => {
+    if (!lock) return;
+    if (hashPw(currentPwDraft, lock.salt) !== lock.hash) { toast("Contraseña incorrecta"); return; }
+    persistLock(null);
+    setUnlocked(false);
+    resetSetup();
+    toast.success("Contraseña eliminada 💗");
+  };
+
+  const tryUnlock = () => {
+    if (!lock) return;
+    if (hashPw(attemptPw, lock.salt) === lock.hash) {
+      setUnlocked(true);
+      setAttemptPw("");
+      setAttempts(0);
+      setShowHint(false);
+      toast.success("Diario desbloqueado 💗");
+    } else {
+      const n = attempts + 1;
+      setAttempts(n);
+      setAttemptPw("");
+      if (n >= 3) { setShowHint(true); toast("Aquí está tu pista 🗝️"); }
+      else toast(`Contraseña incorrecta · ${3 - n} intento${3 - n === 1 ? "" : "s"}`);
+    }
+  };
 
   const category = CATEGORIES[categoryIdx];
 
