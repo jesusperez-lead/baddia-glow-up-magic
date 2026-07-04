@@ -29,7 +29,8 @@ export type Screen =
   | "flags"
   | "dream"
   | "share"
-  | "bestie";
+  | "bestie"
+  | "phone-verify";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
@@ -45,6 +46,8 @@ export interface BaddiaUser {
   sign: string;
   lifeNumber: number;
   savedQuotes: string[];
+  phone?: string;
+  phoneVerified?: boolean;
 }
 
 interface Ctx {
