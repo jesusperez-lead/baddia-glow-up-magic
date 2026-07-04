@@ -4,6 +4,7 @@ import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import {
   ArrowLeft, BookHeart, Save, Trash2, Lock, ChevronLeft, ChevronRight,
   Sparkles, Feather, Heart, Moon, Star, Shirt, Smile, Flame,
+  LockKeyhole, KeyRound, Eye, EyeOff, ShieldCheck, X, Unlock,
 } from "lucide-react";
 import { toast } from "sonner";
 
