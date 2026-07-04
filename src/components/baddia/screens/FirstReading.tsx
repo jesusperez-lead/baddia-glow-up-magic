@@ -165,7 +165,7 @@ export function FirstReading() {
             <Share2 size={14} /> Compartir
           </button>
           <button
-            onClick={() => go("daily")}
+            onClick={() => { sessionStorage.setItem("baddia_welcome_glitter", "1"); go("daily"); }}
             className="btn-sticker py-3.5 rounded-full bg-baddia-ink text-white text-sm flex items-center justify-center gap-1.5"
           >
             Mi Daily <ArrowRight size={14} />

@@ -1,6 +1,7 @@
 import { useBaddia } from "@/lib/baddia-state";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import { ShareGlowSheet } from "../ShareGlowSheet";
+import { GlitterWelcome } from "../GlitterWelcome";
 import { Share2, Bookmark, Lock, Check, ArrowRight, Flame, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -12,9 +13,18 @@ export function Daily() {
   const [saved, setSaved] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [tarotFlipped, setTarotFlipped] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
   const quote = "Lo que es para mí, me encuentra con claridad, paz y abundancia.";
   const scorePct = 0.87;
   const dash = 314;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (sessionStorage.getItem("baddia_welcome_glitter") === "1") {
+      sessionStorage.removeItem("baddia_welcome_glitter");
+      setShowWelcome(true);
+    }
+  }, []);
 
 
   return (
