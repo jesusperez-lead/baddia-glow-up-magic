@@ -54,6 +54,7 @@ function PageShell({
   title,
   subtitle,
   onBack,
+  headerRight,
   children,
 }: {
   chip: string;
@@ -61,6 +62,7 @@ function PageShell({
   title: React.ReactNode;
   subtitle: string;
   onBack?: () => void;
+  headerRight?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
@@ -83,10 +85,15 @@ function PageShell({
         <span className={`inline-block rounded-full ${chipBg} border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-bold shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2 mb-3 uppercase tracking-wider`}>
           {chip}
         </span>
-        <h1 className="font-display font-bold text-[26px] text-baddia-ink leading-tight">
-          {title}
-        </h1>
-        <p className="text-[14px] text-baddia-ink/70 font-medium mt-1.5">{subtitle}</p>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <h1 className="font-display font-bold text-[26px] text-baddia-ink leading-tight">
+              {title}
+            </h1>
+            <p className="text-[14px] text-baddia-ink/70 font-medium mt-1.5">{subtitle}</p>
+          </div>
+          {headerRight}
+        </div>
       </header>
 
       <div className="relative z-10 px-5 mt-5 space-y-5">{children}</div>
