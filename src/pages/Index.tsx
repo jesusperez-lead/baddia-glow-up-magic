@@ -27,6 +27,10 @@ import { WriteWeek } from "@/components/baddia/screens/WriteWeek";
 import { Manifest } from "@/components/baddia/screens/Manifest";
 import { Notifications } from "@/components/baddia/screens/Notifications";
 import { Journal } from "@/components/baddia/screens/Journal";
+import { Flags } from "@/components/baddia/screens/Flags";
+import { Dream } from "@/components/baddia/screens/Dream";
+import { ShareCards } from "@/components/baddia/screens/ShareCards";
+import { Bestie } from "@/components/baddia/screens/Bestie";
 
 const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile", "outfit", "lucky", "tarot", "astral", "compat", "aura", "manifest"]);
 
@@ -59,6 +63,10 @@ function Router() {
     case "manifest": content = <Manifest />; break;
     case "notifications": content = <Notifications />; break;
     case "journal": content = <Journal />; break;
+    case "flags": content = <Flags />; break;
+    case "dream": content = <Dream />; break;
+    case "share": content = <ShareCards />; break;
+    case "bestie": content = <Bestie />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);
