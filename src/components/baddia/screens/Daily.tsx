@@ -343,13 +343,8 @@ export function Daily() {
           </div>
         </div>
 
-        {/* ───── Section: nuevos módulos ───── */}
+        {/* ───── Section: comparte ───── */}
         <SectionLabel emoji="💌" text="para ti hoy" />
-        <div className="grid grid-cols-3 gap-2.5">
-          <MiniCard emoji="🚩" label="Red / Green flags" bg="bg-baddia-hot text-white" onClick={() => go("flags")} />
-          <MiniCard emoji="🌙" label="Interpreta tu sueño" bg="bg-baddia-lavender text-white" onClick={() => go("dream")} />
-          <MiniCard emoji="💖" label="Baddia Bestie" bg="bg-baddia-bubble text-white" onClick={() => go("bestie")} />
-        </div>
         <button
           onClick={() => go("share")}
           className="relative w-full text-left active:scale-[0.99] transition-transform"
