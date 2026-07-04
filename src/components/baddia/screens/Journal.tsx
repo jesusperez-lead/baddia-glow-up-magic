@@ -517,6 +517,197 @@ export function Journal() {
           </div>
         )}
       </div>
+
+      {/* ── Setup / manage password modal ── */}
+      {setupMode && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-baddia-ink/40 backdrop-blur-sm p-4" onClick={resetSetup}>
+          <div
+            className="relative w-full max-w-sm rounded-[26px] bg-[#fffdf7] border-[2.5px] border-baddia-ink p-5 shadow-[6px_7px_0_hsl(260_16%_15%)]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={resetSetup}
+              aria-label="Cerrar"
+              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white border-2 border-baddia-ink flex items-center justify-center shadow-[2px_2px_0_hsl(260_16%_15%)]"
+            >
+              <X size={14} className="text-baddia-ink" />
+            </button>
+
+            {setupMode === "manage" && (
+              <>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-2xl bg-baddia-mint text-white border-2 border-baddia-ink flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-6">
+                    <ShieldCheck size={22} />
+                  </div>
+                  <div>
+                    <p className="font-display font-black text-[17px] text-baddia-ink leading-tight">Tu diario está protegido</p>
+                    <p className="text-[12px] text-baddia-ink/60 font-medium">¿Qué quieres hacer, bb?</p>
+                  </div>
+                </div>
+                <div className="mt-3 space-y-2">
+                  <button
+                    onClick={() => { setUnlocked(false); resetSetup(); toast("Diario cerradito 🔒"); }}
+                    className="w-full inline-flex items-center gap-2 justify-center py-3 rounded-full bg-baddia-lavender text-white border-2 border-baddia-ink text-[13px] font-display font-black shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-[1px]"
+                  >
+                    <Lock size={14} /> Bloquear ahora
+                  </button>
+                  <button
+                    onClick={() => setSetupMode("change")}
+                    className="w-full inline-flex items-center gap-2 justify-center py-3 rounded-full bg-white text-baddia-ink border-2 border-baddia-ink text-[13px] font-display font-black shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-[1px]"
+                  >
+                    <KeyRound size={14} /> Cambiar contraseña
+                  </button>
+                  <button
+                    onClick={() => setSetupMode("remove")}
+                    className="w-full inline-flex items-center gap-2 justify-center py-3 rounded-full bg-baddia-hot text-white border-2 border-baddia-ink text-[13px] font-display font-black shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-[1px]"
+                  >
+                    <Trash2 size={14} /> Quitar contraseña
+                  </button>
+                </div>
+              </>
+            )}
+
+            {setupMode === "create" && (
+              <>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-2xl bg-baddia-yellow text-baddia-ink border-2 border-baddia-ink flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-6">
+                    <LockKeyhole size={22} />
+                  </div>
+                  <div>
+                    <p className="font-display font-black text-[17px] text-baddia-ink leading-tight">Protege tu diario ✨</p>
+                    <p className="text-[12px] text-baddia-ink/60 font-medium">Solo tú vas a poder abrirlo, bb 💗</p>
+                  </div>
+                </div>
+                <PwFields
+                  pw1={pw1} setPw1={setPw1}
+                  pw2={pw2} setPw2={setPw2}
+                  hintDraft={hintDraft} setHintDraft={setHintDraft}
+                  showPw1={showPw1} setShowPw1={setShowPw1}
+                />
+                <button
+                  onClick={submitCreate}
+                  className="mt-4 w-full inline-flex items-center justify-center gap-2 py-3 rounded-full bg-baddia-ink text-white text-[13px] font-display font-black border-2 border-baddia-ink shadow-[3px_3px_0_hsl(48_100%_59%)] active:translate-y-[1px]"
+                >
+                  <ShieldCheck size={14} /> Poner contraseña
+                </button>
+              </>
+            )}
+
+            {setupMode === "change" && (
+              <>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-2xl bg-baddia-bubble text-baddia-ink border-2 border-baddia-ink flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-6">
+                    <KeyRound size={22} />
+                  </div>
+                  <p className="font-display font-black text-[17px] text-baddia-ink leading-tight">Cambiar contraseña</p>
+                </div>
+                <label className="block text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink/70 mb-1">Contraseña actual</label>
+                <input
+                  type="password"
+                  value={currentPwDraft}
+                  onChange={(e) => setCurrentPwDraft(e.target.value)}
+                  className="w-full bg-white border-2 border-baddia-ink rounded-xl px-3 py-2 text-[14px] font-display font-bold text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] focus:outline-none mb-3"
+                  placeholder="•••••"
+                />
+                <PwFields
+                  pw1={pw1} setPw1={setPw1}
+                  pw2={pw2} setPw2={setPw2}
+                  hintDraft={hintDraft} setHintDraft={setHintDraft}
+                  showPw1={showPw1} setShowPw1={setShowPw1}
+                  labelNew="Nueva contraseña"
+                />
+                <button
+                  onClick={submitChange}
+                  className="mt-4 w-full inline-flex items-center justify-center gap-2 py-3 rounded-full bg-baddia-ink text-white text-[13px] font-display font-black border-2 border-baddia-ink shadow-[3px_3px_0_hsl(48_100%_59%)] active:translate-y-[1px]"
+                >
+                  <ShieldCheck size={14} /> Guardar cambios
+                </button>
+              </>
+            )}
+
+            {setupMode === "remove" && (
+              <>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-2xl bg-baddia-hot text-white border-2 border-baddia-ink flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-6">
+                    <Trash2 size={22} />
+                  </div>
+                  <div>
+                    <p className="font-display font-black text-[17px] text-baddia-ink leading-tight">Quitar contraseña</p>
+                    <p className="text-[12px] text-baddia-ink/60 font-medium">Tu diario quedará abiertito ✨</p>
+                  </div>
+                </div>
+                <label className="block text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink/70 mb-1">Confirma tu contraseña</label>
+                <input
+                  type="password"
+                  value={currentPwDraft}
+                  onChange={(e) => setCurrentPwDraft(e.target.value)}
+                  className="w-full bg-white border-2 border-baddia-ink rounded-xl px-3 py-2 text-[14px] font-display font-bold text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] focus:outline-none"
+                  placeholder="•••••"
+                />
+                <button
+                  onClick={submitRemove}
+                  className="mt-4 w-full inline-flex items-center justify-center gap-2 py-3 rounded-full bg-baddia-hot text-white text-[13px] font-display font-black border-2 border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-[1px]"
+                >
+                  <Trash2 size={14} /> Quitar contraseña
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PwFields({
+  pw1, setPw1, pw2, setPw2, hintDraft, setHintDraft, showPw1, setShowPw1, labelNew = "Contraseña",
+}: {
+  pw1: string; setPw1: (v: string) => void;
+  pw2: string; setPw2: (v: string) => void;
+  hintDraft: string; setHintDraft: (v: string) => void;
+  showPw1: boolean; setShowPw1: (v: boolean) => void;
+  labelNew?: string;
+}) {
+  return (
+    <div className="space-y-3">
+      <div>
+        <label className="block text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink/70 mb-1">{labelNew}</label>
+        <div className="relative">
+          <input
+            type={showPw1 ? "text" : "password"}
+            value={pw1}
+            onChange={(e) => setPw1(e.target.value)}
+            className="w-full bg-white border-2 border-baddia-ink rounded-xl px-3 py-2 pr-10 text-[14px] font-display font-bold text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] focus:outline-none"
+            placeholder="Mínimo 4 caracteres"
+          />
+          <button type="button" onClick={() => setShowPw1(!showPw1)} className="absolute right-2 top-1/2 -translate-y-1/2 text-baddia-ink/60 w-7 h-7 flex items-center justify-center" aria-label="Mostrar">
+            {showPw1 ? <EyeOff size={14} /> : <Eye size={14} />}
+          </button>
+        </div>
+      </div>
+      <div>
+        <label className="block text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink/70 mb-1">Confirmar</label>
+        <input
+          type={showPw1 ? "text" : "password"}
+          value={pw2}
+          onChange={(e) => setPw2(e.target.value)}
+          className="w-full bg-white border-2 border-baddia-ink rounded-xl px-3 py-2 text-[14px] font-display font-bold text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] focus:outline-none"
+          placeholder="Otra vez, bb ✨"
+        />
+      </div>
+      <div>
+        <label className="block text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink/70 mb-1 flex items-center gap-1">
+          <KeyRound size={11} /> Palabra de pista
+        </label>
+        <input
+          type="text"
+          value={hintDraft}
+          onChange={(e) => setHintDraft(e.target.value.slice(0, 40))}
+          className="w-full bg-baddia-yellow/30 border-2 border-baddia-ink rounded-xl px-3 py-2 text-[14px] font-serif italic text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] focus:outline-none"
+          placeholder="ej: mi primer amor 💌"
+        />
+        <p className="mt-1 text-[10px] text-baddia-ink/50 font-medium">Te la mostramos si fallas 3 veces.</p>
+      </div>
     </div>
   );
 }
