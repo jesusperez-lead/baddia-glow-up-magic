@@ -332,8 +332,30 @@ export function Daily() {
           </div>
         </div>
 
+        {/* ───── Section: nuevos módulos ───── */}
+        <SectionLabel emoji="💌" text="para ti hoy" />
+        <div className="grid grid-cols-3 gap-2.5">
+          <MiniCard emoji="🚩" label="Red / Green flags" bg="bg-baddia-hot text-white" onClick={() => go("flags")} />
+          <MiniCard emoji="🌙" label="Interpreta tu sueño" bg="bg-baddia-lavender text-white" onClick={() => go("dream")} />
+          <MiniCard emoji="💖" label="Baddia Bestie" bg="bg-baddia-bubble text-white" onClick={() => go("bestie")} />
+        </div>
+        <button
+          onClick={() => go("share")}
+          className="relative w-full text-left active:scale-[0.99] transition-transform"
+        >
+          <div className="rounded-3xl bg-gradient-to-br from-baddia-yellow/40 via-pink-50 to-baddia-lavender/30 border-[2.5px] border-baddia-ink p-4 shadow-[5px_6px_0_hsl(260_16%_15%)] flex items-center gap-3">
+            <span className="text-2xl">✨</span>
+            <div className="flex-1 min-w-0">
+              <p className="font-display font-black text-[14px] text-baddia-ink leading-tight">Comparte tu glow</p>
+              <p className="text-[11px] text-baddia-ink/65 font-semibold">Cartas cute 9:16 y 4:5 para Stories</p>
+            </div>
+            <ArrowRight size={16} className="text-baddia-ink" />
+          </div>
+        </button>
+
         {/* ───── Section: Pro ───── */}
         <SectionLabel emoji="🔮" text="tu lectura completa" />
+
 
         {/* Pro teaser */}
         <button
@@ -375,6 +397,19 @@ function SectionLabel({ emoji, text }: { emoji: string; text: string }) {
     </div>
   );
 }
+
+function MiniCard({ emoji, label, bg, onClick }: { emoji: string; label: string; bg: string; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`relative rounded-2xl border-[2.5px] border-baddia-ink ${bg} px-2 py-3 shadow-[3px_4px_0_hsl(260_16%_15%)] active:scale-[0.97] transition-transform flex flex-col items-center text-center gap-1 min-h-[92px]`}
+    >
+      <span className="text-2xl">{emoji}</span>
+      <span className="font-display font-black text-[10.5px] leading-tight">{label}</span>
+    </button>
+  );
+}
+
 
 /* ─────────── Manifest CTA card (Racha Glow) ─────────── */
 const MANIFEST_KEY = "baddia.manifest.v1";

@@ -25,7 +25,11 @@ export type Screen =
   | "write-week"
   | "manifest"
   | "notifications"
-  | "journal";
+  | "journal"
+  | "flags"
+  | "dream"
+  | "share"
+  | "bestie";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"

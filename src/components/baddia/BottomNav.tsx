@@ -34,6 +34,10 @@ const readings: Reading[] = [
   { emoji: "👁️", title: "Aura Check",       desc: "Detecta tu aura del momento.",   Icon: Eye,           color: "bg-baddia-bubble",   go: "aura" },
   { emoji: "💌", title: "Inicial y mensaje", desc: "La letra de su nombre + mensaje exacto.", Icon: HeartHandshake, color: "bg-baddia-hot",   go: "crush-initial" },
   { emoji: "📱", title: "¿Te escribirá esta semana?", desc: "Probabilidad, día y horario.", Icon: Heart,    color: "bg-baddia-lavender", go: "write-week" },
+  { emoji: "🚩", title: "Red / Green Flags",   desc: "¿Qué energía tiene esa persona?",     Icon: HeartHandshake,color: "bg-baddia-hot",      go: "flags" },
+  { emoji: "🌙", title: "Interpreta tu sueño", desc: "Baddia lee el mensaje detrás.",       Icon: Moon,          color: "bg-baddia-lavender", go: "dream" },
+  { emoji: "💖", title: "Baddia Bestie",       desc: "Tu bestie energética, siempre lista.", Icon: Sparkles,     color: "bg-baddia-bubble",   go: "bestie" },
+  { emoji: "✨", title: "Comparte tu glow",    desc: "Cartas cute para Stories y TikTok.",  Icon: Sparkles,      color: "bg-baddia-yellow",   go: "share" },
 ];
 
 export function BottomNav() {
