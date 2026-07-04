@@ -239,6 +239,82 @@ export function Journal() {
     );
   }
 
+
+  // ─── Lock gate (when diary has password and not unlocked) ───
+  if (lock && !unlocked) {
+    return (
+      <div className="relative min-h-full bg-[#fdf7ee] pb-16 overflow-hidden">
+        <PaperBackground />
+        <SparklesDeco />
+        <header className="relative z-10 px-5 pt-6 pb-2 flex items-center gap-3">
+          <BackBtn onClick={() => go("daily")} />
+          <h1 className="font-display font-black text-[22px] text-baddia-ink leading-tight">
+            Baddia <span className="gradient-text">Journal</span> 🔒
+          </h1>
+        </header>
+
+        <div className="relative z-10 px-5 mt-8">
+          <div className="rounded-[26px] bg-white/90 backdrop-blur border-[2.5px] border-baddia-ink p-6 shadow-[6px_7px_0_hsl(260_16%_15%)] text-center">
+            <div className="mx-auto w-20 h-20 rounded-full border-2 border-baddia-ink bg-baddia-lavender text-white flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)] mb-3 -rotate-6 animate-float-cute">
+              <LockKeyhole size={32} />
+            </div>
+            <p className="font-display font-black text-[20px] text-baddia-ink leading-tight">
+              Tu diario está cerradito ✨
+            </p>
+            <p className="text-[13px] text-baddia-ink/70 font-medium mt-1 leading-snug">
+              Escribe tu contraseña, bb 💗
+            </p>
+
+            <div className="mt-5 relative">
+              <input
+                type={showAttemptPw ? "text" : "password"}
+                inputMode="text"
+                autoFocus
+                value={attemptPw}
+                onChange={(e) => setAttemptPw(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") tryUnlock(); }}
+                placeholder="Contraseña"
+                className="w-full text-center font-display font-black tracking-[0.35em] text-[18px] text-baddia-ink bg-[#fffdf7] border-[2.5px] border-baddia-ink rounded-2xl px-4 py-3 pr-12 shadow-[3px_3px_0_hsl(260_16%_15%)] focus:outline-none placeholder:tracking-normal placeholder:font-medium placeholder:text-baddia-ink/40"
+              />
+              <button
+                type="button"
+                onClick={() => setShowAttemptPw((s) => !s)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-baddia-ink/60"
+                aria-label="Mostrar contraseña"
+              >
+                {showAttemptPw ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+
+            <button
+              onClick={tryUnlock}
+              className="mt-4 w-full inline-flex items-center justify-center gap-2 py-3 rounded-full bg-baddia-ink text-white text-[13px] font-display font-black border-2 border-baddia-ink shadow-[3px_3px_0_hsl(335_85%_58%)] active:translate-y-[1px] transition-all"
+            >
+              <Unlock size={14} /> Abrir mi diario
+            </button>
+
+            {attempts > 0 && !showHint && (
+              <p className="mt-3 text-[11px] font-display font-bold text-baddia-hot">
+                {attempts}/3 intento{attempts === 1 ? "" : "s"} · te quedan {3 - attempts}
+              </p>
+            )}
+
+            {showHint && (
+              <div className="mt-4 rounded-2xl border-2 border-dashed border-baddia-ink/50 bg-baddia-yellow/40 p-3 text-left">
+                <p className="text-[10px] font-display font-black uppercase tracking-widest text-baddia-ink/70 flex items-center gap-1">
+                  <KeyRound size={12} /> tu palabra de pista
+                </p>
+                <p className="mt-1 font-serif italic text-[15px] text-baddia-ink break-words">
+                  “{lock.hint}”
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative min-h-full bg-[#fdf7ee] pb-20 overflow-hidden">
       <PaperBackground />
@@ -255,6 +331,15 @@ export function Journal() {
             Baddia <span className="gradient-text">Journal</span> 📓
           </h1>
         </div>
+        <button
+          onClick={() => setSetupMode(lock ? "manage" : "create")}
+          aria-label={lock ? "Gestionar contraseña" : "Poner contraseña"}
+          className={`w-11 h-11 rounded-2xl border-2 border-baddia-ink flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-[2px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all ${
+            lock ? "bg-baddia-mint text-white" : "bg-white text-baddia-ink"
+          }`}
+        >
+          {lock ? <ShieldCheck size={18} /> : <LockKeyhole size={18} />}
+        </button>
       </header>
 
       {/* Date navigator */}
