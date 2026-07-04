@@ -176,7 +176,7 @@ function ResultSticker({
 /* ─────────────── Home ─────────────── */
 
 function LoveHome({ onOpen }: { onOpen: (k: SubKey) => void }) {
-  const { user, openPaywall } = useBaddia();
+  const { user, openPaywall, go } = useBaddia();
 
   return (
     <PageShell
@@ -184,6 +184,28 @@ function LoveHome({ onOpen }: { onOpen: (k: SubKey) => void }) {
       chipBg="bg-baddia-hot text-white"
       title={<>Hola, <span className="gradient-text">{user.name}</span> 💖</>}
       subtitle="Tu radar amoroso del día — leído para ti."
+      headerRight={
+        <button
+          onClick={() => go("bestie")}
+          aria-label="Abrir Baddia Bestie"
+          className="shrink-0 relative group"
+        >
+          <span className="absolute -top-2 -right-2 z-10 inline-flex items-center justify-center rounded-full bg-baddia-yellow text-baddia-ink border-2 border-baddia-ink w-6 h-6 text-[10px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] rotate-[10deg] animate-pulse">
+            ✨
+          </span>
+          <div
+            className="w-[64px] h-[70px] rounded-2xl border-[2.5px] border-baddia-ink shadow-[4px_5px_0_hsl(260_16%_15%)] flex flex-col items-center justify-center gap-0.5 rotate-[6deg] active:translate-y-[2px] active:shadow-[2px_2px_0_hsl(260_16%_15%)] transition-all overflow-hidden"
+            style={{
+              background: "linear-gradient(135deg, hsl(335 100% 74%), hsl(325 100% 84%))",
+            }}
+          >
+            <span className="text-[22px] leading-none animate-float-cute drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]">💖</span>
+            <span className="font-display font-black text-[8.5px] uppercase tracking-wider text-white drop-shadow-[0_1px_0_rgba(0,0,0,0.25)]">
+              bestie
+            </span>
+          </div>
+        </button>
+      }
     >
       {/* HERO Crush Energy */}
       <SectionLabel emoji="🔥" text="lectura del día" />
@@ -206,6 +228,33 @@ function LoveHome({ onOpen }: { onOpen: (k: SubKey) => void }) {
           </div>
         </div>
       </button>
+
+      {/* Red / Green Flags */}
+      <SectionLabel emoji="🚩" text="red / green flags" />
+      <button
+        onClick={() => go("flags")}
+        className="relative w-full text-left active:scale-[0.99] transition-transform"
+      >
+        <div className="absolute -top-3 left-5 z-10">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-baddia-hot text-white border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-black uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-2">
+            🚩 flags reales
+          </span>
+        </div>
+        <div className="relative rounded-3xl border-[2.5px] border-baddia-ink p-5 pt-7 shadow-[5px_6px_0_hsl(260_16%_15%)] overflow-hidden bg-gradient-to-br from-baddia-hot/20 via-pink-50 to-baddia-mint/40">
+          <span className="absolute -top-2 -right-2 text-6xl opacity-30 select-none rotate-12">💚</span>
+          <span className="absolute top-8 -right-4 text-5xl opacity-25 select-none -rotate-12">🚩</span>
+          <p className="relative font-display font-black text-[18px] leading-tight text-baddia-ink">
+            ¿Qué energía tiene <span className="gradient-text">esa persona?</span>
+          </p>
+          <p className="relative text-[12.5px] font-semibold text-baddia-ink/70 mt-1.5 leading-snug">
+            Cuéntale a Baddia cómo se comporta y descubre sus flags.
+          </p>
+          <div className="relative mt-4 inline-flex items-center gap-1.5 rounded-full bg-baddia-ink text-white px-4 py-2 text-[12px] font-display font-black shadow-[2px_2px_0_hsl(260_60%_75%)]">
+            Leer sus flags <ArrowRight size={13} />
+          </div>
+        </div>
+      </button>
+
 
       {/* Funciones */}
       <SectionLabel emoji="💞" text="tus funciones de amor" />
