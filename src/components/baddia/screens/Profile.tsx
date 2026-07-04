@@ -4,7 +4,7 @@ import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import {
   History, Sparkles, Shield, LogOut, ChevronRight, LayoutGrid,
   Settings, Trash2, Cake, Hash, Lock, ArrowRight, Bookmark, Bell, Globe,
-  User as UserIcon, Heart, Gift, Star,
+  User as UserIcon, Heart, Gift, Star, Phone, Check,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -217,6 +217,11 @@ export function Profile() {
           rows={[
             { icon: UserIcon, label: "Cuenta",        caption: "Nombre, fecha · eliminar cuenta",
               onClick: () => go("account"), tint: "bg-baddia-bubble" },
+            { icon: user.phoneVerified ? Check : Phone,
+              label: user.phoneVerified ? "Número verificado" : "Verificar número",
+              caption: user.phoneVerified ? (user.phone ?? "Tu número está a salvo ✨") : "Protege tu cuenta con SMS",
+              onClick: () => go("phone-verify"),
+              tint: user.phoneVerified ? "bg-baddia-mint" : "bg-baddia-lavender" },
             { icon: Settings, label: "Preferencias",  caption: "Tema, sonidos, idioma",
               onClick: () => toast("Próximamente ✨"), tint: "bg-baddia-yellow" },
             { icon: Bell,     label: "Notificaciones", caption: "Tu lectura diaria, recordatorios",

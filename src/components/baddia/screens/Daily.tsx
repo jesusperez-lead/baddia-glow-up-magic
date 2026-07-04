@@ -29,6 +29,7 @@ export function Daily() {
 
   return (
     <div className="relative min-h-full bg-white pb-10 overflow-hidden">
+      {showWelcome && <GlitterWelcome name={user.name} onDone={() => setShowWelcome(false)} /> }
       {/* background blobs */}
       <div className="blob -top-20 -left-16 w-72 h-72 bg-baddia-bubble/20" />
       <div className="blob top-60 -right-20 w-64 h-64 bg-baddia-soft/25" style={{ animationDelay: "4s" }} />
