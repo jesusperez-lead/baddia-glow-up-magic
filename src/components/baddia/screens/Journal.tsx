@@ -41,6 +41,19 @@ interface JournalEntry {
 }
 
 const STORAGE_KEY = "baddia_journal_v1";
+const LOCK_KEY = "baddia_journal_lock_v1";
+
+interface LockConfig { hash: string; salt: string; hint: string; }
+
+function hashPw(pw: string, salt: string) {
+  const s = salt + "|" + pw;
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = (((h << 5) + h) ^ s.charCodeAt(i)) >>> 0;
+  return h.toString(16);
+}
+function makeSalt() {
+  return Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+}
 
 function todayISO(d = new Date()) {
   const tz = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
