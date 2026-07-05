@@ -206,6 +206,8 @@ export function Compat() {
       const r = data as CompatReading;
       if (!r?.valid) {
         toast.error(r?.reason || "No pude leer la energía. Prueba con otras fotos ✨");
+      } else {
+        setShowMatch(true);
       }
       setReading(r);
     } catch (e: any) {
