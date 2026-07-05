@@ -2,7 +2,7 @@ import { useBaddia } from "@/lib/baddia-state";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import { ShareGlowSheet } from "../ShareGlowSheet";
 import { GlitterWelcome } from "../GlitterWelcome";
-import { Share2, Bookmark, Lock, Check, ArrowRight, Flame, Sparkles } from "lucide-react";
+import { Share2, Bookmark, Lock, Check, ArrowRight, Flame, Sparkles, Phone, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -77,6 +77,7 @@ export function Daily() {
       <div className="relative z-10 px-5 mt-5 space-y-5">
         {/* ───── Section: racha glow ───── */}
         <SectionLabel emoji="🌸" text="tu racha glow" />
+        <PhoneVerifyWidget />
         <ManifestCTA onOpen={() => go("manifest")} />
 
         {/* ───── Section: tu energía ───── */}
@@ -388,6 +389,58 @@ export function Daily() {
         </p>
       </div>
       <ShareGlowSheet open={shareOpen} onClose={() => setShareOpen(false)} quote={quote} />
+    </div>
+  );
+}
+
+function PhoneVerifyWidget() {
+  const { go, user } = useBaddia();
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.localStorage.getItem("baddia_dismiss_phone_verify") === "1") {
+      setDismissed(true);
+    }
+  }, []);
+
+  if (user.phoneVerified || dismissed) return null;
+
+  return (
+    <div className="relative animate-slide-up">
+      <button
+        onClick={() => {
+          window.localStorage.setItem("baddia_dismiss_phone_verify", "1");
+          setDismissed(true);
+        }}
+        aria-label="Cerrar"
+        className="absolute -top-2 -right-2 z-20 w-7 h-7 rounded-full bg-white border-2 border-baddia-ink flex items-center justify-center shadow-[2px_2px_0_hsl(260_16%_15%)] active:scale-95 transition-transform"
+      >
+        <X size={14} className="text-baddia-ink" />
+      </button>
+      <div className="rounded-3xl border-[2.5px] border-baddia-ink p-4 pt-5 shadow-[5px_6px_0_hsl(260_16%_15%)] overflow-hidden bg-gradient-to-br from-baddia-lavender via-baddia-bubble to-baddia-soft text-white">
+        <span className="absolute top-3 right-8 text-lg animate-pulse">✨</span>
+        <span className="absolute bottom-2 right-4 text-xl opacity-30">💖</span>
+        <div className="flex items-start gap-3 relative">
+          <div className="shrink-0 w-12 h-12 rounded-2xl bg-white border-[2.5px] border-baddia-ink flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)]">
+            <Phone size={20} className="text-baddia-lavender" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="font-display font-black text-[16px] leading-tight">
+              Protege tu cuenta ✨
+            </p>
+            <p className="text-[12px] font-semibold leading-snug mt-1 opacity-90">
+              Verifica tu número para guardar tu glow y acceder desde cualquier lado.
+            </p>
+            <button
+              onClick={() => go("phone-verify")}
+              className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white text-baddia-ink border-2 border-baddia-ink px-3 py-1.5 text-[11px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-[1px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+            >
+              <Sparkles size={12} className="text-baddia-hot" /> Verificar ahora
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
