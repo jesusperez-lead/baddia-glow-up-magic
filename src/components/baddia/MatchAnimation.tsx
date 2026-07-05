@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
-import { X, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useState, useCallback } from "react";
+import { X, Sparkles, Share2, Check } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const CUTE_FACTS = [
   "El corazón late más rápido cuando piensas en tu crush 💓 ¡es la dopamina!",
