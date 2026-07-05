@@ -163,6 +163,7 @@ export function Compat() {
   const [photoB, setPhotoB] = useState<{ preview: string; base64: string; mime: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [reading, setReading] = useState<CompatReading | null>(null);
+  const [showMatch, setShowMatch] = useState(false);
 
   const signBGlyph = ZODIAC_SIGNS.find((s) => s.name === signB)?.glyph;
 
