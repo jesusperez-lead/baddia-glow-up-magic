@@ -221,6 +221,7 @@ export function Compat() {
     setPhotoA(null);
     setPhotoB(null);
     setReading(null);
+    setShowMatch(false);
     setLoading(false);
   };
 
