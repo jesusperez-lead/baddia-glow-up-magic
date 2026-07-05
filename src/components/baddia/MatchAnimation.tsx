@@ -40,26 +40,6 @@ export function MatchAnimation({
     return () => clearTimeout(t);
   }, []);
 
-  const shareText = useMemo(() => {
-    return `💖 IT'S A MATCH ${score}% en Baddia ✨\n${label || "vibes que combinan"}\n${fact}\n🔮 Descubre tu compatibilidad en baddia.app`;
-  }, [score, label, fact]);
-
-  const handleQuickShare = useCallback(async () => {
-    try {
-      if (typeof navigator !== "undefined" && (navigator as any).share) {
-        await (navigator as any).share({
-          title: "💖 It's a match en Baddia",
-          text: shareText,
-        });
-      } else {
-        await navigator.clipboard.writeText(shareText);
-        toast({ title: "Copiado ✨", description: "Pégalo donde quieras compartirlo." });
-      }
-    } catch {
-      // user cancelled or error
-    }
-  }, [shareText]);
-
   // sparkle positions
   const sparkles = useMemo(
     () =>
