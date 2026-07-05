@@ -139,11 +139,19 @@ export function BottomNav() {
           </div>
 
           <div className="relative px-4 pb-6 space-y-2.5 overflow-y-auto">
-            {readings.map((r, i) => (
+            {readings.map((r, i) => {
+              const locked = !!r.pro && !isPro;
+              return (
               <button
                 key={r.title}
                 disabled={r.soon}
                 onClick={() => {
+                  if (r.soon) return;
+                  if (locked) {
+                    setOpen(false);
+                    openPaywall();
+                    return;
+                  }
                   if (r.go) {
                     go(r.go);
                     setOpen(false);
@@ -152,12 +160,22 @@ export function BottomNav() {
                 style={{ animationDelay: `${i * 60}ms` }}
                 className="group relative overflow-hidden animate-pop-in-cute w-full flex items-center gap-3 rounded-2xl border-[2px] border-baddia-ink bg-white p-3 shadow-[3px_3px_0_hsl(260_16%_15%)] text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_hsl(260_16%_15%)] active:scale-[0.98] disabled:opacity-70"
               >
-                <span className={`shrink-0 w-12 h-12 rounded-xl border-2 border-baddia-ink ${r.color} flex items-center justify-center text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-6deg]`}>
+                <span className={`relative shrink-0 w-12 h-12 rounded-xl border-2 border-baddia-ink ${r.color} flex items-center justify-center text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-6deg]`}>
                   {r.emoji}
+                  {locked && (
+                    <span className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full bg-baddia-ink border-2 border-white flex items-center justify-center shadow-[1.5px_1.5px_0_hsl(260_16%_15%)]">
+                      <Lock size={11} className="text-baddia-yellow" strokeWidth={3} />
+                    </span>
+                  )}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="flex items-center gap-2">
-                    <span className="font-display font-black text-[15px] text-baddia-ink leading-tight">{r.title}</span>
+                  <span className="flex items-center gap-1.5 flex-wrap">
+                    <span className={`font-display font-black text-[15px] leading-tight ${locked ? "text-baddia-ink/70" : "text-baddia-ink"}`}>{r.title}</span>
+                    {locked && (
+                      <span className="inline-flex items-center gap-1 text-[9px] font-display font-black uppercase tracking-widest text-white bg-gradient-to-r from-baddia-hot to-baddia-lavender border border-baddia-ink rounded-full px-1.5 py-[1px] shadow-[1.5px_1.5px_0_hsl(260_16%_15%)]">
+                        ✨ Pro
+                      </span>
+                    )}
                     {r.soon && (
                       <span className="text-[9px] font-display font-black uppercase tracking-widest text-baddia-ink/55 border border-baddia-ink/30 rounded-full px-1.5 py-[1px]">
                         pronto
@@ -165,7 +183,7 @@ export function BottomNav() {
                     )}
                   </span>
                   <span className="block text-[12px] text-baddia-ink/65 font-semibold leading-snug mt-0.5">
-                    {r.desc}
+                    {locked ? "Desbloquea con Baddia Pro y léelo todo 💖" : r.desc}
                   </span>
                 </span>
                 {/* shimmer sweep on hover */}
@@ -173,7 +191,8 @@ export function BottomNav() {
                   <span className="absolute -inset-y-4 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/60 to-transparent skew-x-12 opacity-0 group-hover:opacity-100 group-hover:animate-shimmer" />
                 </span>
               </button>
-            ))}
+              );
+            })}
 
             <p className="text-[11px] text-center text-baddia-ink/55 font-semibold pt-2 leading-relaxed">
               Powered by IA · resultados solo para entretenimiento 💖
