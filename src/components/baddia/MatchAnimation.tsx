@@ -102,6 +102,19 @@ export function MatchAnimation({
         </span>
       ))}
 
+      {/* share */}
+      <button
+        onClick={handleShare}
+        className="absolute top-6 left-5 w-10 h-10 rounded-full bg-gradient-hot border-2 border-white flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)] z-20 animate-pop-in-cute"
+        aria-label="Compartir match"
+      >
+        {shared ? (
+          <Check size={16} strokeWidth={3} className="text-white" />
+        ) : (
+          <Share2 size={16} strokeWidth={3} className="text-white" />
+        )}
+      </button>
+
       {/* close */}
       <button
         onClick={onClose}
