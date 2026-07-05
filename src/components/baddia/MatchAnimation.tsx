@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
-import { X, Sparkles, Share2, Check } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { useEffect, useMemo, useState } from "react";
+import { X, Sparkles, Share2 } from "lucide-react";
 import { MatchShareSheet } from "./MatchShareSheet";
 
 const CUTE_FACTS = [
