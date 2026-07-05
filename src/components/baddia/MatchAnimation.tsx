@@ -33,11 +33,35 @@ export function MatchAnimation({
     []
   );
   const [phase, setPhase] = useState<"enter" | "hold">("enter");
+  const [shared, setShared] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setPhase("hold"), 1400);
     return () => clearTimeout(t);
   }, []);
+
+  const shareText = useMemo(() => {
+    return `💖 IT'S A MATCH ${score}% en Baddia ✨\n${label || "vibes que combinan"}\n${fact}\n🔮 Descubre tu compatibilidad en baddia.app`;
+  }, [score, label, fact]);
+
+  const handleShare = useCallback(async () => {
+    try {
+      if (typeof navigator !== "undefined" && (navigator as any).share) {
+        await (navigator as any).share({
+          title: "💖 It's a match en Baddia",
+          text: shareText,
+        });
+        toast({ title: "Compartido ✨", description: "Tu match vuela por el mundo." });
+      } else {
+        await navigator.clipboard.writeText(shareText);
+        setShared(true);
+        toast({ title: "Copiado ✨", description: "Pégalo donde quieras compartirlo." });
+        setTimeout(() => setShared(false), 1800);
+      }
+    } catch {
+      // user cancelled or error
+    }
+  }, [shareText]);
 
   // sparkle positions
   const sparkles = useMemo(
