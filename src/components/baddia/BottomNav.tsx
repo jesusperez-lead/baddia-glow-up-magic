@@ -22,22 +22,23 @@ type Reading = {
   color: string;
   go?: Screen;
   soon?: boolean;
+  pro?: boolean;
 };
 
 const readings: Reading[] = [
   { emoji: "🤚", title: "Lectura de manos", desc: "Tu palma, tu mapa, tu brillo. Baddia lo lee todo.",        Icon: Hand,          color: "bg-baddia-mint",     go: "palm" },
-  { emoji: "👗", title: "Outfit Check",      desc: "¿Tu look dice lo que sientes? Baddia te lo cuenta.",          Icon: Shirt,         color: "bg-baddia-bubble",   go: "outfit" },
-  { emoji: "🎲", title: "Déjalo a la suerte", desc: "Sí o No con un dado cute. El universo responde.",     Icon: Dices,         color: "bg-baddia-lavender", go: "lucky" },
-  { emoji: "🔮", title: "Tarot del día",    desc: "3 cartas para tu energía hoy.",  Icon: Wand2,         color: "bg-baddia-lavender", go: "tarot" },
-  { emoji: "✨", title: "Carta astral",     desc: "Tu mapa cósmico personalizado.", Icon: Star,          color: "bg-baddia-yellow",   go: "astral" },
-  { emoji: "💘", title: "Compatibilidad",   desc: "Tu match con tu crush.",         Icon: HeartHandshake,color: "bg-baddia-hot",      go: "compat" },
-  { emoji: "👁️", title: "Aura Check",       desc: "Detecta tu aura del momento.",   Icon: Eye,           color: "bg-baddia-bubble",   go: "aura" },
-  { emoji: "💌", title: "Inicial y mensaje", desc: "La letra de su nombre + mensaje exacto.", Icon: HeartHandshake, color: "bg-baddia-hot",   go: "crush-initial" },
-  { emoji: "📱", title: "¿Te escribirá esta semana?", desc: "Probabilidad, día y horario.", Icon: Heart,    color: "bg-baddia-lavender", go: "write-week" },
-  { emoji: "🚩", title: "Red / Green Flags",   desc: "¿Qué energía tiene esa persona?",     Icon: HeartHandshake,color: "bg-baddia-hot",      go: "flags" },
-  { emoji: "🌙", title: "Interpreta tu sueño", desc: "Baddia lee el mensaje detrás.",       Icon: Moon,          color: "bg-baddia-lavender", go: "dream" },
-  { emoji: "💖", title: "Baddia Bestie",       desc: "Tu bestie energética, siempre lista.", Icon: Sparkles,     color: "bg-baddia-bubble",   go: "bestie" },
-  { emoji: "✨", title: "Comparte tu glow",    desc: "Cartas cute para Stories y TikTok.",  Icon: Sparkles,      color: "bg-baddia-yellow",   go: "share" },
+  { emoji: "👗", title: "Outfit Check",      desc: "¿Tu look dice lo que sientes? Baddia te lo cuenta.",          Icon: Shirt,         color: "bg-baddia-bubble",   go: "outfit", pro: true },
+  { emoji: "🎲", title: "Déjalo a la suerte", desc: "Sí o No con un dado cute. El universo responde.",     Icon: Dices,         color: "bg-baddia-lavender", go: "lucky", pro: true },
+  { emoji: "🔮", title: "Tarot del día",    desc: "3 cartas para tu energía hoy.",  Icon: Wand2,         color: "bg-baddia-lavender", go: "tarot", pro: true },
+  { emoji: "✨", title: "Carta astral",     desc: "Tu mapa cósmico personalizado.", Icon: Star,          color: "bg-baddia-yellow",   go: "astral", pro: true },
+  { emoji: "💘", title: "Compatibilidad",   desc: "Tu match con tu crush.",         Icon: HeartHandshake,color: "bg-baddia-hot",      go: "compat", pro: true },
+  { emoji: "👁️", title: "Aura Check",       desc: "Detecta tu aura del momento.",   Icon: Eye,           color: "bg-baddia-bubble",   go: "aura", pro: true },
+  { emoji: "💌", title: "Inicial y mensaje", desc: "La letra de su nombre + mensaje exacto.", Icon: HeartHandshake, color: "bg-baddia-hot",   go: "crush-initial", pro: true },
+  { emoji: "📱", title: "¿Te escribirá esta semana?", desc: "Probabilidad, día y horario.", Icon: Heart,    color: "bg-baddia-lavender", go: "write-week", pro: true },
+  { emoji: "🚩", title: "Red / Green Flags",   desc: "¿Qué energía tiene esa persona?",     Icon: HeartHandshake,color: "bg-baddia-hot",      go: "flags", pro: true },
+  { emoji: "🌙", title: "Interpreta tu sueño", desc: "Baddia lee el mensaje detrás.",       Icon: Moon,          color: "bg-baddia-lavender", go: "dream", pro: true },
+  { emoji: "💖", title: "Baddia Bestie",       desc: "Tu bestie energética, siempre lista.", Icon: Sparkles,     color: "bg-baddia-bubble",   go: "bestie", pro: true },
+  { emoji: "✨", title: "Comparte tu glow",    desc: "Cartas cute para Stories y TikTok.",  Icon: Sparkles,      color: "bg-baddia-yellow",   go: "share", pro: true },
 ];
 
 export function BottomNav() {
