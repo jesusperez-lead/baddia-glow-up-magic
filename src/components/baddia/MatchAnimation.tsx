@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
-import { X, Sparkles, Share2, Check } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { useEffect, useMemo, useState } from "react";
+import { X, Sparkles, Share2 } from "lucide-react";
+import { MatchShareSheet } from "./MatchShareSheet";
 
 const CUTE_FACTS = [
   "El corazón late más rápido cuando piensas en tu crush 💓 ¡es la dopamina!",
@@ -33,35 +33,12 @@ export function MatchAnimation({
     []
   );
   const [phase, setPhase] = useState<"enter" | "hold">("enter");
-  const [shared, setShared] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setPhase("hold"), 1400);
     return () => clearTimeout(t);
   }, []);
-
-  const shareText = useMemo(() => {
-    return `💖 IT'S A MATCH ${score}% en Baddia ✨\n${label || "vibes que combinan"}\n${fact}\n🔮 Descubre tu compatibilidad en baddia.app`;
-  }, [score, label, fact]);
-
-  const handleShare = useCallback(async () => {
-    try {
-      if (typeof navigator !== "undefined" && (navigator as any).share) {
-        await (navigator as any).share({
-          title: "💖 It's a match en Baddia",
-          text: shareText,
-        });
-        toast({ title: "Compartido ✨", description: "Tu match vuela por el mundo." });
-      } else {
-        await navigator.clipboard.writeText(shareText);
-        setShared(true);
-        toast({ title: "Copiado ✨", description: "Pégalo donde quieras compartirlo." });
-        setTimeout(() => setShared(false), 1800);
-      }
-    } catch {
-      // user cancelled or error
-    }
-  }, [shareText]);
 
   // sparkle positions
   const sparkles = useMemo(
@@ -104,15 +81,11 @@ export function MatchAnimation({
 
       {/* share */}
       <button
-        onClick={handleShare}
+        onClick={() => setShareOpen(true)}
         className="absolute top-6 left-5 w-10 h-10 rounded-full bg-gradient-hot border-2 border-white flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)] z-20 animate-pop-in-cute"
         aria-label="Compartir match"
       >
-        {shared ? (
-          <Check size={16} strokeWidth={3} className="text-white" />
-        ) : (
-          <Share2 size={16} strokeWidth={3} className="text-white" />
-        )}
+        <Share2 size={16} strokeWidth={3} className="text-white" />
       </button>
 
       {/* close */}
@@ -241,6 +214,16 @@ export function MatchAnimation({
           75%     { transform: translate(-50%, -50%) scale(1.12); }
         }
       `}</style>
+
+      <MatchShareSheet
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        photoA={photoA}
+        photoB={photoB}
+        score={score}
+        label={label}
+        fact={fact}
+      />
     </div>
   );
 }
