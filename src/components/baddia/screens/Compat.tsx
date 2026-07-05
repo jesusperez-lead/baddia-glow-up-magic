@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import { CrushBirthdayPicker } from "../CrushBirthdayPicker";
 import { computeZodiac } from "@/lib/baddia-numerology";
+import { MatchAnimation } from "../MatchAnimation";
 import {
   ArrowLeft, Upload, RotateCcw, Sparkles, Share2, Heart, X, Plus, ChevronDown, Check, Cake,
 } from "lucide-react";
@@ -162,6 +163,7 @@ export function Compat() {
   const [photoB, setPhotoB] = useState<{ preview: string; base64: string; mime: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [reading, setReading] = useState<CompatReading | null>(null);
+  const [showMatch, setShowMatch] = useState(false);
 
   const signBGlyph = ZODIAC_SIGNS.find((s) => s.name === signB)?.glyph;
 
@@ -204,6 +206,8 @@ export function Compat() {
       const r = data as CompatReading;
       if (!r?.valid) {
         toast.error(r?.reason || "No pude leer la energía. Prueba con otras fotos ✨");
+      } else {
+        setShowMatch(true);
       }
       setReading(r);
     } catch (e: any) {
@@ -217,6 +221,7 @@ export function Compat() {
     setPhotoA(null);
     setPhotoB(null);
     setReading(null);
+    setShowMatch(false);
     setLoading(false);
   };
 
@@ -606,6 +611,16 @@ export function Compat() {
           setBirthPickerOpen(false);
         }}
       />
+
+      {showMatch && reading?.valid && photoA && photoB && (
+        <MatchAnimation
+          photoA={photoA.preview}
+          photoB={photoB.preview}
+          score={reading.score ?? 0}
+          label={reading.label}
+          onClose={() => setShowMatch(false)}
+        />
+      )}
     </div>
   );
 }
