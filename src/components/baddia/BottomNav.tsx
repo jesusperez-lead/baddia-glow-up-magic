@@ -42,8 +42,9 @@ const readings: Reading[] = [
 ];
 
 export function BottomNav() {
-  const { screen, go } = useBaddia();
+  const { screen, go, user, openPaywall } = useBaddia();
   const [open, setOpen] = useState(false);
+  const isPro = user.plan !== "Free";
 
   const renderTab = ({ id, label, Icon }: Tab) => {
     const active = screen === id;
