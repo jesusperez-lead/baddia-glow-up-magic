@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import { CrushBirthdayPicker } from "../CrushBirthdayPicker";
 import { computeZodiac } from "@/lib/baddia-numerology";
+import { MatchAnimation } from "../MatchAnimation";
 import {
   ArrowLeft, Upload, RotateCcw, Sparkles, Share2, Heart, X, Plus, ChevronDown, Check, Cake,
 } from "lucide-react";
