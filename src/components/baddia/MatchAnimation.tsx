@@ -214,6 +214,16 @@ export function MatchAnimation({
           75%     { transform: translate(-50%, -50%) scale(1.12); }
         }
       `}</style>
+
+      <MatchShareSheet
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        photoA={photoA}
+        photoB={photoB}
+        score={score}
+        label={label}
+        fact={fact}
+      />
     </div>
   );
 }
