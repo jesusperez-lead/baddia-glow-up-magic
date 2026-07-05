@@ -77,6 +77,7 @@ export function Daily() {
       <div className="relative z-10 px-5 mt-5 space-y-5">
         {/* ───── Section: racha glow ───── */}
         <SectionLabel emoji="🌸" text="tu racha glow" />
+        <PhoneVerifyWidget />
         <ManifestCTA onOpen={() => go("manifest")} />
 
         {/* ───── Section: tu energía ───── */}
