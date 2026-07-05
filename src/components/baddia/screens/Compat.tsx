@@ -611,6 +611,16 @@ export function Compat() {
           setBirthPickerOpen(false);
         }}
       />
+
+      {showMatch && reading?.valid && photoA && photoB && (
+        <MatchAnimation
+          photoA={photoA.preview}
+          photoB={photoB.preview}
+          score={reading.score ?? 0}
+          label={reading.label}
+          onClose={() => setShowMatch(false)}
+        />
+      )}
     </div>
   );
 }
