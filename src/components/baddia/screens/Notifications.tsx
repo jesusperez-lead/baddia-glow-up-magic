@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
+import { TimePickerSheet } from "../TimePickerSheet";
 import {
   ArrowLeft, Bell, Sun, Moon, Heart, Sparkles, Hand, Star,
-  Calendar, Clock, Check, BellOff, Volume2, Vibrate,
+  Calendar, Clock, Check, BellOff, Volume2, Vibrate, ChevronRight,
 } from "lucide-react";
 import { toast } from "sonner";
+
+function formatTime12(t: string) {
+  const [hStr, mStr] = (t || "09:00").split(":");
+  const h = Number(hStr) || 0;
+  const m = Number(mStr) || 0;
+  const ampm = h < 12 ? "AM" : "PM";
+  const h12 = h % 12 === 0 ? 12 : h % 12;
+  return `${String(h12).padStart(2, "0")}:${String(m).padStart(2, "0")} ${ampm}`;
+}
 
 const STORAGE_KEY = "baddia-notifications-v1";
 
