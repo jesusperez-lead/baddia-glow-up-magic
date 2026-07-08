@@ -2,6 +2,7 @@ import { useBaddia } from "@/lib/baddia-state";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import { ShareGlowSheet } from "../ShareGlowSheet";
 import { GlitterWelcome } from "../GlitterWelcome";
+import { DailyQuoteReveal } from "../DailyQuoteReveal";
 import { Share2, Bookmark, Lock, Check, ArrowRight, Flame, Sparkles, Phone, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -14,15 +15,24 @@ export function Daily() {
   const [shareOpen, setShareOpen] = useState(false);
   const [tarotFlipped, setTarotFlipped] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [showQuoteReveal, setShowQuoteReveal] = useState(false);
   const quote = "Lo que es para mí, me encuentra con claridad, paz y abundancia.";
   const scorePct = 0.87;
   const dash = 314;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (sessionStorage.getItem("baddia_welcome_glitter") === "1") {
+    const fromWelcome = sessionStorage.getItem("baddia_welcome_glitter") === "1";
+    if (fromWelcome) {
       sessionStorage.removeItem("baddia_welcome_glitter");
       setShowWelcome(true);
+    }
+    if (sessionStorage.getItem("baddia_quote_shown") !== "1") {
+      sessionStorage.setItem("baddia_quote_shown", "1");
+      // let the glitter welcome breathe first if it's playing
+      const delay = fromWelcome ? 2900 : 350;
+      const t = setTimeout(() => setShowQuoteReveal(true), delay);
+      return () => clearTimeout(t);
     }
   }, []);
 
@@ -30,6 +40,14 @@ export function Daily() {
   return (
     <div className="relative min-h-full bg-white pb-10 overflow-hidden">
       {showWelcome && <GlitterWelcome name={user.name} onDone={() => setShowWelcome(false)} /> }
+      {showQuoteReveal && (
+        <DailyQuoteReveal
+          quote={quote}
+          name={user.name}
+          onClose={() => setShowQuoteReveal(false)}
+          onShare={() => setShareOpen(true)}
+        />
+      )}
       {/* background blobs */}
       <div className="blob -top-20 -left-16 w-72 h-72 bg-baddia-bubble/20" />
       <div className="blob top-60 -right-20 w-64 h-64 bg-baddia-soft/25" style={{ animationDelay: "4s" }} />
