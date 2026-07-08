@@ -361,6 +361,7 @@ function TimeRow({
   on: boolean; time: string;
   onToggle: (v: boolean) => void; onTime: (t: string) => void; disabled?: boolean;
 }) {
+  const [open, setOpen] = useState(false);
   return (
     <div className={`rounded-3xl bg-white border-[2.5px] border-baddia-ink p-3.5 shadow-[5px_6px_0_hsl(260_16%_15%)] ${disabled ? "opacity-60" : ""}`}>
       <div className="flex items-center gap-3">
@@ -378,33 +379,53 @@ function TimeRow({
           <span className="inline-flex items-center gap-1 rounded-full bg-baddia-pearl text-baddia-ink border-2 border-baddia-ink px-2 py-0.5 text-[10px] font-display font-black uppercase tracking-wider shadow-[1.5px_1.5px_0_hsl(260_16%_15%)]">
             <Clock size={10} /> hora
           </span>
-          <input
-            type="time"
-            value={time}
+          <button
+            type="button"
             disabled={disabled}
-            onChange={(e) => onTime(e.target.value)}
-            className="flex-1 rounded-2xl border-2 border-baddia-ink bg-baddia-pearl px-3 py-2 text-[13px] font-display font-black text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] focus:outline-none focus:bg-white"
-          />
+            onClick={() => setOpen(true)}
+            className="flex-1 inline-flex items-center justify-between gap-2 rounded-2xl border-2 border-baddia-ink bg-baddia-pearl px-3 py-2 text-[13px] font-display font-black text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-[2px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+          >
+            <span className="tabular-nums">{formatTime12(time)}</span>
+            <ChevronRight size={14} className="text-baddia-ink/50" />
+          </button>
           <span className="inline-flex items-center gap-1 rounded-full bg-baddia-yellow text-baddia-ink border-2 border-baddia-ink px-2 py-0.5 text-[10px] font-display font-black shadow-[1.5px_1.5px_0_hsl(260_16%_15%)]">
             <Calendar size={10} /> cada día
           </span>
         </div>
       )}
+      <TimePickerSheet
+        open={open}
+        onClose={() => setOpen(false)}
+        value={time}
+        onChange={onTime}
+        title={title}
+      />
     </div>
   );
 }
 
 function TimeField({ label, value, onChange }: { label: string; value: string; onChange: (t: string) => void }) {
+  const [open, setOpen] = useState(false);
   return (
     <div>
       <label className="block text-[11px] font-display font-black text-baddia-ink/70 uppercase tracking-wider mb-1.5 pl-1">
         {label}
       </label>
-      <input
-        type="time"
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="w-full inline-flex items-center justify-between gap-2 rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-pearl px-3 py-2.5 text-[14px] font-display font-black text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-[2px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+      >
+        <span className="tabular-nums">{formatTime12(value)}</span>
+        <Clock size={14} className="text-baddia-ink/50" />
+      </button>
+      <TimePickerSheet
+        open={open}
+        onClose={() => setOpen(false)}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-pearl px-3 py-2.5 text-[14px] font-display font-black text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] focus:outline-none focus:bg-white"
+        onChange={onChange}
+        title={label}
+        emoji="🌙"
       />
     </div>
   );
