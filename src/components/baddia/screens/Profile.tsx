@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
+import { PolaroidUploader } from "../PolaroidUploader";
 import {
   History, Sparkles, Shield, LogOut, ChevronRight, LayoutGrid,
   Settings, Trash2, Cake, Hash, Lock, ArrowRight, Bookmark, Bell, Globe,
-  User as UserIcon, Heart, Gift, Star, Phone, Check,
+  User as UserIcon, Heart, Gift, Star, Phone, Check, Camera,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -19,9 +20,10 @@ const SIGN_GLYPH: Record<string, string> = {
 const MONTHS = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 
 export function Profile() {
-  const { user, openPaywall, go, triggerCelebration } = useBaddia();
+  const { user, setUser, openPaywall, go, triggerCelebration } = useBaddia();
   const [tapCount, setTapCount] = useState(0);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [polaroidOpen, setPolaroidOpen] = useState(false);
 
   const isPro = user.plan !== "Free";
   const glyph = SIGN_GLYPH[user.sign] ?? "✦";
@@ -132,9 +134,33 @@ export function Profile() {
           <div className="relative rounded-3xl border-[2.5px] border-baddia-ink p-5 pt-8 shadow-[5px_6px_0_hsl(260_16%_15%)] overflow-hidden gradient-bg-baddia text-white">
             <span className="absolute -top-3 -right-2 text-7xl opacity-20 select-none">{glyph}</span>
             <div className="relative flex items-center gap-4">
-              <div className="shrink-0 w-20 h-20 rounded-2xl border-[2.5px] border-white/70 bg-white/20 backdrop-blur-md flex items-center justify-center font-display font-black text-white text-[40px] shadow-[3px_3px_0_rgba(0,0,0,0.25)]">
-                {user.name.charAt(0).toUpperCase()}
-              </div>
+              <button
+                onClick={() => setPolaroidOpen(true)}
+                aria-label="Editar foto de perfil"
+                className="shrink-0 relative bg-white p-1.5 pb-6 shadow-[3px_4px_0_rgba(0,0,0,0.35)] border border-baddia-ink/10 -rotate-[6deg] active:translate-y-[1px] transition-transform"
+                style={{ width: 78 }}
+              >
+                <span className="absolute -top-1.5 left-2 w-8 h-2.5 bg-baddia-yellow/80 border border-baddia-ink/10 rotate-[-8deg]" />
+                <div className="relative w-[64px] h-[64px] bg-baddia-ink/90 overflow-hidden">
+                  {user.avatar ? (
+                    <>
+                      <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                      <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.4)]" />
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-white/80 gap-0.5">
+                      <Camera size={20} />
+                      <span className="text-[7px] font-display font-black uppercase tracking-wider">tocá</span>
+                    </div>
+                  )}
+                </div>
+                <p
+                  className="absolute bottom-1 left-1.5 right-1.5 text-center text-baddia-ink text-[10px] leading-none truncate"
+                  style={{ fontFamily: "'Caveat', cursive", fontWeight: 700 }}
+                >
+                  {user.avatarCaption || user.name.toLowerCase()}
+                </p>
+              </button>
               <div className="min-w-0 flex-1">
                 <p className="font-display font-black text-[22px] leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
                   {user.name}
@@ -309,6 +335,21 @@ export function Profile() {
         </div>
       )}
 
+      <PolaroidUploader
+        open={polaroidOpen}
+        onClose={() => setPolaroidOpen(false)}
+        initial={user.avatar}
+        initialCaption={user.avatarCaption}
+        defaultCaption={user.name?.toLowerCase() || "mi glow ✧"}
+        onSave={(avatar, caption) => {
+          setUser({ avatar, avatarCaption: caption });
+          toast.success("Postal guardada ✨📷");
+        }}
+        onRemove={() => {
+          setUser({ avatar: undefined, avatarCaption: undefined });
+          toast("Foto eliminada");
+        }}
+      />
     </div>
   );
 }
