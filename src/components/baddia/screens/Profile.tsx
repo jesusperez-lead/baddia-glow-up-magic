@@ -19,9 +19,10 @@ const SIGN_GLYPH: Record<string, string> = {
 const MONTHS = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 
 export function Profile() {
-  const { user, openPaywall, go, triggerCelebration } = useBaddia();
+  const { user, setUser, openPaywall, go, triggerCelebration } = useBaddia();
   const [tapCount, setTapCount] = useState(0);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [polaroidOpen, setPolaroidOpen] = useState(false);
 
   const isPro = user.plan !== "Free";
   const glyph = SIGN_GLYPH[user.sign] ?? "✦";
