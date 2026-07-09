@@ -335,6 +335,21 @@ export function Profile() {
         </div>
       )}
 
+      <PolaroidUploader
+        open={polaroidOpen}
+        onClose={() => setPolaroidOpen(false)}
+        initial={user.avatar}
+        initialCaption={user.avatarCaption}
+        defaultCaption={user.name?.toLowerCase() || "mi glow ✧"}
+        onSave={(avatar, caption) => {
+          setUser({ avatar, avatarCaption: caption });
+          toast.success("Postal guardada ✨📷");
+        }}
+        onRemove={() => {
+          setUser({ avatar: undefined, avatarCaption: undefined });
+          toast("Foto eliminada");
+        }}
+      />
     </div>
   );
 }
