@@ -48,6 +48,8 @@ export interface BaddiaUser {
   savedQuotes: string[];
   phone?: string;
   phoneVerified?: boolean;
+  avatar?: string;
+  avatarCaption?: string;
 }
 
 interface Ctx {
