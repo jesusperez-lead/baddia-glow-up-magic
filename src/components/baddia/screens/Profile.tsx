@@ -230,8 +230,10 @@ export function Profile() {
         <SectionLabel emoji="🕰️" text="actividad" />
         <RowGroup
           rows={[
-            { icon: History,    label: "Historial de lecturas", caption: "Tus tiradas guardadas",
+            { icon: History,    label: "Diario energético", caption: "Tu timeline visual día a día",
               onClick: () => go("history"), tint: "bg-baddia-bubble" },
+            { icon: CalendarDays, label: "Baddia Calendar", caption: "Tu mes cósmico completo",
+              onClick: () => go("calendar"), tint: "bg-baddia-lavender/40" },
             { icon: LayoutGrid, label: "Widgets para iPhone",   caption: "Glow Score en tu home",
               onClick: () => go("widgets"), tint: "bg-baddia-mint" },
           ]}
