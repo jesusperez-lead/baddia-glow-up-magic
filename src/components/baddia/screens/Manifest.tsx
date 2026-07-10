@@ -512,6 +512,30 @@ export function Manifest() {
         {/* STREAK (home) */}
         {step === "streak" && data && (
           <>
+            {/* Guided-audio banner */}
+            <section className="relative rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-pink-50 via-white to-purple-50 p-4 pt-5 shadow-[3px_3px_0_hsl(260_16%_15%)] overflow-hidden">
+              <span className="absolute -top-14 -left-10 w-40 h-40 rounded-full bg-baddia-bubble/30 blur-3xl animate-pulse-slow pointer-events-none" />
+              <span className="absolute -bottom-16 -right-10 w-44 h-44 rounded-full bg-baddia-lavender/30 blur-3xl animate-pulse-slow pointer-events-none" style={{ animationDelay: "1.3s" }} />
+              <div className="relative flex items-center gap-3">
+                <div className="relative w-14 h-14 flex items-center justify-center shrink-0">
+                  <span className="absolute inset-0 rounded-full bg-baddia-hot/20 animate-breathe" />
+                  <span className="relative text-3xl">🌙</span>
+                </div>
+                <div className="min-w-0">
+                  <p className="font-display font-black text-[17px] text-baddia-ink leading-tight">Manifestemos juntas ✨</p>
+                  <p className="text-[12px] text-baddia-ink/70 font-semibold italic mt-0.5">Tómate unos segundos para conectar con tu energía de hoy.</p>
+                </div>
+              </div>
+              {data.reminderEnabled && data.reminderTime && (
+                <div className="relative mt-3 rounded-2xl border-2 border-baddia-ink bg-baddia-yellow/60 px-3 py-2 shadow-[2px_2px_0_hsl(260_16%_15%)] flex items-center gap-2">
+                  <Bell size={13} className="text-baddia-ink shrink-0" />
+                  <p className="text-[11.5px] font-display font-black text-baddia-ink leading-tight">
+                    Te recordaremos mañana a las {data.reminderTime} ✨
+                  </p>
+                </div>
+              )}
+            </section>
+
             {/* HERO Streak card — irresistible polaroid */}
             <section className="relative rounded-[28px] border-[2.5px] border-baddia-ink bg-white p-4 pt-5 shadow-[6px_8px_0_hsl(260_16%_15%)] overflow-hidden">
               {/* tape strips */}
