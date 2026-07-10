@@ -822,6 +822,123 @@ export function Manifest() {
           name={user.name}
         />
       )}
+
+      {/* Reminder ask sheet */}
+      {reminderSheet === "ask" && (
+        <ReminderAskSheet
+          onSameTime={acceptSameTime}
+          onPick={() => setReminderSheet("picker")}
+          onLater={() => setReminderSheet(null)}
+          onClose={() => setReminderSheet(null)}
+        />
+      )}
+
+      {/* Time picker for custom hour */}
+      <TimePickerSheet
+        open={reminderSheet === "picker"}
+        onClose={() => setReminderSheet("ask")}
+        value={data?.reminderTime ?? "09:00"}
+        onChange={(t) => saveReminder(t)}
+        title="¿A qué hora te aviso?"
+        emoji="💗"
+      />
+
+      {/* Permission denied sheet */}
+      {reminderSheet === "denied" && (
+        <PermissionDeniedSheet onClose={() => setReminderSheet(null)} onGoSettings={() => { setReminderSheet(null); go("notifications"); }} />
+      )}
+
+      {/* Reminder saved micro-feedback */}
+      {reminderJustSaved && (
+        <div className="fixed inset-x-0 top-6 z-[80] flex justify-center pointer-events-none animate-pop-in-cute">
+          <div className="px-4 py-2 rounded-full border-[2.5px] border-baddia-ink bg-baddia-yellow shadow-[3px_3px_0_hsl(260_16%_15%)] font-display font-black text-[12px] text-baddia-ink flex items-center gap-1.5">
+            <Bell size={14} /> Recordatorio guardado ✨
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─────────── Reminder ask sheet ─────────── */
+function ReminderAskSheet({
+  onSameTime, onPick, onLater, onClose,
+}: { onSameTime: () => void; onPick: () => void; onLater: () => void; onClose: () => void }) {
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+  return (
+    <div className="fixed inset-0 z-[70] flex items-end justify-center animate-fade-in" onClick={onClose}>
+      <div className="absolute inset-0 bg-baddia-ink/50 backdrop-blur-sm" />
+      <div
+        className="relative w-full max-w-md rounded-t-[32px] bg-white border-t-[3px] border-x-[3px] border-baddia-ink p-6 pb-8 shadow-[0_-6px_24px_-8px_rgba(0,0,0,0.3)] animate-slide-up"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <span className="mx-auto block w-12 h-1.5 rounded-full bg-baddia-ink/20 mb-4" />
+        <div className="text-center">
+          <span className="inline-block text-4xl animate-float-cute">💗</span>
+          <h3 className="font-display font-black text-[22px] text-baddia-ink mt-2 leading-tight">
+            ¿Quieres manifestar <br /><span className="gradient-text">mañana conmigo?</span>
+          </h3>
+          <p className="text-[13px] text-baddia-ink/70 font-semibold mt-2 px-2 leading-relaxed">
+            Puedo recordarte mañana a esta misma hora para mantener tu racha ✨
+          </p>
+        </div>
+        <div className="mt-6 space-y-2.5">
+          <button
+            onClick={onSameTime}
+            className="w-full rounded-2xl border-[2.5px] border-baddia-ink bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white font-display font-black py-3.5 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5 inline-flex items-center justify-center gap-2"
+          >
+            <Bell size={16} /> Sí, mañana a las {hh}:{mm}
+          </button>
+          <button
+            onClick={onPick}
+            className="w-full rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-yellow text-baddia-ink font-display font-black py-3 text-[13px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5 inline-flex items-center justify-center gap-2"
+          >
+            <Clock size={15} /> Elegir otra hora
+          </button>
+          <button
+            onClick={onLater}
+            className="w-full rounded-2xl border-2 border-baddia-ink bg-white text-baddia-ink/70 font-display font-black py-2.5 text-[12px] shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-0.5"
+          >
+            Ahora no
+          </button>
+        </div>
+        <p className="text-center text-[10.5px] text-baddia-ink/50 font-semibold mt-3">
+          Puedes activarlo después desde Ajustes.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function PermissionDeniedSheet({ onClose, onGoSettings }: { onClose: () => void; onGoSettings: () => void }) {
+  return (
+    <div className="fixed inset-0 z-[70] flex items-end justify-center animate-fade-in" onClick={onClose}>
+      <div className="absolute inset-0 bg-baddia-ink/50 backdrop-blur-sm" />
+      <div
+        className="relative w-full max-w-md rounded-t-[32px] bg-white border-t-[3px] border-x-[3px] border-baddia-ink p-6 pb-8 animate-slide-up"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <span className="mx-auto block w-12 h-1.5 rounded-full bg-baddia-ink/20 mb-4" />
+        <div className="text-center">
+          <span className="inline-block text-4xl">🔕</span>
+          <h3 className="font-display font-black text-[19px] text-baddia-ink mt-2 leading-tight">
+            No pudimos activar el recordatorio
+          </h3>
+          <p className="text-[13px] text-baddia-ink/70 font-semibold mt-2 px-2">
+            Las notificaciones están desactivadas para Baddia.
+          </p>
+        </div>
+        <div className="mt-5 grid grid-cols-2 gap-2">
+          <button onClick={onClose} className="rounded-2xl border-2 border-baddia-ink bg-white text-baddia-ink font-display font-black py-3 text-[12px] shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-0.5">
+            Ahora no
+          </button>
+          <button onClick={onGoSettings} className="rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-hot text-white font-display font-black py-3 text-[12px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5">
+            Ir a ajustes
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
