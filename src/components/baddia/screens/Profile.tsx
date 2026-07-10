@@ -5,7 +5,7 @@ import { PolaroidUploader } from "../PolaroidUploader";
 import {
   History, Sparkles, Shield, LogOut, ChevronRight, LayoutGrid,
   Settings, Trash2, Cake, Hash, Lock, ArrowRight, Bookmark, Bell, Globe,
-  User as UserIcon, Heart, Gift, Star, Phone, Check, Camera,
+  User as UserIcon, Heart, Gift, Star, Phone, Check, Camera, CalendarDays,
 } from "lucide-react";
 import { toast } from "sonner";
 
