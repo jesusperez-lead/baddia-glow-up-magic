@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import { toast } from "sonner";
-import { ArrowLeft, Heart, Share2, RotateCcw, Sparkles, X } from "lucide-react";
+import { ArrowLeft, Heart, Share2, RotateCcw, Sparkles, X, Lock } from "lucide-react";
 
 /* ============================================================
    COMO ATRAER · mazo tarot mágico
