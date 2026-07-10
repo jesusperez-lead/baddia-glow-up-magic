@@ -487,7 +487,7 @@ export function Attract() {
           <div className="grid grid-cols-2 gap-3.5">
             {visible.map((card, i) => {
               const cat = CATEGORIES.find((c) => c.id === card.category)!;
-              const locked = !isPro && filter !== "favs" && i >= FREE_LIMIT;
+              const locked = !isPro && filter !== "favs" && card.category !== "amor";
               return (
                 <TarotCard
                   key={`${card.id}-${revealKey}`}
@@ -504,7 +504,7 @@ export function Attract() {
           </div>
         )}
 
-        {!isPro && filter !== "favs" && visible.length > FREE_LIMIT && (
+        {!isPro && filter !== "favs" && visible.some((c) => c.category !== "amor") && (
           <button
             onClick={openPaywall}
             className="mt-5 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-baddia-yellow border-[2.5px] border-baddia-ink shadow-[3px_4px_0_hsl(260_16%_15%)] text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink active:translate-y-0.5"
