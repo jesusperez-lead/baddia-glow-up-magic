@@ -67,11 +67,13 @@ export function Onboarding() {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [selected, setSelected] = useState<Interest[]>([]);
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [tone, setTone] = useState<Tone | null>(null);
   const [msgIdx, setMsgIdx] = useState(0);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (step !== 4) return;
+    if (step !== TOTAL_STEPS) return;
     setProgress(0);
     const msgInt = setInterval(() => setMsgIdx((i) => (i + 1) % LOADING_MESSAGES.length), 900);
     const progInt = setInterval(() => setProgress((p) => Math.min(100, p + 2.5)), 100);
