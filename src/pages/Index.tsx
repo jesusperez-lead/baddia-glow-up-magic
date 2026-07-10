@@ -33,6 +33,7 @@ import { ShareCards } from "@/components/baddia/screens/ShareCards";
 import { Bestie } from "@/components/baddia/screens/Bestie";
 import { PhoneVerify } from "@/components/baddia/screens/PhoneVerify";
 import { Attract } from "@/components/baddia/screens/Attract";
+import { Calendar } from "@/components/baddia/screens/Calendar";
 
 const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile", "outfit", "lucky", "tarot", "astral", "compat", "aura", "manifest"]);
 
