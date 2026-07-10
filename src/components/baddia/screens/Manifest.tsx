@@ -206,6 +206,8 @@ export function Manifest() {
   const [intentionIdx, setIntentionIdx] = useState(0);
   const [editing, setEditing] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [reminderSheet, setReminderSheet] = useState<null | "ask" | "picker" | "denied">(null);
+  const [reminderJustSaved, setReminderJustSaved] = useState(false);
 
   useEffect(() => { saveManifest(data); }, [data]);
 
