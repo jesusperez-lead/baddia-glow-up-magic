@@ -487,7 +487,7 @@ export function Attract() {
           <div className="grid grid-cols-2 gap-3.5">
             {visible.map((card, i) => {
               const cat = CATEGORIES.find((c) => c.id === card.category)!;
-              const locked = !isPro && filter !== "favs" && i >= FREE_LIMIT;
+              const locked = !isPro && filter !== "favs" && card.category !== "amor";
               return (
                 <TarotCard
                   key={`${card.id}-${revealKey}`}
