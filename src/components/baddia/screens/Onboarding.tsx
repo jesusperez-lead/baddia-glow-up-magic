@@ -306,13 +306,122 @@ export function Onboarding() {
               disabled={selected.length === 0}
               onClick={() => { setUser({ interests: selected }); setStep(4); }}
             >
+              Continuar
+            </PrimaryButton>
+          </div>
+        )}
+
+        {/* STEP 4 — Goals */}
+        {step === 4 && (
+          <div className="flex-1 flex flex-col animate-slide-up">
+            <div className="inline-flex self-start mb-3">
+              <span className="rounded-full bg-baddia-lavender text-white px-3 py-1.5 text-xs font-display font-bold shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2">
+                💫 tu intención
+              </span>
+            </div>
+            <h2 className="font-display font-bold text-[30px] leading-[1.1] text-baddia-ink">
+              ¿Qué buscas en <span className="gradient-text">Baddia</span>?
+            </h2>
+            <p className="text-[14px] text-baddia-ink/60 mt-2 font-semibold">
+              Elige todas las que te vibren. 💖
+            </p>
+
+            <div className="mt-5 flex flex-col gap-2.5">
+              {GOALS.map((g, idx) => {
+                const active = goals.includes(g.label);
+                return (
+                  <button
+                    key={g.label}
+                    onClick={() =>
+                      setGoals((s) =>
+                        s.includes(g.label) ? s.filter((x) => x !== g.label) : [...s, g.label]
+                      )
+                    }
+                    style={{ animationDelay: `${idx * 40}ms` }}
+                    className={`animate-pop-in relative rounded-2xl px-4 py-3.5 text-left font-display font-bold text-[15px] transition-all active:scale-[0.98] border-2 flex items-center gap-3 ${
+                      active
+                        ? `${g.color} ${g.text} border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)]`
+                        : "bg-white text-baddia-ink border-baddia-ink/10 hover:border-baddia-ink/30"
+                    }`}
+                  >
+                    <span className="text-2xl leading-none">{g.emoji}</span>
+                    <span className="flex-1">{g.label}</span>
+                    {active && (
+                      <span className="w-6 h-6 rounded-full bg-baddia-yellow border-2 border-baddia-ink flex items-center justify-center text-[10px] font-bold text-baddia-ink">
+                        ✓
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex-1" />
+            <PrimaryButton
+              disabled={goals.length === 0}
+              onClick={() => { setUser({ goals }); setStep(5); }}
+            >
+              Continuar
+            </PrimaryButton>
+          </div>
+        )}
+
+        {/* STEP 5 — Tone */}
+        {step === 5 && (
+          <div className="flex-1 flex flex-col animate-slide-up">
+            <div className="inline-flex self-start mb-3">
+              <span className="rounded-full bg-baddia-yellow border-2 border-baddia-ink px-3 py-1.5 text-xs font-display font-bold text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2">
+                🎙️ tu tono
+              </span>
+            </div>
+            <h2 className="font-display font-bold text-[30px] leading-[1.1] text-baddia-ink">
+              ¿Qué <span className="gradient-text">tono</span> prefieres?
+            </h2>
+            <p className="text-[14px] text-baddia-ink/60 mt-2 font-semibold">
+              Así te hablará Baddia todos los días. ✨
+            </p>
+
+            <div className="mt-5 flex flex-col gap-2.5">
+              {TONES.map((t, idx) => {
+                const active = tone === t.label;
+                return (
+                  <button
+                    key={t.label}
+                    onClick={() => setTone(t.label)}
+                    style={{ animationDelay: `${idx * 40}ms` }}
+                    className={`animate-pop-in relative rounded-2xl px-4 py-3.5 text-left transition-all active:scale-[0.98] border-2 flex items-center gap-3 ${
+                      active
+                        ? `${t.color} ${t.text} border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)]`
+                        : "bg-white text-baddia-ink border-baddia-ink/10 hover:border-baddia-ink/30"
+                    }`}
+                  >
+                    <span className="text-2xl leading-none">{t.emoji}</span>
+                    <div className="flex-1">
+                      <p className="font-display font-bold text-[15px] leading-tight">{t.label}</p>
+                      <p className={`text-[12px] font-semibold ${active ? "opacity-90" : "text-baddia-ink/50"}`}>{t.desc}</p>
+                    </div>
+                    {active && (
+                      <span className="w-6 h-6 rounded-full bg-baddia-yellow border-2 border-baddia-ink flex items-center justify-center text-[10px] font-bold text-baddia-ink">
+                        ✓
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex-1" />
+            <PrimaryButton
+              disabled={!tone}
+              onClick={() => { if (tone) setUser({ tone }); setStep(6); }}
+            >
               Crear mi perfil cósmico
             </PrimaryButton>
           </div>
         )}
 
-        {/* STEP 4 — Loading */}
-        {step === 4 && (
+        {/* STEP 6 — Loading */}
+        {step === TOTAL_STEPS && (
           <div className="flex-1 flex flex-col items-center justify-center text-center animate-fade-in">
             <div className="relative w-[260px] h-[260px] mb-8">
               {/* Outer glow halos */}
