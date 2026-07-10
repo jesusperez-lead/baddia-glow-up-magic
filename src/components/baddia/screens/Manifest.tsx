@@ -84,6 +84,8 @@ type Manifest = {
   createdAt: string;
   daysCompleted: string[];
   remind?: boolean;
+  reminderTime?: string | null;  // "HH:MM"
+  reminderEnabled?: boolean;
 };
 
 const KEY = "baddia.manifest.v1";
