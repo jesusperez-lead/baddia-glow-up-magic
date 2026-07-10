@@ -264,9 +264,17 @@ export function Manifest() {
   const completeToday = () => {
     if (!data) return;
     const t = todayKey();
-    if (data.daysCompleted.includes(t)) return;
+    if (data.daysCompleted.includes(t)) {
+      setStep("celebrate");
+      return;
+    }
     setData({ ...data, daysCompleted: [...data.daysCompleted, t] });
     setStep("celebrate");
+    // Trigger reminder sheet after a short delay only if not configured
+    setTimeout(() => {
+      const hasReminder = data.reminderEnabled && data.reminderTime;
+      if (!hasReminder) setReminderSheet("ask");
+    }, 900);
   };
 
   const resetAll = () => {
@@ -274,11 +282,45 @@ export function Manifest() {
     setStep("intro");
   };
 
+  const requestNotifPermission = async (): Promise<boolean> => {
+    if (typeof Notification === "undefined") return true; // no API — treat as ok
+    if (Notification.permission === "granted") return true;
+    if (Notification.permission === "denied") return false;
+    try {
+      const p = await Notification.requestPermission();
+      return p === "granted";
+    } catch { return false; }
+  };
+
+  const saveReminder = async (time: string) => {
+    if (!data) return;
+    const granted = await requestNotifPermission();
+    if (!granted && typeof Notification !== "undefined" && Notification.permission === "denied") {
+      setReminderSheet("denied");
+      return;
+    }
+    setData({ ...data, reminderTime: time, reminderEnabled: true, remind: true });
+    setReminderSheet(null);
+    setReminderJustSaved(true);
+    toast.success(`Listo, mañana te aviso a las ${time} ✨`);
+    setTimeout(() => setReminderJustSaved(false), 2600);
+  };
+
+  const acceptSameTime = () => {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    saveReminder(`${hh}:${mm}`);
+  };
+
   const toggleRemind = () => {
     if (!data) return;
-    const next = !data.remind;
-    setData({ ...data, remind: next });
-    toast.success(next ? "Te recordaremos cada día a las 9:00 ✨" : "Recordatorio desactivado");
+    if (!data.reminderEnabled) {
+      setReminderSheet("ask");
+    } else {
+      setData({ ...data, remind: false, reminderEnabled: false, reminderTime: null });
+      toast.success("Recordatorio desactivado");
+    }
   };
 
   /* ─────────── Render ─────────── */
