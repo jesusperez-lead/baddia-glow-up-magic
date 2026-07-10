@@ -2,108 +2,135 @@ import { useMemo, useState } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import {
-  ArrowLeft, Search, Bookmark, Share2, Trash2, ChevronRight, History as HistoryIcon,
+  ArrowLeft, Bookmark, Share2, ChevronRight, CalendarDays, Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 
-type ReadingType = "daily" | "tarot" | "love" | "palm" | "aura" | "compat" | "lucky";
+type EntryKind =
+  | "glow" | "quote" | "tarot" | "manifest"
+  | "dream" | "crush" | "outfit" | "aura" | "mood";
 
-interface ReadingEntry {
+interface TimelineEntry {
   id: string;
-  type: ReadingType;
+  kind: EntryKind;
   title: string;
-  snippet: string;
-  date: Date;
+  detail: string;
+  hour: string;
   saved?: boolean;
 }
 
-const TYPE_META: Record<ReadingType, { label: string; emoji: string; tint: string; chip: string }> = {
-  daily:  { label: "Diaria",        emoji: "🌙", tint: "bg-baddia-bubble",   chip: "bg-baddia-lavender text-white" },
-  tarot:  { label: "Tarot",         emoji: "🔮", tint: "bg-baddia-soft",     chip: "bg-baddia-purple text-white" },
-  love:   { label: "Crush Energy",  emoji: "💘", tint: "bg-baddia-hot/15",   chip: "bg-baddia-hot text-white" },
-  palm:   { label: "Palm Reading",  emoji: "🖐️", tint: "bg-baddia-mint/20",  chip: "bg-baddia-mint text-white" },
-  aura:   { label: "Aura Check",    emoji: "🌈", tint: "bg-baddia-yellow/40",chip: "bg-baddia-gold text-baddia-ink" },
-  compat: { label: "Compatibilidad",emoji: "💞", tint: "bg-baddia-bubble/60",chip: "bg-baddia-hot text-white" },
-  lucky:  { label: "Lucky",         emoji: "🍀", tint: "bg-baddia-lime/40",  chip: "bg-baddia-mint text-white" },
+interface DayGroup {
+  key: string;
+  label: string;    // "Lunes"
+  dateLabel: string; // "14 oct"
+  mood: { emoji: string; label: string; tint: string };
+  glow: number;
+  color: { name: string; from: string; to: string };
+  entries: TimelineEntry[];
+}
+
+const KIND_META: Record<EntryKind, { emoji: string; label: string; tint: string; chip: string }> = {
+  glow:     { emoji: "✨", label: "Glow Score",   tint: "bg-baddia-yellow/40", chip: "bg-baddia-gold text-baddia-ink" },
+  quote:    { emoji: "💬", label: "Frase",        tint: "bg-baddia-bubble",    chip: "bg-baddia-hot text-white" },
+  tarot:    { emoji: "🔮", label: "Tarot",        tint: "bg-baddia-soft",      chip: "bg-baddia-purple text-white" },
+  manifest: { emoji: "🌙", label: "Manifestación", tint: "bg-baddia-lavender/25", chip: "bg-baddia-lavender text-white" },
+  dream:    { emoji: "☁️", label: "Sueño",        tint: "bg-baddia-soft/70",   chip: "bg-baddia-purple text-white" },
+  crush:    { emoji: "💘", label: "Crush Energy", tint: "bg-baddia-hot/15",    chip: "bg-baddia-hot text-white" },
+  outfit:   { emoji: "👗", label: "Outfit",       tint: "bg-baddia-mint/25",   chip: "bg-baddia-mint text-white" },
+  aura:     { emoji: "🌈", label: "Aura",         tint: "bg-baddia-bubble/60", chip: "bg-baddia-hot text-white" },
+  mood:     { emoji: "🫧", label: "Mood",         tint: "bg-baddia-lime/40",   chip: "bg-baddia-mint text-white" },
 };
 
-const FILTERS: ({ key: "all" | ReadingType; label: string; emoji: string })[] = [
-  { key: "all",    label: "Todas",      emoji: "✨" },
-  { key: "daily",  label: "Diaria",     emoji: "🌙" },
-  { key: "tarot",  label: "Tarot",      emoji: "🔮" },
-  { key: "love",   label: "Crush",      emoji: "💘" },
-  { key: "palm",   label: "Palm",       emoji: "🖐️" },
-  { key: "aura",   label: "Aura",       emoji: "🌈" },
-  { key: "compat", label: "Compat",     emoji: "💞" },
-  { key: "lucky",  label: "Lucky",      emoji: "🍀" },
+const WEEK: DayGroup[] = [
+  {
+    key: "lun", label: "Lunes", dateLabel: "14 oct",
+    mood: { emoji: "🥺", label: "Confundida", tint: "bg-baddia-soft" },
+    glow: 82,
+    color: { name: "Rosa cuarzo", from: "#FFD6E6", to: "#FF7AC8" },
+    entries: [
+      { id: "l1", kind: "glow",  title: "Glow Score 82%", detail: "Magnética pero un poquito dispersa hoy ✨", hour: "08:12" },
+      { id: "l2", kind: "mood",  title: "Mood: confundida", detail: "Registraste tu energía por la mañana 🫧", hour: "08:30" },
+      { id: "l3", kind: "quote", title: "Frase guardada", detail: "\"Lo que es para mí, llega sin forzar.\"", hour: "10:04", saved: true },
+    ],
+  },
+  {
+    key: "mar", label: "Martes", dateLabel: "15 oct",
+    mood: { emoji: "🌟", label: "Inspirada", tint: "bg-baddia-yellow/50" },
+    glow: 91,
+    color: { name: "Dorado glow", from: "#FFF0B8", to: "#FFD12E" },
+    entries: [
+      { id: "m1", kind: "tarot",    title: "La Estrella", detail: "Fe, esperanza y renacimiento emocional 🌟", hour: "09:20", saved: true },
+      { id: "m2", kind: "manifest", title: "Manifestación completada", detail: "\"El dinero llega a mí con claridad y orden.\"", hour: "21:00" },
+    ],
+  },
+  {
+    key: "mie", label: "Miércoles", dateLabel: "16 oct",
+    mood: { emoji: "☁️", label: "Soñadora", tint: "bg-baddia-lavender/25" },
+    glow: 74,
+    color: { name: "Violeta luna", from: "#D9C8FF", to: "#6E47E8" },
+    entries: [
+      { id: "w1", kind: "dream", title: "Interpretación de sueño", detail: "Soñaste con agua clara: emociones limpiándose 💧", hour: "07:45" },
+      { id: "w2", kind: "quote", title: "Frase guardada", detail: "\"Mi intuición nunca me miente.\"", hour: "13:10", saved: true },
+    ],
+  },
+  {
+    key: "jue", label: "Jueves", dateLabel: "17 oct",
+    mood: { emoji: "💘", label: "Enamorada", tint: "bg-baddia-hot/15" },
+    glow: 88,
+    color: { name: "Bubble pink", from: "#FFE0F0", to: "#FF7AC8" },
+    entries: [
+      { id: "j1", kind: "crush", title: "Crush Energy · Mateo", detail: "87% de compatibilidad · te está pensando 💘", hour: "16:22" },
+      { id: "j2", kind: "mood",  title: "Mood: mariposas", detail: "Energía alta y magnética toda la tarde", hour: "18:00" },
+    ],
+  },
+  {
+    key: "vie", label: "Viernes", dateLabel: "18 oct",
+    mood: { emoji: "🔥", label: "Bad", tint: "bg-baddia-hot/20" },
+    glow: 95,
+    color: { name: "Coral baddie", from: "#FFD0C2", to: "#FF6B6B" },
+    entries: [
+      { id: "v1", kind: "outfit",   title: "Outfit Check", detail: "Coral + dorado · magnetismo activado 🔥", hour: "19:30" },
+      { id: "v2", kind: "manifest", title: "Manifestación completada", detail: "\"Atraigo noches divertidas y bonitas.\"", hour: "22:00" },
+    ],
+  },
 ];
 
-const MOCK: ReadingEntry[] = [
-  { id: "1", type: "daily",  title: "Tu lectura diaria",
-    snippet: "Hoy el universo te empuja a confiar en tu intuición. Un mensaje llega antes del atardecer ✨",
-    date: new Date(Date.now() - 1000 * 60 * 60 * 2), saved: true },
-  { id: "2", type: "tarot",  title: "Tirada de 3 cartas",
-    snippet: "La Estrella · El Sol · As de Copas. Renacimiento emocional en camino 🌟",
-    date: new Date(Date.now() - 1000 * 60 * 60 * 20) },
-  { id: "3", type: "love",   title: "Crush Energy de Mateo",
-    snippet: "Compatibilidad 87% · Está pensando en ti más de lo que admite 💘",
-    date: new Date(Date.now() - 1000 * 60 * 60 * 26), saved: true },
-  { id: "4", type: "palm",   title: "Lectura de tu mano izq.",
-    snippet: "Línea de la vida fuerte · Línea del corazón curva: amor intenso pero protegido 🖐️",
-    date: new Date(Date.now() - 1000 * 60 * 60 * 48) },
-  { id: "5", type: "aura",   title: "Aura Check",
-    snippet: "Tu aura es rosa-violeta · Energía creativa y magnética hoy 🌈",
-    date: new Date(Date.now() - 1000 * 60 * 60 * 72) },
-  { id: "6", type: "compat", title: "Tú + Valentina",
-    snippet: "Libra + Géminis = 94% besties cósmicas 💞",
-    date: new Date(Date.now() - 1000 * 60 * 60 * 96) },
-  { id: "7", type: "lucky",  title: "Tus números de la suerte",
-    snippet: "11 · 23 · 7 — Color del día: dorado ✨",
-    date: new Date(Date.now() - 1000 * 60 * 60 * 120) },
-  { id: "8", type: "daily",  title: "Tu lectura diaria",
-    snippet: "Día de cerrar ciclos. Suelta lo que ya no vibra contigo 🌙",
-    date: new Date(Date.now() - 1000 * 60 * 60 * 144) },
+const FILTERS: { key: "all" | EntryKind; label: string; emoji: string }[] = [
+  { key: "all",      label: "Todo",       emoji: "✨" },
+  { key: "glow",     label: "Glow",       emoji: "✨" },
+  { key: "quote",    label: "Frases",     emoji: "💬" },
+  { key: "tarot",    label: "Tarot",      emoji: "🔮" },
+  { key: "manifest", label: "Manifest",   emoji: "🌙" },
+  { key: "dream",    label: "Sueños",     emoji: "☁️" },
+  { key: "crush",    label: "Crush",      emoji: "💘" },
+  { key: "outfit",   label: "Outfit",     emoji: "👗" },
+  { key: "mood",     label: "Mood",       emoji: "🫧" },
 ];
-
-function formatDate(d: Date) {
-  const diff = (Date.now() - d.getTime()) / 1000;
-  if (diff < 60) return "ahora";
-  if (diff < 3600) return `hace ${Math.floor(diff / 60)} min`;
-  if (diff < 86400) return `hace ${Math.floor(diff / 3600)} h`;
-  if (diff < 86400 * 7) return `hace ${Math.floor(diff / 86400)} d`;
-  return d.toLocaleDateString("es", { day: "numeric", month: "short" });
-}
 
 export function History() {
   const { go } = useBaddia();
-  const [filter, setFilter] = useState<"all" | ReadingType>("all");
-  const [query, setQuery] = useState("");
-  const [items, setItems] = useState<ReadingEntry[]>(MOCK);
+  const [filter, setFilter] = useState<"all" | EntryKind>("all");
+  const [days, setDays] = useState<DayGroup[]>(WEEK);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return items.filter((it) => {
-      if (filter !== "all" && it.type !== filter) return false;
-      if (!q) return true;
-      return (
-        it.title.toLowerCase().includes(q) ||
-        it.snippet.toLowerCase().includes(q) ||
-        TYPE_META[it.type].label.toLowerCase().includes(q)
-      );
-    });
-  }, [items, filter, query]);
+    if (filter === "all") return days;
+    return days
+      .map((d) => ({ ...d, entries: d.entries.filter((e) => e.kind === filter) }))
+      .filter((d) => d.entries.length > 0);
+  }, [days, filter]);
 
-  const toggleSave = (id: string) => {
-    setItems((prev) => prev.map((it) => (it.id === id ? { ...it, saved: !it.saved } : it)));
-  };
-  const removeItem = (id: string) => {
-    setItems((prev) => prev.filter((it) => it.id !== id));
-    toast.success("Lectura eliminada del historial");
+  const toggleSave = (dayKey: string, id: string) => {
+    setDays((prev) =>
+      prev.map((d) =>
+        d.key !== dayKey
+          ? d
+          : { ...d, entries: d.entries.map((e) => (e.id === id ? { ...e, saved: !e.saved } : e)) }
+      )
+    );
   };
 
   return (
     <div className="relative min-h-full bg-white pb-16 overflow-hidden">
-      {/* blobs */}
       <div className="blob -top-20 -left-16 w-72 h-72 bg-baddia-bubble/25" />
       <div className="blob top-72 -right-16 w-60 h-60 bg-baddia-soft/30" style={{ animationDelay: "3s" }} />
       <SparklesDeco />
@@ -119,29 +146,25 @@ export function History() {
         </button>
         <div className="flex-1 min-w-0">
           <span className="inline-block rounded-full bg-baddia-lavender text-white border-2 border-baddia-ink px-2.5 py-1 text-[10px] font-display font-bold shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-2 mb-1.5 uppercase tracking-wider">
-            ✦ tu historial
+            ✦ tu diario energético
           </span>
           <h1 className="font-display font-black text-[22px] text-baddia-ink leading-tight">
-            Tus <span className="gradient-text">lecturas</span> ✨
+            Tu <span className="gradient-text">timeline</span> ✨
           </h1>
         </div>
+        <button
+          onClick={() => go("calendar")}
+          aria-label="Abrir calendario"
+          className="w-10 h-10 rounded-2xl bg-baddia-lavender text-white border-2 border-baddia-ink flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-[2px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+        >
+          <CalendarDays size={16} />
+        </button>
       </header>
 
       <div className="relative z-10 px-5 space-y-4">
         <p className="text-[13px] text-baddia-ink/70 font-medium leading-snug">
-          Revisa, guarda o elimina tus lecturas pasadas. Tu glow tiene memoria 💫
+          Un diario visual de tu energía: mood, tarot, frases y manifestaciones día a día 💫
         </p>
-
-        {/* Buscador */}
-        <div className="relative">
-          <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-baddia-ink/50" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Buscar en tu historial…"
-            className="w-full pl-10 pr-4 py-3 rounded-full bg-white border-[2.5px] border-baddia-ink text-[13px] font-semibold text-baddia-ink placeholder:text-baddia-ink/40 shadow-[4px_4px_0_hsl(260_16%_15%)] focus:outline-none focus:translate-y-[1px] focus:shadow-[3px_3px_0_hsl(260_16%_15%)] transition-all"
-          />
-        </div>
 
         {/* Filtros */}
         <div className="-mx-5 px-5 overflow-x-auto scrollbar-hide">
@@ -165,99 +188,143 @@ export function History() {
           </div>
         </div>
 
-        {/* Lista */}
-        <div className="space-y-3 pt-1">
-          {filtered.length === 0 ? (
-            <EmptyState />
-          ) : (
-            filtered.map((entry, i) => (
-              <ReadingCard
-                key={entry.id}
-                entry={entry}
-                onToggleSave={() => toggleSave(entry.id)}
-                onRemove={() => removeItem(entry.id)}
-                onOpen={() => toast(`Abriendo ${TYPE_META[entry.type].label} ✨`)}
-                style={{ animationDelay: `${i * 40}ms` }}
-              />
-            ))
-          )}
-        </div>
+        {/* Timeline */}
+        {filtered.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <div className="relative pl-6 pt-2">
+            {/* Línea vertical del timeline */}
+            <div className="absolute left-[10px] top-3 bottom-3 w-[3px] bg-gradient-to-b from-baddia-bubble via-baddia-lavender to-baddia-soft rounded-full" />
+
+            <div className="space-y-5">
+              {filtered.map((day, di) => (
+                <DayBlock
+                  key={day.key}
+                  day={day}
+                  onToggleSave={(id) => toggleSave(day.key, id)}
+                  style={{ animationDelay: `${di * 60}ms` }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-function ReadingCard({
-  entry, onToggleSave, onRemove, onOpen, style,
+function DayBlock({
+  day, onToggleSave, style,
 }: {
-  entry: ReadingEntry;
-  onToggleSave: () => void;
-  onRemove: () => void;
-  onOpen: () => void;
+  day: DayGroup;
+  onToggleSave: (id: string) => void;
   style?: React.CSSProperties;
 }) {
-  const meta = TYPE_META[entry.type];
   return (
-    <div
-      className="relative animate-slide-up"
-      style={style}
-    >
-      <div className="absolute -top-3 left-4 z-10">
-        <span className={`inline-flex items-center gap-1 rounded-full ${meta.chip} border-2 border-baddia-ink px-2.5 py-1 text-[10px] font-display font-black uppercase tracking-wider shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-1`}>
+    <div className="relative animate-slide-up" style={style}>
+      {/* Dot del timeline */}
+      <div
+        className="absolute -left-[22px] top-1 w-5 h-5 rounded-full border-2 border-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)]"
+        style={{ background: `linear-gradient(135deg, ${day.color.from}, ${day.color.to})` }}
+      />
+
+      {/* Header del día */}
+      <div className="flex items-center gap-2 mb-2">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-white text-baddia-ink border-2 border-baddia-ink px-2.5 py-1 text-[11px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] uppercase tracking-wider">
+          {day.label} <span className="text-baddia-ink/50">·</span> {day.dateLabel}
+        </span>
+        <span className={`inline-flex items-center gap-1 rounded-full ${day.mood.tint} text-baddia-ink border-2 border-baddia-ink px-2.5 py-1 text-[10px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-1`}>
+          {day.mood.emoji} {day.mood.label}
+        </span>
+      </div>
+
+      {/* Card de resumen del día */}
+      <div className="rounded-2xl bg-white border-[2.5px] border-baddia-ink p-3 mb-3 shadow-[4px_5px_0_hsl(260_16%_15%)] flex items-center gap-3">
+        <div
+          className="w-10 h-10 rounded-2xl border-2 border-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] flex items-center justify-center text-white font-display font-black text-[13px]"
+          style={{ background: `linear-gradient(135deg, ${day.color.from}, ${day.color.to})` }}
+        >
+          {day.glow}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="font-display font-black text-baddia-ink text-[12px] leading-tight">
+            Glow del día · {day.glow}%
+          </p>
+          <p className="text-[11px] text-baddia-ink/70 font-medium leading-snug truncate">
+            Color: {day.color.name}
+          </p>
+        </div>
+        <Sparkles size={16} className="text-baddia-lavender shrink-0" />
+      </div>
+
+      {/* Entradas */}
+      <div className="space-y-2.5">
+        {day.entries.map((e) => (
+          <EntryCard key={e.id} entry={e} onToggleSave={() => onToggleSave(e.id)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function EntryCard({
+  entry, onToggleSave,
+}: {
+  entry: TimelineEntry;
+  onToggleSave: () => void;
+}) {
+  const meta = KIND_META[entry.kind];
+  return (
+    <div className="relative">
+      <div className="absolute -top-2.5 left-3 z-10">
+        <span className={`inline-flex items-center gap-1 rounded-full ${meta.chip} border-2 border-baddia-ink px-2 py-0.5 text-[9px] font-display font-black uppercase tracking-wider shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-1`}>
           {meta.emoji} {meta.label}
         </span>
       </div>
-      <div className="rounded-3xl bg-white border-[2.5px] border-baddia-ink p-4 pt-6 shadow-[5px_6px_0_hsl(260_16%_15%)]">
-        <button onClick={onOpen} className="w-full text-left flex items-start gap-3">
-          <span className={`shrink-0 w-12 h-12 rounded-2xl border-2 border-baddia-ink ${meta.tint} flex items-center justify-center text-2xl shadow-[2px_2px_0_hsl(260_16%_15%)]`}>
+      <div className="rounded-2xl bg-white border-2 border-baddia-ink p-3 pt-4 pl-3 shadow-[3px_4px_0_hsl(260_16%_15%)]">
+        <div className="flex items-start gap-2.5">
+          <span className={`shrink-0 w-9 h-9 rounded-xl border-2 border-baddia-ink ${meta.tint} flex items-center justify-center text-lg shadow-[2px_2px_0_hsl(260_16%_15%)]`}>
             {meta.emoji}
           </span>
           <div className="flex-1 min-w-0">
-            <p className="font-display font-black text-baddia-ink text-[14px] leading-tight">
-              {entry.title}
-            </p>
-            <p className="text-[12px] text-baddia-ink/70 font-medium mt-1 line-clamp-2 leading-snug">
-              {entry.snippet}
-            </p>
-            <p className="text-[10px] text-baddia-ink/45 font-display font-bold uppercase tracking-wider mt-1.5">
-              {formatDate(entry.date)}
+            <div className="flex items-center justify-between gap-2">
+              <p className="font-display font-black text-baddia-ink text-[13px] leading-tight truncate">
+                {entry.title}
+              </p>
+              <span className="text-[10px] text-baddia-ink/45 font-display font-bold uppercase tracking-wider shrink-0">
+                {entry.hour}
+              </span>
+            </div>
+            <p className="text-[12px] text-baddia-ink/75 font-medium mt-0.5 line-clamp-2 leading-snug">
+              {entry.detail}
             </p>
           </div>
-        </button>
-
-        {/* Acciones */}
-        <div className="mt-3 pt-3 border-t-2 border-baddia-ink/10 flex items-center gap-2">
+        </div>
+        <div className="mt-2.5 flex items-center gap-2">
           <button
             onClick={onToggleSave}
-            className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-full border-2 border-baddia-ink py-2 text-[11px] font-display font-black transition-all active:translate-y-[1px] ${
+            className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-full border-2 border-baddia-ink py-1.5 text-[10px] font-display font-black transition-all active:translate-y-[1px] ${
               entry.saved
                 ? "bg-baddia-gold text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)]"
                 : "bg-white text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%/0.55)]"
             }`}
           >
-            <Bookmark size={12} className={entry.saved ? "fill-baddia-ink" : ""} />
+            <Bookmark size={11} className={entry.saved ? "fill-baddia-ink" : ""} />
             {entry.saved ? "Guardada" : "Guardar"}
           </button>
           <button
             onClick={() => toast("Compartiendo tu glow ✨")}
-            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-baddia-lavender text-white border-2 border-baddia-ink px-3 py-2 text-[11px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-[1px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
+            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-baddia-lavender text-white border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-[1px] active:shadow-[1px_1px_0_hsl(260_16%_15%)] transition-all"
             aria-label="Compartir"
           >
-            <Share2 size={12} />
+            <Share2 size={11} />
           </button>
           <button
-            onClick={onRemove}
-            className="inline-flex items-center justify-center rounded-full bg-white text-baddia-hot border-2 border-baddia-ink px-3 py-2 text-[11px] font-display font-black shadow-[2px_2px_0_hsl(260_16%_15%/0.55)] active:translate-y-[1px] active:shadow-[1px_1px_0_hsl(260_16%_15%/0.55)] transition-all"
-            aria-label="Eliminar"
+            onClick={() => toast(`Abriendo ${meta.label} ✨`)}
+            className="inline-flex items-center justify-center rounded-full bg-baddia-ink text-white border-2 border-baddia-ink px-2.5 py-1.5 shadow-[2px_2px_0_hsl(260_16%_15%/0.4)] active:translate-y-[1px] transition-all"
+            aria-label="Abrir"
           >
-            <Trash2 size={12} />
-          </button>
-          <button
-            onClick={onOpen}
-            className="inline-flex items-center justify-center rounded-full bg-baddia-ink text-white border-2 border-baddia-ink px-3 py-2 shadow-[2px_2px_0_hsl(260_16%_15%/0.4)] active:translate-y-[1px] transition-all"
-            aria-label="Abrir lectura"
-          >
-            <ChevronRight size={14} />
+            <ChevronRight size={12} />
           </button>
         </div>
       </div>
@@ -267,18 +334,13 @@ function ReadingCard({
 
 function EmptyState() {
   return (
-    <div className="relative mt-2">
-      <div className="rounded-3xl bg-gradient-pearl border-[2.5px] border-baddia-ink p-7 text-center shadow-[5px_6px_0_hsl(260_16%_15%)]">
-        <div className="mx-auto w-16 h-16 rounded-full border-2 border-baddia-ink bg-white flex items-center justify-center shadow-[3px_3px_0_hsl(260_16%_15%)] mb-3">
-          <HistoryIcon size={26} className="text-baddia-ink" />
-        </div>
-        <p className="font-display font-black text-baddia-ink text-[16px]">
-          Aún no hay nada por aquí ✨
-        </p>
-        <p className="text-[12px] text-baddia-ink/70 font-medium mt-1.5 leading-snug">
-          Cuando hagas lecturas, tu historial vivirá aquí, listo para revivir tu glow.
-        </p>
-      </div>
+    <div className="rounded-3xl bg-gradient-pearl border-[2.5px] border-baddia-ink p-7 text-center shadow-[5px_6px_0_hsl(260_16%_15%)]">
+      <p className="font-display font-black text-baddia-ink text-[16px]">
+        Nada aquí todavía ✨
+      </p>
+      <p className="text-[12px] text-baddia-ink/70 font-medium mt-1.5 leading-snug">
+        Cuando registres tu energía, aparecerá en tu diario visual.
+      </p>
     </div>
   );
 }
