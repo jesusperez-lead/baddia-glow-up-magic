@@ -722,7 +722,7 @@ export function Manifest() {
                 {data.remind ? <Bell size={16}/> : <BellOff size={16}/>}
                 <span className="text-left">
                   <span className="block font-display font-black text-[11.5px] text-baddia-ink leading-tight">Recordatorio diario</span>
-                  <span className="block text-[9.5px] text-baddia-ink/65 font-semibold">{data.remind ? "Activo · 9:00am" : "Toca para activar"}</span>
+                  <span className="block text-[9.5px] text-baddia-ink/65 font-semibold">{data.reminderEnabled && data.reminderTime ? `Activo · ${data.reminderTime}` : "Toca para activar"}</span>
                 </span>
               </button>
               <button
