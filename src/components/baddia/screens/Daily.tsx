@@ -98,6 +98,36 @@ export function Daily() {
         <PhoneVerifyWidget />
         <ManifestCTA onOpen={() => go("manifest")} />
 
+        {/* Cómo atraer — mazo mágico */}
+        <button
+          onClick={() => go("attract")}
+          className="relative w-full text-left rounded-3xl border-[2.5px] border-baddia-ink p-4 shadow-[5px_6px_0_hsl(260_16%_15%)] overflow-hidden active:translate-y-0.5 transition"
+          style={{ background: "linear-gradient(135deg,#2E1A47 0%,#8B63F7 50%,#FF7AC8 100%)" }}
+        >
+          <span className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-baddia-yellow/40 blur-2xl" />
+          <span className="absolute top-2 right-3 text-baddia-yellow text-lg animate-sparkle-spin">✦</span>
+          <span className="absolute bottom-2 left-3 text-white/70 text-sm animate-sparkle-spin" style={{ animationDelay: "1s" }}>✧</span>
+          <div className="relative flex items-center gap-3">
+            <div className="relative w-14 h-14 rounded-2xl border-2 border-baddia-ink bg-white/95 flex items-center justify-center rotate-[-6deg] shadow-[3px_3px_0_hsl(48_100%_59%)] animate-float-cute">
+              <span className="text-2xl">🔮</span>
+              <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full border-2 border-baddia-ink bg-baddia-yellow text-baddia-ink text-[9px] font-display font-black flex items-center justify-center rotate-6">
+                ✨
+              </span>
+            </div>
+            <div className="flex-1 min-w-0 text-white">
+              <span className="inline-block px-2 py-0.5 rounded-full bg-white/25 border border-white/40 text-[9px] font-display font-black uppercase tracking-widest">
+                nuevo · mazo mágico
+              </span>
+              <p className="font-serif-display italic font-black text-[19px] leading-tight mt-1">
+                Cómo atraer ✦
+              </p>
+              <p className="text-[11px] font-medium italic opacity-90 mt-0.5">
+                Amor, dinero, paz, glow… toca una carta y revela tu mensaje.
+              </p>
+            </div>
+          </div>
+        </button>
+
         {/* ───── Section: tu energía ───── */}
         <SectionLabel emoji="✨" text="tu energía de hoy" />
 

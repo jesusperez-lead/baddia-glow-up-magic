@@ -30,7 +30,8 @@ export type Screen =
   | "dream"
   | "share"
   | "bestie"
-  | "phone-verify";
+  | "phone-verify"
+  | "attract";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
