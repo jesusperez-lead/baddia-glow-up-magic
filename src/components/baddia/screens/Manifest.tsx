@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import {
-  ArrowLeft, Sparkles, RotateCcw, Share2, Check, Pencil, Lock, Bell, BellOff, Trophy, Flame, Download,
+  ArrowLeft, Sparkles, RotateCcw, Share2, Check, Pencil, Lock, Bell, BellOff, Trophy, Flame, Download, Volume2, VolumeX,
 } from "lucide-react";
 import { toast } from "sonner";
 import * as htmlToImage from "html-to-image";
