@@ -1183,44 +1183,134 @@ function useRitualAudio(enabled: boolean) {
   return { bell, startPad, stopPad };
 }
 
-/* ─────────── Ritual sub-screen ─────────── */
+/* ─────────── Ritual sub-screen — guided audio + countdown ─────────── */
+type Phase = "guide" | "countdown" | "done";
+const DURATIONS: { label: string; s: number }[] = [
+  { label: "30s", s: 30 },
+  { label: "1 min", s: 60 },
+  { label: "3 min", s: 180 },
+];
+
 function Ritual({ category, intention, onDone }: { category: Category; intention: string; onDone: () => void }) {
-  const [s, setS] = useState<1|2|3>(1);
-  const [secs, setSecs] = useState(30);
+  const [phase, setPhase] = useState<Phase>("guide");
   const [audioOn, setAudioOn] = useState<boolean>(() => loadAudioPref());
-  const affirmation = useMemo(() => AFFIRMATIONS[Math.floor(Math.random()*AFFIRMATIONS.length)], []);
-  const action = useMemo(() => ACTIONS[category][Math.floor(Math.random()*ACTIONS[category].length)], [category]);
+  const [duration, setDuration] = useState(30);
+  const [secs, setSecs] = useState(30);
+  const [paused, setPaused] = useState(false);
+  const [guideLine, setGuideLine] = useState(0);
+  const [loadingVoice, setLoadingVoice] = useState(false);
+
   const { bell, startPad, stopPad } = useRitualAudio(audioOn);
+  const { speak, stop: stopVoice } = useBaddiaVoice();
+
+  const guideLines = useMemo(
+    () => [
+      "Vamos a manifestar hoy.",
+      "Respira profundo… suelta un poquito la tensión…",
+      `Repite conmigo esta frase: ${intention}`,
+      "Ahora repítela tú tres veces en voz baja, o repítela en tu mente. Yo te aviso cuando terminemos.",
+    ],
+    [intention]
+  );
+  const finalText = "Ya terminamos por hoy. Lo hiciste muy bien. Tu energía ya está en movimiento.";
 
   const toggleAudio = () => {
-    setAudioOn((v) => { const n = !v; saveAudioPref(n); return n; });
+    setAudioOn((v) => {
+      const n = !v;
+      saveAudioPref(n);
+      if (!n) stopVoice();
+      return n;
+    });
   };
 
-  // Bell + pad on entering step 2, bell on countdown end
+  // Guide sequence: speak each line, then move to countdown
   useEffect(() => {
-    if (s !== 2) return;
-    setSecs(30);
-    bell(528, 3.4);           // campana suave al iniciar
-    const padT = setTimeout(() => startPad(), 350);
-    const id = setInterval(() => setSecs((v) => (v <= 1 ? 0 : v - 1)), 1000);
-    return () => { clearInterval(id); clearTimeout(padT); stopPad(); };
+    if (phase !== "guide") return;
+    let cancelled = false;
+    (async () => {
+      setLoadingVoice(true);
+      for (let i = 0; i < guideLines.length; i++) {
+        if (cancelled) return;
+        setGuideLine(i);
+        setLoadingVoice(i === 0);
+        if (audioOn) {
+          await speak(guideLines[i]);
+        } else {
+          await new Promise((r) => setTimeout(r, 2600));
+        }
+        setLoadingVoice(false);
+      }
+      if (!cancelled) {
+        setPhase("countdown");
+      }
+    })();
+    return () => {
+      cancelled = true;
+      stopVoice();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [s]);
+  }, [phase, audioOn]);
+
+  // Countdown
+  useEffect(() => {
+    if (phase !== "countdown") return;
+    setSecs(duration);
+    bell(528, 3.4);
+    const padT = setTimeout(() => startPad(), 350);
+    return () => {
+      clearTimeout(padT);
+      stopPad();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, duration]);
 
   useEffect(() => {
-    if (s === 2 && secs === 0) {
+    if (phase !== "countdown" || paused) return;
+    if (secs <= 0) return;
+    const id = setInterval(() => setSecs((v) => Math.max(0, v - 1)), 1000);
+    return () => clearInterval(id);
+  }, [phase, paused, secs]);
+
+  useEffect(() => {
+    if (phase === "countdown" && secs === 0) {
       stopPad();
-      bell(660, 3.8);         // campana suave al terminar
+      bell(660, 3.8);
+      (async () => {
+        if (audioOn) await speak(finalText);
+        else await new Promise((r) => setTimeout(r, 1600));
+        setPhase("done");
+      })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [secs, s]);
+  }, [secs, phase]);
+
+  const cancel = () => {
+    stopPad();
+    stopVoice();
+    onDone(); // returns to streak via completeToday? No — we want cancel to NOT count. Use setStep back via prop? For now use a flag:
+  };
+
+  // ── Rendering ──────────────────────────────────────────────────
+  const progress = phase === "countdown" ? 1 - secs / duration : 0;
+  const R = 62;
+  const C = 2 * Math.PI * R;
 
   return (
     <div className="space-y-4">
+      {/* Controls bar */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex-1 flex items-center justify-center gap-2">
-          {[1,2,3].map((n) => (
-            <span key={n} className={`h-2 rounded-full border border-baddia-ink/40 transition-all ${n===s ? "w-10 bg-baddia-hot" : n<s ? "w-6 bg-baddia-bubble" : "w-6 bg-white"}`}/>
+          {(["guide", "countdown", "done"] as Phase[]).map((p, i) => (
+            <span
+              key={p}
+              className={`h-2 rounded-full border border-baddia-ink/40 transition-all ${
+                p === phase
+                  ? "w-10 bg-baddia-hot"
+                  : (phase === "countdown" && i === 0) || (phase === "done" && i < 2)
+                    ? "w-6 bg-baddia-bubble"
+                    : "w-6 bg-white"
+              }`}
+            />
           ))}
         </div>
         <button
@@ -1228,64 +1318,180 @@ function Ritual({ category, intention, onDone }: { category: Category; intention
           aria-label={audioOn ? "Silenciar audio" : "Activar audio"}
           className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full border-2 border-baddia-ink text-[10px] font-display font-black uppercase tracking-wider shadow-[2px_2px_0_hsl(260_16%_15%)] active:scale-95 transition-all ${audioOn ? "bg-baddia-bubble text-baddia-ink" : "bg-white text-baddia-ink/60"}`}
         >
-          {audioOn ? <Volume2 size={12}/> : <VolumeX size={12}/>}
+          {audioOn ? <Volume2 size={12} /> : <VolumeX size={12} />}
           {audioOn ? "sonido" : "mute"}
         </button>
       </div>
 
-      {s === 1 && (
-        <section className="rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-pink-50 to-purple-50 p-6 shadow-[4px_4px_0_hsl(260_16%_15%)] text-center">
-          <p className="text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink/60">Paso 1 · Afirmación</p>
-          <p className="mt-3 text-[14px] text-baddia-ink/70 font-semibold">Repite 3 veces, despacito:</p>
-          <p className="mt-3 font-display font-black text-[18px] text-baddia-ink leading-snug animate-pulse-slow">
-            "{affirmation}"
-          </p>
-          <button onClick={()=>{ bell(440, 2.2); setS(2); }} className="mt-5 w-full rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-hot text-white font-display font-black py-3 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:scale-95">
-            Ya la repetí ✨
-          </button>
-        </section>
-      )}
+      {/* GUIDE PHASE */}
+      {phase === "guide" && (
+        <section className="relative rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-pink-50 via-white to-purple-50 p-6 shadow-[4px_4px_0_hsl(260_16%_15%)] text-center overflow-hidden">
+          {/* aura */}
+          <span className="absolute -top-16 left-1/2 -translate-x-1/2 w-56 h-56 rounded-full bg-baddia-bubble/30 blur-3xl animate-pulse-slow pointer-events-none" />
+          <span className="absolute -bottom-14 -right-10 w-48 h-48 rounded-full bg-baddia-lavender/30 blur-3xl animate-pulse-slow pointer-events-none" style={{ animationDelay: "1.4s" }} />
 
-      {s === 2 && (
-        <section className="rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-baddia-lavender/40 to-baddia-bubble/30 p-6 shadow-[4px_4px_0_hsl(260_16%_15%)] text-center">
-          <p className="text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink/60">Paso 2 · Visualización</p>
-          <p className="mt-2 text-[13px] text-baddia-ink/70 font-semibold">Cierra los ojos e imagina que ya lo recibiste.</p>
-          <div className="relative mx-auto mt-5 w-40 h-40 flex items-center justify-center">
-            <span className="absolute inset-0 rounded-full bg-baddia-bubble/40 animate-ping" />
-            <span className="absolute inset-3 rounded-full bg-baddia-lavender/50 animate-pulse-slow" />
-            <div className="relative w-28 h-28 rounded-full border-[3px] border-baddia-ink bg-white flex items-center justify-center font-display font-black text-[28px] text-baddia-ink">
-              {secs}s
-            </div>
-            {audioOn && (
-              <span className="absolute -bottom-1 right-2 inline-flex items-center gap-0.5 text-baddia-ink/50">
-                <span className="w-1 h-2 bg-baddia-hot/70 rounded-full animate-pulse" style={{animationDelay:"0ms"}}/>
-                <span className="w-1 h-3 bg-baddia-lavender/70 rounded-full animate-pulse" style={{animationDelay:"180ms"}}/>
-                <span className="w-1 h-2 bg-baddia-bubble/80 rounded-full animate-pulse" style={{animationDelay:"360ms"}}/>
-              </span>
-            )}
+          <p className="relative text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink/60">Baddia te guía ✨</p>
+          <div className="relative mx-auto mt-4 w-24 h-24 flex items-center justify-center">
+            <span className="absolute inset-0 rounded-full bg-baddia-hot/20 animate-breathe" />
+            <span className="absolute inset-2 rounded-full bg-baddia-bubble/40 animate-pulse-slow" />
+            <span className="relative text-4xl animate-float-cute">🌙</span>
           </div>
-          <p className="mt-4 text-[12px] text-baddia-ink/70 font-semibold italic">"{intention}"</p>
+
+          <div className="relative mt-5 min-h-[92px] flex items-center justify-center px-2">
+            <p key={guideLine} className="font-display font-black text-[18px] text-baddia-ink leading-snug animate-pop-in-cute">
+              {loadingVoice && guideLine === 0 ? "…" : guideLines[guideLine]}
+            </p>
+          </div>
+
+          <div className="relative flex items-center justify-center gap-1.5 mt-4">
+            {guideLines.map((_, i) => (
+              <span key={i} className={`h-1.5 rounded-full transition-all ${i === guideLine ? "w-8 bg-baddia-hot" : i < guideLine ? "w-4 bg-baddia-bubble/70" : "w-4 bg-baddia-ink/15"}`} />
+            ))}
+          </div>
+
           <button
-            onClick={()=>setS(3)}
-            disabled={secs>0}
-            className="mt-5 w-full rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-ink text-white font-display font-black py-3 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:scale-95 disabled:opacity-50 disabled:active:scale-100"
+            onClick={() => { stopVoice(); setPhase("countdown"); }}
+            className="relative mt-5 w-full rounded-2xl border-2 border-baddia-ink bg-white text-baddia-ink font-display font-black py-2.5 text-[12px] shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-0.5"
           >
-            {secs>0 ? `Visualizando… ${secs}s` : "Ya lo visualicé"}
+            Saltar guía
           </button>
         </section>
       )}
 
-      {s === 3 && (
-        <section className="rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-baddia-yellow/60 to-baddia-mint/40 p-6 shadow-[4px_4px_0_hsl(260_16%_15%)] text-center">
-          <p className="text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink/60">Paso 3 · Acción alineada</p>
-          <span className="inline-block mt-3 text-3xl animate-wiggle">🌟</span>
-          <p className="mt-2 font-display font-black text-[17px] text-baddia-ink leading-snug">
-            {action}
+      {/* COUNTDOWN PHASE */}
+      {phase === "countdown" && (
+        <section className="relative rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-baddia-lavender/40 via-white to-baddia-bubble/30 p-6 shadow-[4px_4px_0_hsl(260_16%_15%)] text-center overflow-hidden">
+          {/* breathing aura */}
+          <span className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(circle at 50% 40%, hsl(325 100% 82% / 0.35), transparent 60%)", animation: "breathe 4.5s ease-in-out infinite" }} />
+
+          {/* duration chips */}
+          <div className="relative flex items-center justify-center gap-1.5 mb-4">
+            {DURATIONS.map((d) => (
+              <button
+                key={d.s}
+                onClick={() => { setDuration(d.s); setSecs(d.s); setPaused(false); }}
+                className={`px-2.5 py-1 rounded-full border-2 border-baddia-ink text-[10px] font-display font-black uppercase tracking-wider transition ${duration === d.s ? "bg-baddia-hot text-white shadow-[2px_2px_0_hsl(260_16%_15%)]" : "bg-white text-baddia-ink/70"}`}
+              >
+                {d.label}
+              </button>
+            ))}
+          </div>
+
+          {/* progress ring */}
+          <div className="relative mx-auto w-52 h-52 flex items-center justify-center">
+            <span className="absolute inset-0 rounded-full bg-gradient-to-br from-baddia-bubble/50 via-baddia-yellow/30 to-baddia-lavender/50 blur-2xl animate-pulse-slow" />
+            {/* floating sparkles */}
+            {["✨", "💗", "✦", "🌸", "✧"].map((s, i) => (
+              <span
+                key={i}
+                className="absolute text-lg animate-float-cute"
+                style={{
+                  left: `${10 + i * 18}%`,
+                  top: `${5 + (i % 2) * 80}%`,
+                  animationDelay: `${i * 0.35}s`,
+                  filter: "drop-shadow(0 0 8px rgba(255,255,255,0.7))",
+                }}
+              >
+                {s}
+              </span>
+            ))}
+            <svg viewBox="0 0 140 140" className="absolute inset-0 -rotate-90">
+              <circle cx="70" cy="70" r={R} fill="none" stroke="hsl(260 16% 15% / 0.08)" strokeWidth="8" />
+              <circle
+                cx="70" cy="70" r={R} fill="none" strokeLinecap="round" strokeWidth="8"
+                stroke="url(#ritG)"
+                strokeDasharray={C}
+                strokeDashoffset={C - C * progress}
+                style={{ transition: "stroke-dashoffset 1s linear", filter: "drop-shadow(0 0 10px hsl(325 100% 74% / 0.7))" }}
+              />
+              <defs>
+                <linearGradient id="ritG" x1="0" x2="1">
+                  <stop offset="0%" stopColor="hsl(338 90% 68%)" />
+                  <stop offset="50%" stopColor="hsl(325 100% 78%)" />
+                  <stop offset="100%" stopColor="hsl(256 90% 78%)" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div className="relative flex flex-col items-center justify-center">
+              <span className="font-display font-black text-[54px] leading-none text-baddia-ink drop-shadow-[0_2px_0_rgba(255,255,255,0.7)]">
+                {secs}
+              </span>
+              <span className="text-[10px] font-display font-black uppercase tracking-[0.2em] text-baddia-ink/60 mt-1">
+                {paused ? "en pausa" : "segundos"}
+              </span>
+            </div>
+          </div>
+
+          <p className="relative mt-4 text-[13px] font-display font-black italic text-baddia-ink/80">
+            Repite tu frase en tu mente…
           </p>
-          <p className="mt-2 text-[11px] text-baddia-ink/60 font-semibold">Una acción pequeña, pero alineada con tu intención.</p>
-          <button onClick={()=>{ bell(792, 3.2); onDone(); }} className="mt-5 w-full rounded-2xl border-[2.5px] border-baddia-ink bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white font-display font-black py-3 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:scale-95 inline-flex items-center justify-center gap-2">
-            <Check size={16}/> Lo hice — sumar a mi racha
-          </button>
+          <p className="relative text-[12px] text-baddia-ink/60 font-semibold italic mt-1 px-3 line-clamp-2">
+            "{intention}"
+          </p>
+
+          {/* controls */}
+          <div className="relative mt-5 grid grid-cols-2 gap-2">
+            <button
+              onClick={() => setPaused((p) => !p)}
+              className="rounded-2xl border-[2.5px] border-baddia-ink bg-white text-baddia-ink font-display font-black py-2.5 text-[12px] shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-0.5 inline-flex items-center justify-center gap-1.5"
+            >
+              {paused ? <><Play size={14} /> Continuar</> : <><Pause size={14} /> Pausar</>}
+            </button>
+            <button
+              onClick={() => { stopPad(); stopVoice(); onDone(); }}
+              className="rounded-2xl border-2 border-baddia-ink bg-baddia-ink/90 text-white font-display font-black py-2.5 text-[12px] shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-0.5 inline-flex items-center justify-center gap-1.5"
+            >
+              <Check size={14} /> Terminar ahora
+            </button>
+          </div>
+        </section>
+      )}
+
+      {/* DONE PHASE — mini celebration before parent celebrate step */}
+      {phase === "done" && (
+        <section className="relative rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-baddia-yellow/60 via-white to-baddia-bubble/40 p-6 shadow-[4px_4px_0_hsl(260_16%_15%)] text-center overflow-hidden">
+          {/* confetti */}
+          <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
+            {Array.from({ length: 22 }).map((_, i) => (
+              <span
+                key={i}
+                className="absolute text-lg"
+                style={{
+                  left: `${(i * 37) % 100}%`,
+                  top: "-10%",
+                  animation: `confetti 2.2s cubic-bezier(.4,.1,.5,1) ${i * 0.06}s forwards`,
+                  filter: "drop-shadow(0 0 4px rgba(255,255,255,0.7))",
+                }}
+              >
+                {["✨", "💗", "🌸", "💫", "✦"][i % 5]}
+              </span>
+            ))}
+          </div>
+          <div className="relative">
+            <div className="relative mx-auto w-24 h-24 flex items-center justify-center">
+              <span className="absolute inset-0 rounded-full bg-baddia-hot/30 animate-breathe" />
+              <span className="relative text-5xl animate-pop-in-cute">💗</span>
+            </div>
+            <p className="mt-3 font-display font-black text-[22px] text-baddia-ink leading-tight">
+              Manifestación completada ✨
+            </p>
+            <p className="text-[13px] text-baddia-ink/70 font-semibold italic mt-1">
+              Volviste a elegirte hoy.
+            </p>
+            <button
+              onClick={onDone}
+              className="mt-5 w-full rounded-2xl border-[2.5px] border-baddia-ink bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white font-display font-black py-3 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5 inline-flex items-center justify-center gap-2"
+            >
+              <Check size={16} /> Sumar a mi racha
+            </button>
+          </div>
+          <style>{`
+            @keyframes confetti {
+              0%   { transform: translateY(0) rotate(0); opacity: 0; }
+              15%  { opacity: 1; }
+              100% { transform: translateY(320px) rotate(360deg); opacity: 0; }
+            }
+          `}</style>
         </section>
       )}
     </div>
