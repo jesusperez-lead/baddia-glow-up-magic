@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import { toast } from "sonner";
-import { ArrowLeft, Heart, Share2, RotateCcw, Sparkles } from "lucide-react";
+import { ArrowLeft, Heart, Share2, RotateCcw, Sparkles, X } from "lucide-react";
 
 /* ============================================================
    COMO ATRAER · mazo tarot mágico
@@ -13,18 +13,18 @@ interface Category {
   id: CategoryId;
   label: string;
   emoji: string;
-  bg: string;           // sticker bg
-  frontGradient: string; // css gradient for card front
-  aura: string;         // soft aura color
-  glyph: string;        // decorative glyph
+  bg: string;
+  frontGradient: string;
+  aura: string;
+  glyph: string;
 }
 
 interface AttractCard {
   id: string;
   category: CategoryId;
-  intent: string;       // front title (categoría o intención)
-  advice: string;       // reverso: consejo práctico
-  mantra: string;       // reverso: frase de manifestación
+  intent: string;
+  advice: string;
+  mantra: string;
 }
 
 const CATEGORIES: Category[] = [
@@ -38,43 +38,36 @@ const CATEGORIES: Category[] = [
 ];
 
 const CARDS: AttractCard[] = [
-  // AMOR
   { id: "amor-1", category: "amor", intent: "Amor Recíproco", advice: "Deja de perseguir: enfoca tu energía en verte, tratarte y hablarte como quien mereces recibir.", mantra: "El amor que doy vuelve a mí multiplicado por 10." },
   { id: "amor-2", category: "amor", intent: "Amor Propio",   advice: "Un ritual diario de 3 minutos frente al espejo: mírate, sonríe y di 3 cosas que te encantan de ti.", mantra: "Yo soy mi primer gran amor y desde ahí lo atraigo todo." },
   { id: "amor-3", category: "amor", intent: "Corazón Abierto", advice: "Suelta a quien no eligió quedarse. El espacio vacío es donde tu próximo amor bonito respira.", mantra: "Suelto con amor lo que ya no es para mí." },
   { id: "amor-4", category: "amor", intent: "Química Real",  advice: "Habla y actúa como si el amor que quieres ya estuviera en camino. La certeza magnetiza más que la ansiedad.", mantra: "Estoy en frecuencia del amor sano, correspondido y bonito." },
 
-  // DINERO
   { id: "din-1", category: "dinero", intent: "Abundancia Diaria", advice: "Guarda una moneda o billete solo para atraer más. Verlo cada día le recuerda a tu mente que sí hay.", mantra: "El dinero fluye hacia mí con facilidad y en paz." },
   { id: "din-2", category: "dinero", intent: "Mentalidad Rica",   advice: "Deja de decir 'no puedo pagarlo'. Cámbialo por '¿cómo puedo generarlo?' — tu cerebro escucha todo.", mantra: "Soy un imán para el dinero y las oportunidades." },
   { id: "din-3", category: "dinero", intent: "Recibe Sin Culpa",  advice: "Acepta cumplidos, regalos y ayuda con un simple 'gracias'. Bloquear lo pequeño bloquea lo grande.", mantra: "Merezco recibir en abundancia sin culpa ni miedo." },
   { id: "din-4", category: "dinero", intent: "Ingresos Extra",    advice: "Escribe una cifra que quieres recibir este mes y pégala donde la veas al despertar.", mantra: "El dinero me encuentra en formas inesperadas y bonitas." },
 
-  // PAZ
   { id: "paz-1", category: "paz", intent: "Mente Calmada",   advice: "10 respiraciones profundas antes de responder cualquier mensaje que te acelere el pecho.", mantra: "Yo elijo la paz sobre la razón." },
   { id: "paz-2", category: "paz", intent: "Suelta el Control", advice: "Lo que no depende de ti, no es tuyo. Escríbelo, léelo y déjalo ir mentalmente.", mantra: "Confío en que todo se acomoda para mi bien." },
   { id: "paz-3", category: "paz", intent: "Espacios Sagrados", advice: "Limpia un rincón de tu cuarto hoy: energía estancada afuera, aire nuevo adentro.", mantra: "Mi hogar y mi mente están en paz." },
   { id: "paz-4", category: "paz", intent: "Sin Ruido",       advice: "Silencia 3 chats o cuentas que te bajen la vibra. La paz también es curaduría.", mantra: "Elijo aquello que me suma calma." },
 
-  // CONFIANZA
   { id: "conf-1", category: "confianza", intent: "Postura Poderosa", advice: "2 minutos al día parada con la espalda recta y el pecho abierto. Tu cuerpo le enseña seguridad a tu mente.", mantra: "Camino con la energía de quien sabe lo que vale." },
   { id: "conf-2", category: "confianza", intent: "Voz Firme",        advice: "Deja de pedir permiso con 'perdón por...'. Empieza tus frases directo: 'necesito', 'quiero', 'no gracias'.", mantra: "Mi voz importa y ocupa espacio con calma." },
   { id: "conf-3", category: "confianza", intent: "Cero Comparación", advice: "Cada vez que abras redes hoy, envía un cumplido a alguien. La abundancia mental empieza soltando envidia.", mantra: "Su brillo no apaga el mío, lo confirma." },
   { id: "conf-4", category: "confianza", intent: "Yo Primero",       advice: "Elige una cosa que llevas postergando por miedo y hazla hoy en versión mini. Pequeña acción = grande evidencia.", mantra: "Soy capaz, soy suficiente, soy imparable." },
 
-  // SUERTE
   { id: "suerte-1", category: "suerte", intent: "Lucky Girl Energy", advice: "Repite 'todo me sale bien' hoy, aunque no lo sientas. La suerte se entrena como músculo.", mantra: "La suerte me busca y me encuentra cada día." },
   { id: "suerte-2", category: "suerte", intent: "Ojos Abiertos",     advice: "La suerte suele venir disfrazada de coincidencia. Anota 3 señales bonitas que veas hoy.", mantra: "Reconozco las señales y las sigo con fe." },
   { id: "suerte-3", category: "suerte", intent: "Amuleto Personal",  advice: "Elige un objeto pequeño y decláralo tu amuleto. La intención lo carga, no el objeto.", mantra: "Voy protegida, guiada y bendecida." },
   { id: "suerte-4", category: "suerte", intent: "Sí Rotundo",        advice: "Di sí a un plan random esta semana. Las mejores rachas empiezan fuera del guion.", mantra: "Me pasan cosas increíbles todo el tiempo." },
 
-  // GLOW
   { id: "glow-1", category: "glow", intent: "Rutina Ritual",  advice: "5 minutos de skincare como si fueras la protagonista. El glow externo empieza tratándote como diosa.", mantra: "Cuidarme es mi acto de manifestación." },
   { id: "glow-2", category: "glow", intent: "Agua Sagrada",   advice: "Un vaso grande de agua antes del café. Piel, ojos y aura te lo pagan al instante.", mantra: "Cada gota me enciende por dentro." },
   { id: "glow-3", category: "glow", intent: "Luz Interior",   advice: "Sonríe sin motivo 3 veces hoy. El nervio facial engaña al cerebro y sube tu vibra.", mantra: "Brillo desde adentro y todos lo sienten." },
   { id: "glow-4", category: "glow", intent: "Aesthetic Life", advice: "Deja tu cama tendida y una vela cerca antes de salir. Vuelves a un espacio que te trata bonito.", mantra: "Mi vida es cute, aesthetic y en calma." },
 
-  // OPORTUNIDADES
   { id: "op-1", category: "oportunidades", intent: "Puertas Abiertas", advice: "Manda un mensaje a alguien con quien perdiste contacto. Las oportunidades viajan por conversaciones.", mantra: "Se abren puertas correctas en el momento correcto." },
   { id: "op-2", category: "oportunidades", intent: "Sí a lo Nuevo",    advice: "Anota una idea que te dé miedo/emoción. Guárdala visible. La vas a activar antes de fin de mes.", mantra: "Yo atraigo oportunidades alineadas con mi propósito." },
   { id: "op-3", category: "oportunidades", intent: "Networking Cute",  advice: "Comenta con intención en 3 cuentas que admires hoy. Presencia = memoria = oportunidad.", mantra: "Las personas correctas ya me están buscando." },
@@ -91,180 +84,212 @@ function writeFavs(ids: string[]) {
 }
 
 /* ============================================================
-   Card component with 3D flip
+   Reusable card faces (used in grid preview + fullscreen)
+   ============================================================ */
+function CardFaces({ card, cat, size = "sm" }: { card: AttractCard; cat: Category; size?: "sm" | "lg" }) {
+  const lg = size === "lg";
+  return (
+    <>
+      {/* FRONT */}
+      <div
+        className="absolute inset-0 rounded-[26px] border-[2.5px] border-baddia-ink overflow-hidden"
+        style={{
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
+          background: cat.frontGradient,
+          boxShadow: lg ? "8px 12px 0 hsl(260 16% 15%)" : "6px 8px 0 hsl(260 16% 15%)",
+        }}
+      >
+        <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full blur-3xl pointer-events-none animate-pulse-slow" style={{ background: cat.aura }} />
+        <div className="absolute -bottom-14 -right-10 w-52 h-52 rounded-full blur-3xl pointer-events-none animate-pulse-slow" style={{ background: cat.aura, animationDelay: "1.2s" }} />
+        <span className="absolute top-2 left-3 text-white/80 text-sm font-serif-display">✦</span>
+        <span className="absolute top-2 right-3 text-white/80 text-sm font-serif-display">✦</span>
+        <span className="absolute bottom-2 left-3 text-white/80 text-sm font-serif-display rotate-180">✦</span>
+        <span className="absolute bottom-2 right-3 text-white/80 text-sm font-serif-display rotate-180">✦</span>
+        <span className="absolute top-6 right-6 text-white/70 text-xs animate-sparkle-spin">✧</span>
+        <span className="absolute bottom-10 left-5 text-white/60 text-[10px] animate-sparkle-spin" style={{ animationDelay: "1s" }}>✧</span>
+
+        <div className={`relative z-10 h-full flex flex-col items-center justify-between text-white text-center ${lg ? "p-8" : "p-4"}`}>
+          <span className={`inline-flex items-center gap-1 rounded-full bg-white/25 backdrop-blur-sm border border-white/40 px-2 py-0.5 font-display font-black uppercase tracking-[0.2em] ${lg ? "text-[11px]" : "text-[9px]"}`}>
+            {cat.emoji} {cat.label}
+          </span>
+          <div className="flex flex-col items-center gap-3">
+            <div className={`relative rounded-full border-2 border-white/70 flex items-center justify-center animate-float-cute ${lg ? "w-32 h-32" : "w-20 h-20"}`}>
+              <div className="absolute inset-1 rounded-full border border-white/40" />
+              <span className={`drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)] ${lg ? "text-6xl" : "text-4xl"}`}>{cat.emoji}</span>
+            </div>
+            <p className={`font-serif-display italic font-black leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] px-2 ${lg ? "text-[38px]" : "text-[22px]"}`}>
+              {card.intent}
+            </p>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <span className={`text-white/80 font-display font-black tracking-[0.35em] uppercase ${lg ? "text-[11px]" : "text-[9px]"}`}>Cómo atraer</span>
+            <span className={`text-white/70 font-display font-bold tracking-[0.3em] uppercase ${lg ? "text-[10px]" : "text-[9px]"}`}>
+              Baddia · tap para revelar
+            </span>
+          </div>
+        </div>
+        <span className="absolute -top-6 -left-16 w-24 h-[220%] rotate-12 bg-white/25 blur-md animate-shimmer pointer-events-none" />
+      </div>
+
+      {/* BACK */}
+      <div
+        className="absolute inset-0 rounded-[26px] border-[2.5px] border-baddia-ink overflow-hidden bg-white"
+        style={{
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
+          transform: "rotateY(180deg)",
+          boxShadow: lg ? "8px 12px 0 hsl(260 16% 15%)" : "6px 8px 0 hsl(260 16% 15%)",
+        }}
+      >
+        <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{ backgroundImage: "radial-gradient(hsl(260 16% 15%) 1px, transparent 1px)", backgroundSize: "10px 10px" }} />
+        <div className="absolute -top-14 -right-10 w-40 h-40 rounded-full blur-3xl pointer-events-none" style={{ background: cat.aura }} />
+
+        <div className={`relative z-10 h-full flex flex-col text-baddia-ink ${lg ? "p-7" : "p-4"}`}>
+          <div className="flex items-center justify-between">
+            <span
+              className={`inline-flex items-center gap-1 rounded-full border-2 border-baddia-ink px-2 py-0.5 font-display font-black uppercase tracking-widest ${lg ? "text-[11px]" : "text-[9px]"}`}
+              style={{ background: cat.frontGradient, color: "#fff" }}
+            >
+              {cat.emoji} {cat.label}
+            </span>
+            <span className={`text-baddia-ink/40 font-display font-black tracking-widest uppercase ${lg ? "text-[11px]" : "text-[9px]"}`}>✦ carta</span>
+          </div>
+          <p className={`font-serif-display italic font-black leading-[1.05] mt-4 ${lg ? "text-[34px]" : "text-[19px]"}`}>{card.intent}</p>
+
+          <div className={`mt-3 flex-1 flex flex-col overflow-hidden ${lg ? "gap-5" : "gap-3"}`}>
+            <div>
+              <span className={`font-display font-black tracking-[0.25em] uppercase text-baddia-hot ${lg ? "text-[11px]" : "text-[8px]"}`}>Consejo</span>
+              <p className={`leading-snug font-medium text-baddia-ink/85 mt-1 ${lg ? "text-[16px]" : "text-[12px]"}`}>{card.advice}</p>
+            </div>
+            <div className={`rounded-2xl border-2 border-baddia-ink bg-baddia-yellow/25 shadow-[2px_2px_0_hsl(260_16%_15%)] ${lg ? "p-4" : "p-2.5"}`}>
+              <span className={`font-display font-black tracking-[0.25em] uppercase text-baddia-ink ${lg ? "text-[11px]" : "text-[8px]"}`}>Mantra</span>
+              <p className={`font-serif-display italic leading-snug text-baddia-ink mt-0.5 ${lg ? "text-[20px]" : "text-[13px]"}`}>"{card.mantra}"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ============================================================
+   Grid card (preview)
    ============================================================ */
 function TarotCard({
-  card,
-  cat,
-  index,
-  flipped,
-  onFlip,
-  isFav,
-  onToggleFav,
-  onShare,
-  dealDelayMs,
+  card, cat, index, onOpen, dealDelayMs,
 }: {
-  card: AttractCard;
-  cat: Category;
-  index: number;
-  flipped: boolean;
-  onFlip: () => void;
-  isFav: boolean;
-  onToggleFav: () => void;
-  onShare: () => void;
-  dealDelayMs: number;
+  card: AttractCard; cat: Category; index: number; onOpen: () => void; dealDelayMs: number;
 }) {
   return (
     <div
       className="attract-deal"
       style={{
         animationDelay: `${dealDelayMs}ms`,
-        // random small tilt per card (deterministic by index)
         ["--tilt" as any]: `${((index * 37) % 7) - 3}deg`,
       }}
     >
       <div className="[perspective:1400px] w-full">
         <button
-          onClick={onFlip}
-          className="attract-card-inner relative block w-full aspect-[3/4.6] rounded-[26px] transition-transform duration-[850ms] will-change-transform"
+          onClick={onOpen}
+          className="attract-card-inner relative block w-full aspect-[3/4.6] rounded-[26px] active:scale-[.97] transition-transform"
+          style={{ transformStyle: "preserve-3d" }}
+          aria-label={`Card ${card.intent}`}
+        >
+          <CardFaces card={card} cat={cat} size="sm" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Fullscreen expanded card (with flip)
+   ============================================================ */
+function ExpandedCard({
+  card, cat, isFav, onToggleFav, onShare, onClose,
+}: {
+  card: AttractCard; cat: Category; isFav: boolean; onToggleFav: () => void; onShare: () => void; onClose: () => void;
+}) {
+  const [flipped, setFlipped] = useState(false);
+
+  useEffect(() => {
+    // auto-flip shortly after opening for the magical reveal
+    const t = setTimeout(() => setFlipped(true), 380);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[90] flex items-center justify-center px-5 py-6 animate-fade-in">
+      {/* dim + baddia-tinted backdrop */}
+      <button
+        aria-label="Cerrar"
+        onClick={onClose}
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 30%, hsl(325 100% 88% / 0.85) 0%, hsl(256 100% 92% / 0.85) 45%, hsl(333 100% 96% / 0.9) 100%)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+        }}
+      />
+
+      {/* close */}
+      <button
+        onClick={onClose}
+        className="absolute top-5 right-5 z-20 w-10 h-10 rounded-full bg-white border-[2.5px] border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center justify-center active:translate-y-0.5"
+        aria-label="Cerrar"
+      >
+        <X size={18} strokeWidth={3} className="text-baddia-ink" />
+      </button>
+
+      {/* card */}
+      <div className="relative z-10 w-full max-w-[380px] [perspective:1600px] attract-expand-in">
+        <button
+          onClick={() => setFlipped((f) => !f)}
+          className="relative block w-full aspect-[3/4.6] rounded-[26px] transition-transform duration-[900ms] will-change-transform"
           style={{
             transformStyle: "preserve-3d",
             transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
           }}
-          aria-label={`Card ${card.intent}`}
+          aria-label="Voltear carta"
         >
-          {/* FRONT */}
-          <div
-            className="absolute inset-0 rounded-[26px] border-[2.5px] border-baddia-ink shadow-[6px_8px_0_hsl(260_16%_15%)] overflow-hidden"
-            style={{
-              backfaceVisibility: "hidden",
-              WebkitBackfaceVisibility: "hidden",
-              background: cat.frontGradient,
-            }}
-          >
-            {/* aura */}
-            <div
-              className="absolute -top-10 -left-10 w-48 h-48 rounded-full blur-3xl pointer-events-none animate-pulse-slow"
-              style={{ background: cat.aura }}
-            />
-            <div
-              className="absolute -bottom-14 -right-10 w-52 h-52 rounded-full blur-3xl pointer-events-none animate-pulse-slow"
-              style={{ background: cat.aura, animationDelay: "1.2s" }}
-            />
-            {/* filigree corners */}
-            <span className="absolute top-2 left-3 text-white/80 text-sm font-serif-display">✦</span>
-            <span className="absolute top-2 right-3 text-white/80 text-sm font-serif-display">✦</span>
-            <span className="absolute bottom-2 left-3 text-white/80 text-sm font-serif-display rotate-180">✦</span>
-            <span className="absolute bottom-2 right-3 text-white/80 text-sm font-serif-display rotate-180">✦</span>
-
-            {/* stars orbit */}
-            <span className="absolute top-6 right-6 text-white/70 text-xs animate-sparkle-spin">✧</span>
-            <span className="absolute bottom-10 left-5 text-white/60 text-[10px] animate-sparkle-spin" style={{ animationDelay: "1s" }}>✧</span>
-
-            <div className="relative z-10 h-full flex flex-col items-center justify-between p-4 text-white text-center">
-              <span className="inline-flex items-center gap-1 rounded-full bg-white/25 backdrop-blur-sm border border-white/40 px-2 py-0.5 text-[9px] font-display font-black uppercase tracking-[0.2em]">
-                {cat.emoji} {cat.label}
-              </span>
-
-              <div className="flex flex-col items-center gap-3">
-                <div className="relative w-20 h-20 rounded-full border-2 border-white/70 flex items-center justify-center animate-float-cute">
-                  <div className="absolute inset-1 rounded-full border border-white/40" />
-                  <span className="text-4xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]">{cat.emoji}</span>
-                </div>
-                <p className="font-serif-display italic font-black leading-tight text-[22px] drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] px-2">
-                  {card.intent}
-                </p>
-              </div>
-
-              <div className="flex flex-col items-center gap-1">
-                <span className="text-white/80 text-[9px] font-display font-black tracking-[0.35em] uppercase">
-                  Cómo atraer
-                </span>
-                <span className="text-white/70 text-[9px] font-display font-bold tracking-[0.3em] uppercase">
-                  Baddia · tap para revelar
-                </span>
-              </div>
-            </div>
-
-            {/* soft shine sweep */}
-            <span className="absolute -top-6 -left-16 w-24 h-[220%] rotate-12 bg-white/25 blur-md animate-shimmer pointer-events-none" />
-          </div>
-
-          {/* BACK */}
-          <div
-            className="absolute inset-0 rounded-[26px] border-[2.5px] border-baddia-ink shadow-[6px_8px_0_hsl(260_16%_15%)] overflow-hidden bg-white"
-            style={{
-              backfaceVisibility: "hidden",
-              WebkitBackfaceVisibility: "hidden",
-              transform: "rotateY(180deg)",
-            }}
-          >
-            <div
-              className="absolute inset-0 opacity-[0.08] pointer-events-none"
-              style={{
-                backgroundImage: "radial-gradient(hsl(260 16% 15%) 1px, transparent 1px)",
-                backgroundSize: "10px 10px",
-              }}
-            />
-            <div
-              className="absolute -top-14 -right-10 w-40 h-40 rounded-full blur-3xl pointer-events-none"
-              style={{ background: cat.aura }}
-            />
-
-            <div className="relative z-10 h-full flex flex-col p-4 text-baddia-ink">
-              <div className="flex items-center justify-between">
-                <span
-                  className="inline-flex items-center gap-1 rounded-full border-2 border-baddia-ink px-2 py-0.5 text-[9px] font-display font-black uppercase tracking-widest"
-                  style={{ background: cat.frontGradient, color: "#fff" }}
-                >
-                  {cat.emoji} {cat.label}
-                </span>
-                <span className="text-baddia-ink/40 text-[9px] font-display font-black tracking-widest uppercase">
-                  ✦ carta
-                </span>
-              </div>
-
-              <p className="font-serif-display italic font-black text-[19px] leading-[1.1] mt-3">
-                {card.intent}
-              </p>
-
-              <div className="mt-3 flex-1 flex flex-col gap-3 overflow-hidden">
-                <div>
-                  <span className="text-[8px] font-display font-black tracking-[0.25em] uppercase text-baddia-hot">
-                    Consejo
-                  </span>
-                  <p className="text-[12px] leading-snug font-medium text-baddia-ink/85 mt-1">
-                    {card.advice}
-                  </p>
-                </div>
-                <div className="rounded-2xl border-2 border-baddia-ink bg-baddia-yellow/25 p-2.5 shadow-[2px_2px_0_hsl(260_16%_15%)]">
-                  <span className="text-[8px] font-display font-black tracking-[0.25em] uppercase text-baddia-ink">
-                    Mantra
-                  </span>
-                  <p className="font-serif-display italic text-[13px] leading-snug text-baddia-ink mt-0.5">
-                    "{card.mantra}"
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between gap-2 mt-3">
-                <button
-                  onClick={(e) => { e.stopPropagation(); onToggleFav(); }}
-                  className={`flex-1 inline-flex items-center justify-center gap-1 rounded-full border-2 border-baddia-ink px-2 py-1.5 text-[10px] font-display font-black uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-[1px] transition ${isFav ? "bg-baddia-hot text-white" : "bg-white text-baddia-ink"}`}
-                >
-                  <Heart size={11} strokeWidth={3} fill={isFav ? "currentColor" : "none"} /> {isFav ? "Guardada" : "Guardar"}
-                </button>
-                <button
-                  onClick={(e) => { e.stopPropagation(); onShare(); }}
-                  className="inline-flex items-center justify-center gap-1 rounded-full border-2 border-baddia-ink bg-white px-2.5 py-1.5 text-[10px] font-display font-black uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-[1px] transition text-baddia-ink"
-                >
-                  <Share2 size={11} strokeWidth={3} /> Share
-                </button>
-              </div>
-            </div>
-          </div>
+          <CardFaces card={card} cat={cat} size="lg" />
         </button>
+
+        {/* actions */}
+        <div className="mt-5 flex items-center justify-center gap-2.5">
+          <button
+            onClick={onToggleFav}
+            className={`inline-flex items-center gap-1.5 rounded-full border-[2.5px] border-baddia-ink px-4 py-2.5 text-[11px] font-display font-black uppercase tracking-widest shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5 transition ${isFav ? "bg-baddia-hot text-white" : "bg-white text-baddia-ink"}`}
+          >
+            <Heart size={13} strokeWidth={3} fill={isFav ? "currentColor" : "none"} /> {isFav ? "Guardada" : "Guardar"}
+          </button>
+          <button
+            onClick={onShare}
+            className="inline-flex items-center gap-1.5 rounded-full border-[2.5px] border-baddia-ink bg-baddia-yellow text-baddia-ink px-4 py-2.5 text-[11px] font-display font-black uppercase tracking-widest shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5 transition"
+          >
+            <Share2 size={13} strokeWidth={3} /> Compartir
+          </button>
+          <button
+            onClick={() => setFlipped((f) => !f)}
+            className="inline-flex items-center gap-1.5 rounded-full border-[2.5px] border-baddia-ink bg-white text-baddia-ink px-4 py-2.5 text-[11px] font-display font-black uppercase tracking-widest shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5 transition"
+          >
+            <RotateCcw size={13} strokeWidth={3} /> Girar
+          </button>
+        </div>
       </div>
+
+      <style>{`
+        .attract-expand-in {
+          animation: attractExpandIn .55s cubic-bezier(.34,1.56,.64,1) both;
+        }
+        @keyframes attractExpandIn {
+          0%   { opacity: 0; transform: translateY(30px) scale(.6); }
+          60%  { opacity: 1; transform: translateY(-4px) scale(1.02); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      `}</style>
     </div>
   );
 }
@@ -291,7 +316,7 @@ function ShareSheet({ card, cat, onClose }: { card: AttractCard; cat: Category; 
   };
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center animate-fade-in" onClick={onClose}>
+    <div className="fixed inset-0 z-[95] flex items-end sm:items-center justify-center animate-fade-in" onClick={onClose}>
       <div className="absolute inset-0 bg-baddia-ink/50 backdrop-blur-sm" />
       <div
         className="relative w-full max-w-sm mx-3 mb-3 sm:mb-0 rounded-[28px] bg-white border-[2.5px] border-baddia-ink p-5 shadow-[6px_8px_0_hsl(260_16%_15%)] animate-slide-up"
@@ -304,27 +329,15 @@ function ShareSheet({ card, cat, onClose }: { card: AttractCard; cat: Category; 
           <span className="inline-flex items-center gap-1 rounded-full bg-white/25 border border-white/40 px-2 py-0.5 text-[9px] font-display font-black uppercase tracking-widest">
             {cat.emoji} atraer {cat.label.toLowerCase()}
           </span>
-          <p className="font-serif-display italic font-black text-[22px] leading-tight mt-3">
-            {card.intent}
-          </p>
-          <p className="font-serif-display italic text-[14px] leading-snug mt-3 opacity-95">
-            "{card.mantra}"
-          </p>
-          <span className="block text-[9px] font-display font-black uppercase tracking-[0.3em] mt-4 opacity-80">
-            baddia.app ✦
-          </span>
+          <p className="font-serif-display italic font-black text-[22px] leading-tight mt-3">{card.intent}</p>
+          <p className="font-serif-display italic text-[14px] leading-snug mt-3 opacity-95">"{card.mantra}"</p>
+          <span className="block text-[9px] font-display font-black uppercase tracking-[0.3em] mt-4 opacity-80">baddia.app ✦</span>
         </div>
         <div className="flex gap-2 mt-4">
-          <button onClick={copy} className="flex-1 btn-sticker rounded-full py-2.5 bg-white text-baddia-ink text-[11px] uppercase tracking-widest">
-            Copiar frase
-          </button>
-          <button onClick={doNativeShare} className="flex-1 btn-sticker rounded-full py-2.5 bg-baddia-hot text-white text-[11px] uppercase tracking-widest">
-            Compartir
-          </button>
+          <button onClick={copy} className="flex-1 btn-sticker rounded-full py-2.5 bg-white text-baddia-ink text-[11px] uppercase tracking-widest">Copiar frase</button>
+          <button onClick={doNativeShare} className="flex-1 btn-sticker rounded-full py-2.5 bg-baddia-hot text-white text-[11px] uppercase tracking-widest">Compartir</button>
         </div>
-        <button onClick={onClose} className="w-full mt-2 text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink/60">
-          cerrar
-        </button>
+        <button onClick={onClose} className="w-full mt-2 text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink/60">cerrar</button>
       </div>
     </div>
   );
@@ -336,17 +349,17 @@ function ShareSheet({ card, cat, onClose }: { card: AttractCard; cat: Category; 
 export function Attract() {
   const { go } = useBaddia();
   const [filter, setFilter] = useState<CategoryId | "all" | "favs">("all");
-  const [flipped, setFlipped] = useState<Record<string, boolean>>({});
   const [favs, setFavs] = useState<string[]>(() => readFavs());
   const [share, setShare] = useState<{ card: AttractCard; cat: Category } | null>(null);
-  const [revealKey, setRevealKey] = useState(0); // to re-trigger deal animation
-  const introRef = useRef<HTMLDivElement>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [revealKey, setRevealKey] = useState(0);
   const [introDone, setIntroDone] = useState(false);
 
   useEffect(() => {
+    setIntroDone(false);
     const t = setTimeout(() => setIntroDone(true), 1700);
     return () => clearTimeout(t);
-  }, []);
+  }, [revealKey]);
 
   const visible = useMemo(() => {
     if (filter === "all") return CARDS;
@@ -363,17 +376,28 @@ export function Attract() {
     });
   };
 
-  const flipOne = (id: string) => setFlipped((p) => ({ ...p, [id]: !p[id] }));
-
   const reshuffle = () => {
-    setFlipped({});
+    setExpandedId(null);
     setRevealKey((k) => k + 1);
   };
 
+  const expandedCard = expandedId ? CARDS.find((c) => c.id === expandedId) : null;
+  const expandedCat = expandedCard ? CATEGORIES.find((c) => c.id === expandedCard.category)! : null;
+
   return (
-    <div className="relative min-h-full pb-10 overflow-hidden" style={{ background: "linear-gradient(180deg,#1B1230 0%,#2E1A47 45%,#3D1E4E 100%)" }}>
-      {/* starfield */}
-      <StarField />
+    <div
+      className="relative min-h-full pb-10 overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(180deg, hsl(257 100% 94%) 0%, hsl(325 100% 92%) 40%, hsl(333 100% 97%) 70%, hsl(39 100% 95%) 100%)",
+      }}
+    >
+      {/* soft blobs */}
+      <div className="absolute -top-10 -left-16 w-72 h-72 rounded-full blur-3xl pointer-events-none" style={{ background: "hsl(325 100% 74% / 0.35)" }} />
+      <div className="absolute top-40 -right-20 w-80 h-80 rounded-full blur-3xl pointer-events-none" style={{ background: "hsl(256 90% 78% / 0.35)" }} />
+      <div className="absolute bottom-10 left-1/3 w-72 h-72 rounded-full blur-3xl pointer-events-none" style={{ background: "hsl(48 100% 70% / 0.3)" }} />
+
+      <SparkleField />
 
       {/* header */}
       <header className="relative z-10 px-5 pt-6 pb-3">
@@ -388,10 +412,10 @@ export function Attract() {
           🔮 mazo mágico
         </span>
 
-        <h1 className="font-serif-display italic font-black text-[46px] leading-[0.95] tracking-tight text-white mt-3 drop-shadow-[0_4px_20px_rgba(255,122,200,0.35)]">
-          Cómo <br />atraer <span className="inline-block animate-sparkle-spin">✦</span>
+        <h1 className="font-serif-display italic font-black text-[46px] leading-[0.95] tracking-tight text-baddia-ink mt-3">
+          Cómo <br />atraer <span className="inline-block animate-sparkle-spin gradient-text">✦</span>
         </h1>
-        <p className="text-[14px] font-medium italic text-white/75 mt-2">
+        <p className="text-[14px] font-medium italic text-baddia-ink/70 mt-2">
           Un mazo cargado de intención. Toca cualquier carta y revela su mensaje.
         </p>
 
@@ -409,7 +433,7 @@ export function Attract() {
 
       {/* Intro deck animation */}
       {!introDone && (
-        <div ref={introRef} className="fixed inset-0 z-[70] flex items-center justify-center pointer-events-none">
+        <div key={`intro-${revealKey}`} className="fixed inset-0 z-[70] flex items-center justify-center pointer-events-none">
           <div className="relative">
             {[0, 1, 2, 3, 4].map((i) => (
               <div
@@ -427,13 +451,13 @@ export function Attract() {
         </div>
       )}
 
-      {/* grid of cards */}
+      {/* grid */}
       <div key={revealKey} className="relative z-10 px-5 mt-4">
         {visible.length === 0 ? (
-          <div className="text-center text-white/70 py-14">
+          <div className="text-center text-baddia-ink/70 py-14">
             <span className="text-4xl block mb-2">🪄</span>
             <p className="font-display font-black text-[13px] uppercase tracking-widest">Aún no guardas cartas</p>
-            <p className="text-[12px] font-medium italic mt-1">Toca el corazón en el reverso para guardarlas.</p>
+            <p className="text-[12px] font-medium italic mt-1">Toca el corazón para guardarlas.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3.5">
@@ -441,15 +465,11 @@ export function Attract() {
               const cat = CATEGORIES.find((c) => c.id === card.category)!;
               return (
                 <TarotCard
-                  key={card.id}
+                  key={`${card.id}-${revealKey}`}
                   card={card}
                   cat={cat}
                   index={i}
-                  flipped={!!flipped[card.id]}
-                  onFlip={() => flipOne(card.id)}
-                  isFav={favs.includes(card.id)}
-                  onToggleFav={() => toggleFav(card.id)}
-                  onShare={() => setShare({ card, cat })}
+                  onOpen={() => setExpandedId(card.id)}
                   dealDelayMs={introDone ? i * 55 : 1700 + i * 55}
                 />
               );
@@ -464,7 +484,7 @@ export function Attract() {
           <RotateCcw size={13} strokeWidth={3} /> Barajar de nuevo
         </button>
 
-        <div className="mt-8 flex items-center justify-center gap-2 text-white/60">
+        <div className="mt-8 flex items-center justify-center gap-2 text-baddia-ink/60">
           <Sparkles size={14} />
           <p className="text-[11px] font-display font-black uppercase tracking-[0.3em]">
             manifiesta con calma, recibe con fe
@@ -472,6 +492,17 @@ export function Attract() {
           <Sparkles size={14} />
         </div>
       </div>
+
+      {expandedCard && expandedCat && (
+        <ExpandedCard
+          card={expandedCard}
+          cat={expandedCat}
+          isFav={favs.includes(expandedCard.id)}
+          onToggleFav={() => toggleFav(expandedCard.id)}
+          onShare={() => setShare({ card: expandedCard, cat: expandedCat })}
+          onClose={() => setExpandedId(null)}
+        />
+      )}
 
       {share && <ShareSheet card={share.card} cat={share.cat} onClose={() => setShare(null)} />}
 
@@ -486,9 +517,6 @@ export function Attract() {
           0%   { opacity: 0; transform: translateY(-120vh) scale(.6) rotate(-25deg); filter: blur(4px); }
           55%  { opacity: 1; transform: translateY(10px) scale(1.02) rotate(calc(var(--tilt,0deg) + 4deg)); filter: blur(0); }
           100% { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt,0deg)); }
-        }
-        .attract-card-inner:hover {
-          transform: translateY(-4px) rotateY(var(--flip,0deg));
         }
         .intro-card {
           left: 50%;
@@ -520,7 +548,7 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
       className={`shrink-0 px-3 py-1.5 rounded-full border-2 border-baddia-ink text-[10px] font-display font-black uppercase tracking-widest transition ${
         active
           ? "bg-baddia-yellow text-baddia-ink shadow-[3px_3px_0_hsl(335_100%_59%)]"
-          : "bg-white/10 text-white backdrop-blur-sm shadow-[2px_2px_0_rgba(0,0,0,0.4)]"
+          : "bg-white/70 text-baddia-ink backdrop-blur-sm shadow-[2px_2px_0_hsl(260_16%_15%_/_0.2)]"
       }`}
     >
       {children}
@@ -528,40 +556,40 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
   );
 }
 
-function StarField() {
-  const stars = useMemo(() => {
-    return Array.from({ length: 42 }).map((_, i) => ({
+function SparkleField() {
+  const sparkles = useMemo(() => {
+    return Array.from({ length: 22 }).map(() => ({
       left: Math.random() * 100,
       top: Math.random() * 100,
-      size: Math.random() * 2 + 1,
       delay: Math.random() * 4,
-      dur: 2 + Math.random() * 3,
+      dur: 2.4 + Math.random() * 2.6,
+      size: 10 + Math.random() * 10,
+      color: ["#FF2E75", "#FFD12E", "#8B63F7", "#FF7AC8"][Math.floor(Math.random() * 4)],
     }));
   }, []);
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {stars.map((s, i) => (
+      {sparkles.map((s, i) => (
         <span
           key={i}
-          className="absolute rounded-full bg-white"
+          className="absolute font-serif-display"
           style={{
             left: `${s.left}%`,
             top: `${s.top}%`,
-            width: s.size,
-            height: s.size,
-            opacity: 0.6,
-            animation: `twinkle ${s.dur}s ease-in-out ${s.delay}s infinite`,
-            boxShadow: "0 0 6px rgba(255,255,255,0.7)",
+            fontSize: s.size,
+            color: s.color,
+            opacity: 0.55,
+            animation: `attractTwinkle ${s.dur}s ease-in-out ${s.delay}s infinite`,
+            filter: "drop-shadow(0 0 6px rgba(255,255,255,0.6))",
           }}
-        />
+        >
+          ✦
+        </span>
       ))}
-      <span className="absolute top-10 left-8 text-baddia-yellow/60 text-2xl animate-sparkle-spin">✦</span>
-      <span className="absolute top-32 right-10 text-baddia-bubble/70 text-xl animate-sparkle-spin" style={{ animationDelay: "1.4s" }}>✧</span>
-      <span className="absolute bottom-40 left-12 text-baddia-lavender/70 text-2xl animate-sparkle-spin" style={{ animationDelay: "0.8s" }}>✦</span>
       <style>{`
-        @keyframes twinkle {
-          0%, 100% { opacity: .2; transform: scale(1); }
-          50%      { opacity: 1;   transform: scale(1.6); }
+        @keyframes attractTwinkle {
+          0%, 100% { opacity: .25; transform: scale(.9) rotate(0deg); }
+          50%      { opacity: .9;  transform: scale(1.3) rotate(20deg); }
         }
       `}</style>
     </div>
