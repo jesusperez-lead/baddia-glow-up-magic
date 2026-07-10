@@ -1,25 +1,27 @@
 import { useCallback, useEffect, useRef } from "react";
-import { supabase } from "@/integrations/supabase/client";
 
-/** Cache TTS mp3 blobs by text so we don't re-generate the same guide phrase. */
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+const TTS_URL = `${SUPABASE_URL}/functions/v1/manifest-tts`;
+
+/** Cache TTS mp3 object URLs by text so we don't re-generate the same guide phrase. */
 const cache = new Map<string, Promise<string>>();
 
 async function fetchAudioUrl(text: string): Promise<string> {
   const cached = cache.get(text);
   if (cached) return cached;
   const p = (async () => {
-    const { data, error } = await supabase.functions.invoke("manifest-tts", {
-      body: { text },
+    const res = await fetch(TTS_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: SUPABASE_PUBLISHABLE_KEY,
+        Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+      },
+      body: JSON.stringify({ text }),
     });
-    if (error) throw error;
-    // supabase-js decodes body based on content-type. For audio/mpeg it returns a Blob.
-    const blob =
-      data instanceof Blob
-        ? data
-        : data instanceof ArrayBuffer
-          ? new Blob([data], { type: "audio/mpeg" })
-          : null;
-    if (!blob) throw new Error("Invalid TTS payload");
+    if (!res.ok) throw new Error(`TTS ${res.status}`);
+    const blob = await res.blob();
     return URL.createObjectURL(blob);
   })();
   cache.set(text, p);
