@@ -487,6 +487,7 @@ export function Attract() {
           <div className="grid grid-cols-2 gap-3.5">
             {visible.map((card, i) => {
               const cat = CATEGORIES.find((c) => c.id === card.category)!;
+              const locked = !isPro && filter !== "favs" && i >= FREE_LIMIT;
               return (
                 <TarotCard
                   key={`${card.id}-${revealKey}`}
@@ -495,11 +496,23 @@ export function Attract() {
                   index={i}
                   onOpen={() => setExpandedId(card.id)}
                   dealDelayMs={introDone ? i * 55 : 1700 + i * 55}
+                  locked={locked}
+                  onLockedTap={openPaywall}
                 />
               );
             })}
           </div>
         )}
+
+        {!isPro && filter !== "favs" && visible.length > FREE_LIMIT && (
+          <button
+            onClick={openPaywall}
+            className="mt-5 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-baddia-yellow border-[2.5px] border-baddia-ink shadow-[3px_4px_0_hsl(260_16%_15%)] text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink active:translate-y-0.5"
+          >
+            <Sparkles size={13} strokeWidth={3} /> Desbloquea el mazo completo · Pro
+          </button>
+        )}
+
 
         <button
           onClick={reshuffle}
