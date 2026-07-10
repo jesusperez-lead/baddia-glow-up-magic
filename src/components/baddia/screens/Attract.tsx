@@ -372,6 +372,7 @@ export function Attract() {
   const { go, user, openPaywall } = useBaddia();
   const isPro = user.plan !== "Free";
   const FREE_LIMIT = 4;
+  const [filter, setFilter] = useState<CategoryId | "all" | "favs">("all");
   const [favs, setFavs] = useState<string[]>(() => readFavs());
   const [share, setShare] = useState<{ card: AttractCard; cat: Category } | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
