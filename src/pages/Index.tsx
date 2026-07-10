@@ -72,6 +72,7 @@ function Router() {
     case "bestie": content = <Bestie />; break;
     case "phone-verify": content = <PhoneVerify />; break;
     case "attract": content = <Attract />; break;
+    case "calendar": content = <Calendar />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);
