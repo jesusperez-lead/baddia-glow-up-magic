@@ -1281,9 +1281,20 @@ function Ritual({ category, intention, onDone }: { category: Category; intention
     setSecs(duration);
     bell(528, 3.4);
     const padT = setTimeout(() => startPad(), 350);
+    let cancelled = false;
+    (async () => {
+      if (!audioOn) return;
+      await new Promise((r) => setTimeout(r, 700));
+      if (cancelled) return;
+      await speak("Repite tu frase en tu mente…");
+      if (cancelled) return;
+      await speak(intention);
+    })();
     return () => {
+      cancelled = true;
       clearTimeout(padT);
       stopPad();
+      stopVoice();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, duration]);
