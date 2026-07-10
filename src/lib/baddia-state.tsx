@@ -51,7 +51,12 @@ export interface BaddiaUser {
   phoneVerified?: boolean;
   avatar?: string;
   avatarCaption?: string;
+  goals?: Goal[];
+  tone?: Tone;
 }
+
+export type Goal = "Amor" | "Claridad" | "Manifestar" | "Glow up" | "Sanar" | "Divertirme" | "Entender mi energía";
+export type Tone = "Dulce" | "Directa" | "Bestie" | "Espiritual" | "Motivadora";
 
 interface Ctx {
   screen: Screen;

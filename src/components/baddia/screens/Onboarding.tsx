@@ -1,12 +1,31 @@
 import { useState, useEffect } from "react";
-import { useBaddia, Interest } from "@/lib/baddia-state";
+import { useBaddia, Interest, Goal, Tone } from "@/lib/baddia-state";
 import { computeZodiac, computeLifeNumber } from "@/lib/baddia-numerology";
 import { Sparkles } from "../PhoneFrame";
 import { LogoMark } from "../Logo";
 import { ChevronLeft } from "lucide-react";
 
 const NICKNAME_EXAMPLES = ["Vale", "Sofi", "Nena", "Baddie"];
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 6;
+
+const GOALS: { label: Goal; emoji: string; color: string; text: string }[] = [
+  { label: "Amor",                 emoji: "💖", color: "bg-baddia-bubble",  text: "text-white" },
+  { label: "Claridad",             emoji: "🔮", color: "bg-baddia-soft",    text: "text-baddia-ink" },
+  { label: "Manifestar",           emoji: "✨", color: "bg-baddia-yellow",  text: "text-baddia-ink" },
+  { label: "Glow up",              emoji: "🌸", color: "bg-baddia-hot",     text: "text-white" },
+  { label: "Sanar",                emoji: "🌿", color: "bg-baddia-mint",    text: "text-white" },
+  { label: "Divertirme",           emoji: "🎀", color: "bg-baddia-lime",    text: "text-baddia-ink" },
+  { label: "Entender mi energía",  emoji: "🌙", color: "bg-baddia-lavender",text: "text-white" },
+];
+
+const TONES: { label: Tone; emoji: string; desc: string; color: string; text: string }[] = [
+  { label: "Dulce",       emoji: "🍭", desc: "Suave y tierna",       color: "bg-baddia-bubble",   text: "text-white" },
+  { label: "Directa",     emoji: "💅", desc: "Sin filtros, real",     color: "bg-baddia-ink",      text: "text-white" },
+  { label: "Bestie",      emoji: "👯", desc: "Como tu mejor amiga",   color: "bg-baddia-hot",      text: "text-white" },
+  { label: "Espiritual",  emoji: "🌙", desc: "Cósmica y guía",        color: "bg-baddia-lavender", text: "text-white" },
+  { label: "Motivadora",  emoji: "🔥", desc: "Empuje y energía",      color: "bg-baddia-yellow",   text: "text-baddia-ink" },
+];
+
 
 const INTERESTS: { label: Interest; emoji: string; color: string; text: string }[] = [
   { label: "Amor",            emoji: "💖", color: "bg-baddia-bubble",  text: "text-white" },
@@ -48,11 +67,13 @@ export function Onboarding() {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [selected, setSelected] = useState<Interest[]>([]);
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [tone, setTone] = useState<Tone | null>(null);
   const [msgIdx, setMsgIdx] = useState(0);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (step !== 4) return;
+    if (step !== TOTAL_STEPS) return;
     setProgress(0);
     const msgInt = setInterval(() => setMsgIdx((i) => (i + 1) % LOADING_MESSAGES.length), 900);
     const progInt = setInterval(() => setProgress((p) => Math.min(100, p + 2.5)), 100);
@@ -285,13 +306,122 @@ export function Onboarding() {
               disabled={selected.length === 0}
               onClick={() => { setUser({ interests: selected }); setStep(4); }}
             >
+              Continuar
+            </PrimaryButton>
+          </div>
+        )}
+
+        {/* STEP 4 — Goals */}
+        {step === 4 && (
+          <div className="flex-1 flex flex-col animate-slide-up">
+            <div className="inline-flex self-start mb-3">
+              <span className="rounded-full bg-baddia-lavender text-white px-3 py-1.5 text-xs font-display font-bold shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2">
+                💫 tu intención
+              </span>
+            </div>
+            <h2 className="font-display font-bold text-[30px] leading-[1.1] text-baddia-ink">
+              ¿Qué buscas en <span className="gradient-text">Baddia</span>?
+            </h2>
+            <p className="text-[14px] text-baddia-ink/60 mt-2 font-semibold">
+              Elige todas las que te vibren. 💖
+            </p>
+
+            <div className="mt-5 flex flex-col gap-2.5">
+              {GOALS.map((g, idx) => {
+                const active = goals.includes(g.label);
+                return (
+                  <button
+                    key={g.label}
+                    onClick={() =>
+                      setGoals((s) =>
+                        s.includes(g.label) ? s.filter((x) => x !== g.label) : [...s, g.label]
+                      )
+                    }
+                    style={{ animationDelay: `${idx * 40}ms` }}
+                    className={`animate-pop-in relative rounded-2xl px-4 py-3.5 text-left font-display font-bold text-[15px] transition-all active:scale-[0.98] border-2 flex items-center gap-3 ${
+                      active
+                        ? `${g.color} ${g.text} border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)]`
+                        : "bg-white text-baddia-ink border-baddia-ink/10 hover:border-baddia-ink/30"
+                    }`}
+                  >
+                    <span className="text-2xl leading-none">{g.emoji}</span>
+                    <span className="flex-1">{g.label}</span>
+                    {active && (
+                      <span className="w-6 h-6 rounded-full bg-baddia-yellow border-2 border-baddia-ink flex items-center justify-center text-[10px] font-bold text-baddia-ink">
+                        ✓
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex-1" />
+            <PrimaryButton
+              disabled={goals.length === 0}
+              onClick={() => { setUser({ goals }); setStep(5); }}
+            >
+              Continuar
+            </PrimaryButton>
+          </div>
+        )}
+
+        {/* STEP 5 — Tone */}
+        {step === 5 && (
+          <div className="flex-1 flex flex-col animate-slide-up">
+            <div className="inline-flex self-start mb-3">
+              <span className="rounded-full bg-baddia-yellow border-2 border-baddia-ink px-3 py-1.5 text-xs font-display font-bold text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2">
+                🎙️ tu tono
+              </span>
+            </div>
+            <h2 className="font-display font-bold text-[30px] leading-[1.1] text-baddia-ink">
+              ¿Qué <span className="gradient-text">tono</span> prefieres?
+            </h2>
+            <p className="text-[14px] text-baddia-ink/60 mt-2 font-semibold">
+              Así te hablará Baddia todos los días. ✨
+            </p>
+
+            <div className="mt-5 flex flex-col gap-2.5">
+              {TONES.map((t, idx) => {
+                const active = tone === t.label;
+                return (
+                  <button
+                    key={t.label}
+                    onClick={() => setTone(t.label)}
+                    style={{ animationDelay: `${idx * 40}ms` }}
+                    className={`animate-pop-in relative rounded-2xl px-4 py-3.5 text-left transition-all active:scale-[0.98] border-2 flex items-center gap-3 ${
+                      active
+                        ? `${t.color} ${t.text} border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)]`
+                        : "bg-white text-baddia-ink border-baddia-ink/10 hover:border-baddia-ink/30"
+                    }`}
+                  >
+                    <span className="text-2xl leading-none">{t.emoji}</span>
+                    <div className="flex-1">
+                      <p className="font-display font-bold text-[15px] leading-tight">{t.label}</p>
+                      <p className={`text-[12px] font-semibold ${active ? "opacity-90" : "text-baddia-ink/50"}`}>{t.desc}</p>
+                    </div>
+                    {active && (
+                      <span className="w-6 h-6 rounded-full bg-baddia-yellow border-2 border-baddia-ink flex items-center justify-center text-[10px] font-bold text-baddia-ink">
+                        ✓
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex-1" />
+            <PrimaryButton
+              disabled={!tone}
+              onClick={() => { if (tone) setUser({ tone }); setStep(6); }}
+            >
               Crear mi perfil cósmico
             </PrimaryButton>
           </div>
         )}
 
-        {/* STEP 4 — Loading */}
-        {step === 4 && (
+        {/* STEP 6 — Loading */}
+        {step === TOTAL_STEPS && (
           <div className="flex-1 flex flex-col items-center justify-center text-center animate-fade-in">
             <div className="relative w-[260px] h-[260px] mb-8">
               {/* Outer glow halos */}
