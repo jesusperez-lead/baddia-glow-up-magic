@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import {
-  ArrowLeft, Sparkles, RotateCcw, Share2, Check, Pencil, Lock, Bell, BellOff, Trophy, Flame, Download,
+  ArrowLeft, Sparkles, RotateCcw, Share2, Check, Pencil, Lock, Bell, BellOff, Trophy, Flame, Download, Volume2, VolumeX,
 } from "lucide-react";
 import { toast } from "sonner";
 import * as htmlToImage from "html-to-image";
@@ -908,26 +908,141 @@ function ShareSheet({
   );
 }
 
+/* ─────────── Ritual audio (Web Audio, sin assets) ─────────── */
+const AUDIO_KEY = "baddia.manifest.audio";
+const loadAudioPref = () => {
+  try { const v = localStorage.getItem(AUDIO_KEY); return v === null ? true : v === "1"; } catch { return true; }
+};
+const saveAudioPref = (on: boolean) => { try { localStorage.setItem(AUDIO_KEY, on ? "1" : "0"); } catch {} };
+
+function useRitualAudio(enabled: boolean) {
+  const ctxRef = useRef<AudioContext | null>(null);
+  const padRef = useRef<{ stop: () => void } | null>(null);
+
+  const getCtx = () => {
+    if (!ctxRef.current) {
+      const AC = (window.AudioContext || (window as any).webkitAudioContext);
+      if (!AC) return null;
+      ctxRef.current = new AC();
+    }
+    if (ctxRef.current.state === "suspended") ctxRef.current.resume();
+    return ctxRef.current;
+  };
+
+  const bell = (freq = 528, dur = 3.2) => {
+    if (!enabled) return;
+    const ctx = getCtx(); if (!ctx) return;
+    const now = ctx.currentTime;
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0, now);
+    master.gain.linearRampToValueAtTime(0.28, now + 0.02);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    master.connect(ctx.destination);
+    // partials for a bell/singing-bowl tone
+    [1, 2.01, 3.02, 4.7].forEach((mult, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = i === 0 ? "sine" : "triangle";
+      o.frequency.value = freq * mult;
+      g.gain.value = [0.9, 0.35, 0.18, 0.08][i];
+      o.connect(g).connect(master);
+      o.start(now);
+      o.stop(now + dur);
+    });
+  };
+
+  const startPad = () => {
+    if (!enabled) return;
+    const ctx = getCtx(); if (!ctx) return;
+    stopPad();
+    const now = ctx.currentTime;
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0, now);
+    master.gain.linearRampToValueAtTime(0.05, now + 1.2);
+    master.connect(ctx.destination);
+    const oscs: OscillatorNode[] = [];
+    [220, 277.18, 329.63].forEach((f) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = "sine"; o.frequency.value = f;
+      g.gain.value = 0.33;
+      // subtle detune shimmer
+      const lfo = ctx.createOscillator();
+      const lfoG = ctx.createGain();
+      lfo.frequency.value = 0.15 + Math.random() * 0.2;
+      lfoG.gain.value = 1.2;
+      lfo.connect(lfoG).connect(o.detune);
+      lfo.start(now);
+      o.connect(g).connect(master);
+      o.start(now);
+      oscs.push(o); oscs.push(lfo);
+    });
+    padRef.current = {
+      stop: () => {
+        const t = ctx.currentTime;
+        master.gain.cancelScheduledValues(t);
+        master.gain.setValueAtTime(master.gain.value, t);
+        master.gain.linearRampToValueAtTime(0, t + 0.8);
+        oscs.forEach(o => { try { o.stop(t + 0.9); } catch {} });
+      },
+    };
+  };
+  const stopPad = () => { padRef.current?.stop(); padRef.current = null; };
+
+  useEffect(() => () => { stopPad(); ctxRef.current?.close().catch(()=>{}); }, []);
+  useEffect(() => { if (!enabled) stopPad(); }, [enabled]);
+
+  return { bell, startPad, stopPad };
+}
+
 /* ─────────── Ritual sub-screen ─────────── */
 function Ritual({ category, intention, onDone }: { category: Category; intention: string; onDone: () => void }) {
   const [s, setS] = useState<1|2|3>(1);
   const [secs, setSecs] = useState(30);
+  const [audioOn, setAudioOn] = useState<boolean>(() => loadAudioPref());
   const affirmation = useMemo(() => AFFIRMATIONS[Math.floor(Math.random()*AFFIRMATIONS.length)], []);
   const action = useMemo(() => ACTIONS[category][Math.floor(Math.random()*ACTIONS[category].length)], [category]);
+  const { bell, startPad, stopPad } = useRitualAudio(audioOn);
 
+  const toggleAudio = () => {
+    setAudioOn((v) => { const n = !v; saveAudioPref(n); return n; });
+  };
+
+  // Bell + pad on entering step 2, bell on countdown end
   useEffect(() => {
     if (s !== 2) return;
     setSecs(30);
+    bell(528, 3.4);           // campana suave al iniciar
+    const padT = setTimeout(() => startPad(), 350);
     const id = setInterval(() => setSecs((v) => (v <= 1 ? 0 : v - 1)), 1000);
-    return () => clearInterval(id);
+    return () => { clearInterval(id); clearTimeout(padT); stopPad(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [s]);
+
+  useEffect(() => {
+    if (s === 2 && secs === 0) {
+      stopPad();
+      bell(660, 3.8);         // campana suave al terminar
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [secs, s]);
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-center gap-2">
-        {[1,2,3].map((n) => (
-          <span key={n} className={`h-2 rounded-full border border-baddia-ink/40 transition-all ${n===s ? "w-10 bg-baddia-hot" : n<s ? "w-6 bg-baddia-bubble" : "w-6 bg-white"}`}/>
-        ))}
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex-1 flex items-center justify-center gap-2">
+          {[1,2,3].map((n) => (
+            <span key={n} className={`h-2 rounded-full border border-baddia-ink/40 transition-all ${n===s ? "w-10 bg-baddia-hot" : n<s ? "w-6 bg-baddia-bubble" : "w-6 bg-white"}`}/>
+          ))}
+        </div>
+        <button
+          onClick={toggleAudio}
+          aria-label={audioOn ? "Silenciar audio" : "Activar audio"}
+          className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full border-2 border-baddia-ink text-[10px] font-display font-black uppercase tracking-wider shadow-[2px_2px_0_hsl(260_16%_15%)] active:scale-95 transition-all ${audioOn ? "bg-baddia-bubble text-baddia-ink" : "bg-white text-baddia-ink/60"}`}
+        >
+          {audioOn ? <Volume2 size={12}/> : <VolumeX size={12}/>}
+          {audioOn ? "sonido" : "mute"}
+        </button>
       </div>
 
       {s === 1 && (
@@ -937,7 +1052,7 @@ function Ritual({ category, intention, onDone }: { category: Category; intention
           <p className="mt-3 font-display font-black text-[18px] text-baddia-ink leading-snug animate-pulse-slow">
             "{affirmation}"
           </p>
-          <button onClick={()=>setS(2)} className="mt-5 w-full rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-hot text-white font-display font-black py-3 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:scale-95">
+          <button onClick={()=>{ bell(440, 2.2); setS(2); }} className="mt-5 w-full rounded-2xl border-[2.5px] border-baddia-ink bg-baddia-hot text-white font-display font-black py-3 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:scale-95">
             Ya la repetí ✨
           </button>
         </section>
@@ -953,6 +1068,13 @@ function Ritual({ category, intention, onDone }: { category: Category; intention
             <div className="relative w-28 h-28 rounded-full border-[3px] border-baddia-ink bg-white flex items-center justify-center font-display font-black text-[28px] text-baddia-ink">
               {secs}s
             </div>
+            {audioOn && (
+              <span className="absolute -bottom-1 right-2 inline-flex items-center gap-0.5 text-baddia-ink/50">
+                <span className="w-1 h-2 bg-baddia-hot/70 rounded-full animate-pulse" style={{animationDelay:"0ms"}}/>
+                <span className="w-1 h-3 bg-baddia-lavender/70 rounded-full animate-pulse" style={{animationDelay:"180ms"}}/>
+                <span className="w-1 h-2 bg-baddia-bubble/80 rounded-full animate-pulse" style={{animationDelay:"360ms"}}/>
+              </span>
+            )}
           </div>
           <p className="mt-4 text-[12px] text-baddia-ink/70 font-semibold italic">"{intention}"</p>
           <button
@@ -973,7 +1095,7 @@ function Ritual({ category, intention, onDone }: { category: Category; intention
             {action}
           </p>
           <p className="mt-2 text-[11px] text-baddia-ink/60 font-semibold">Una acción pequeña, pero alineada con tu intención.</p>
-          <button onClick={onDone} className="mt-5 w-full rounded-2xl border-[2.5px] border-baddia-ink bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white font-display font-black py-3 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:scale-95 inline-flex items-center justify-center gap-2">
+          <button onClick={()=>{ bell(792, 3.2); onDone(); }} className="mt-5 w-full rounded-2xl border-[2.5px] border-baddia-ink bg-gradient-to-r from-baddia-hot via-baddia-bubble to-baddia-lavender text-white font-display font-black py-3 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:scale-95 inline-flex items-center justify-center gap-2">
             <Check size={16}/> Lo hice — sumar a mi racha
           </button>
         </section>
@@ -981,3 +1103,4 @@ function Ritual({ category, intention, onDone }: { category: Category; intention
     </div>
   );
 }
+
