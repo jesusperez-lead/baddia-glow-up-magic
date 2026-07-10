@@ -1,12 +1,31 @@
 import { useState, useEffect } from "react";
-import { useBaddia, Interest } from "@/lib/baddia-state";
+import { useBaddia, Interest, Goal, Tone } from "@/lib/baddia-state";
 import { computeZodiac, computeLifeNumber } from "@/lib/baddia-numerology";
 import { Sparkles } from "../PhoneFrame";
 import { LogoMark } from "../Logo";
 import { ChevronLeft } from "lucide-react";
 
 const NICKNAME_EXAMPLES = ["Vale", "Sofi", "Nena", "Baddie"];
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 6;
+
+const GOALS: { label: Goal; emoji: string; color: string; text: string }[] = [
+  { label: "Amor",                 emoji: "💖", color: "bg-baddia-bubble",  text: "text-white" },
+  { label: "Claridad",             emoji: "🔮", color: "bg-baddia-soft",    text: "text-baddia-ink" },
+  { label: "Manifestar",           emoji: "✨", color: "bg-baddia-yellow",  text: "text-baddia-ink" },
+  { label: "Glow up",              emoji: "🌸", color: "bg-baddia-hot",     text: "text-white" },
+  { label: "Sanar",                emoji: "🌿", color: "bg-baddia-mint",    text: "text-white" },
+  { label: "Divertirme",           emoji: "🎀", color: "bg-baddia-lime",    text: "text-baddia-ink" },
+  { label: "Entender mi energía",  emoji: "🌙", color: "bg-baddia-lavender",text: "text-white" },
+];
+
+const TONES: { label: Tone; emoji: string; desc: string; color: string; text: string }[] = [
+  { label: "Dulce",       emoji: "🍭", desc: "Suave y tierna",       color: "bg-baddia-bubble",   text: "text-white" },
+  { label: "Directa",     emoji: "💅", desc: "Sin filtros, real",     color: "bg-baddia-ink",      text: "text-white" },
+  { label: "Bestie",      emoji: "👯", desc: "Como tu mejor amiga",   color: "bg-baddia-hot",      text: "text-white" },
+  { label: "Espiritual",  emoji: "🌙", desc: "Cósmica y guía",        color: "bg-baddia-lavender", text: "text-white" },
+  { label: "Motivadora",  emoji: "🔥", desc: "Empuje y energía",      color: "bg-baddia-yellow",   text: "text-baddia-ink" },
+];
+
 
 const INTERESTS: { label: Interest; emoji: string; color: string; text: string }[] = [
   { label: "Amor",            emoji: "💖", color: "bg-baddia-bubble",  text: "text-white" },
