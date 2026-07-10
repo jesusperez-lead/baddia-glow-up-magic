@@ -177,9 +177,10 @@ function CardFaces({ card, cat, size = "sm" }: { card: AttractCard; cat: Categor
    Grid card (preview)
    ============================================================ */
 function TarotCard({
-  card, cat, index, onOpen, dealDelayMs,
+  card, cat, index, onOpen, dealDelayMs, locked = false, onLockedTap,
 }: {
   card: AttractCard; cat: Category; index: number; onOpen: () => void; dealDelayMs: number;
+  locked?: boolean; onLockedTap?: () => void;
 }) {
   return (
     <div
@@ -189,14 +190,35 @@ function TarotCard({
         ["--tilt" as any]: `${((index * 37) % 7) - 3}deg`,
       }}
     >
-      <div className="[perspective:1400px] w-full">
+      <div className="[perspective:1400px] w-full relative">
         <button
-          onClick={onOpen}
+          onClick={locked ? onLockedTap : onOpen}
           className="attract-card-inner relative block w-full aspect-[3/4.6] rounded-[26px] active:scale-[.97] transition-transform"
           style={{ transformStyle: "preserve-3d" }}
-          aria-label={`Card ${card.intent}`}
+          aria-label={locked ? `Card bloqueada · ${card.intent}` : `Card ${card.intent}`}
         >
           <CardFaces card={card} cat={cat} size="sm" />
+          {locked && (
+            <>
+              <span
+                className="absolute inset-0 rounded-[26px] pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(160deg, hsl(260 30% 20% / 0.55) 0%, hsl(325 60% 40% / 0.5) 60%, hsl(256 60% 40% / 0.55) 100%)",
+                  backdropFilter: "blur(4px)",
+                  WebkitBackdropFilter: "blur(4px)",
+                }}
+              />
+              <span className="absolute inset-0 flex flex-col items-center justify-center gap-2 pointer-events-none">
+                <span className="w-11 h-11 rounded-full bg-white border-[2.5px] border-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] flex items-center justify-center">
+                  <Lock size={18} strokeWidth={3} className="text-baddia-ink" />
+                </span>
+                <span className="px-2.5 py-1 rounded-full bg-baddia-yellow border-2 border-baddia-ink text-[9px] font-display font-black uppercase tracking-widest text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)]">
+                  Pro ✨
+                </span>
+              </span>
+            </>
+          )}
         </button>
       </div>
     </div>
