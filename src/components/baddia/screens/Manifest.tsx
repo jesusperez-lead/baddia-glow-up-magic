@@ -323,6 +323,29 @@ export function Manifest() {
     }
   };
 
+  // Schedule next-day local notification when reminder is enabled
+  useEffect(() => {
+    if (!data?.reminderEnabled || !data.reminderTime) return;
+    if (typeof Notification === "undefined" || Notification.permission !== "granted") return;
+    const [hh, mm] = data.reminderTime.split(":").map((n) => parseInt(n, 10));
+    if (isNaN(hh) || isNaN(mm)) return;
+    const now = new Date();
+    const next = new Date();
+    next.setHours(hh, mm, 0, 0);
+    if (next.getTime() <= now.getTime()) next.setDate(next.getDate() + 1);
+    const delay = next.getTime() - now.getTime();
+    // Cap timeout to a day to avoid overflow; will re-schedule when it fires
+    const id = setTimeout(() => {
+      try {
+        new Notification("Es hora de manifestar ✨", {
+          body: "Baddia te está esperando para repetir tu frase de hoy.",
+          icon: "/favicon.ico",
+        });
+      } catch {}
+    }, Math.min(delay, 24 * 60 * 60 * 1000));
+    return () => clearTimeout(id);
+  }, [data?.reminderEnabled, data?.reminderTime]);
+
   /* ─────────── Render ─────────── */
   return (
     <div className="relative min-h-full overflow-hidden">
