@@ -245,6 +245,20 @@ export function Profile() {
           ]}
         />
 
+        {/* ───── Comunidad ───── */}
+        <SectionLabel emoji="💌" text="comunidad" />
+        <RowGroup
+          rows={[
+            { icon: MessageCircleHeart,
+              label: (user.feedbackCount ?? 0) > 0 ? "Enviar más feedback" : "Enviar feedback",
+              caption: (user.feedbackCount ?? 0) > 0
+                ? `Ya aportaste ${user.feedbackCount} ideas ✨ · sos Contributor`
+                : "Bug, feature o wishlist · ayudá a que crezca",
+              onClick: () => go("feedback"),
+              tint: "bg-baddia-hot/15" },
+          ]}
+        />
+
         {/* ───── Ajustes ───── */}
         <SectionLabel emoji="⚙️" text="ajustes" />
         <RowGroup
