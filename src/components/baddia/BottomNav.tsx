@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { Sparkles, Heart, User, Moon, Hand, Star, HeartHandshake, Wand2, Eye, Shirt, Dices, Lock } from "lucide-react";
+import { Sparkles, Heart, Moon, Hand, Star, HeartHandshake, Wand2, Eye, Shirt, Dices, Lock } from "lucide-react";
 import { Screen, useBaddia } from "@/lib/baddia-state";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { DailyIcon, ZodiacIcon, LoveIcon, ProfileIcon, WandIcon, CuteIconsStyles } from "./CuteIcons";
 
-type Tab = { id: Screen; label: string; Icon: any };
+type Tab = { id: Screen; label: string; Icon: React.ComponentType<{ active?: boolean; size?: number; className?: string }> };
 
 const leftTabs: Tab[] = [
-  { id: "daily",  label: "Daily",  Icon: Sparkles },
-  { id: "zodiac", label: "Zodiac", Icon: Moon },
+  { id: "daily",  label: "Daily",  Icon: DailyIcon },
+  { id: "zodiac", label: "Zodiac", Icon: ZodiacIcon },
 ];
 const rightTabs: Tab[] = [
-  { id: "love",    label: "Love", Icon: Heart },
-  { id: "profile", label: "Yo",   Icon: User },
+  { id: "love",    label: "Love", Icon: LoveIcon },
+  { id: "profile", label: "Yo",   Icon: ProfileIcon },
 ];
 
 type Reading = {
@@ -57,10 +58,10 @@ export function BottomNav() {
           className="group w-full flex flex-col items-center justify-center gap-1 py-1.5 transition-transform duration-300 active:scale-90"
         >
           <Icon
-            size={20}
-            strokeWidth={active ? 2.6 : 2}
+            size={26}
+            active={active}
             className={`transition-all duration-300 ${
-              active ? "text-baddia-hot -translate-y-0.5" : "text-baddia-ink/55 group-hover:text-baddia-ink/80"
+              active ? "-translate-y-0.5 drop-shadow-[0_2px_0_hsl(260_16%_15%/0.3)]" : "opacity-70 group-hover:opacity-100"
             }`}
           />
           <span
@@ -77,6 +78,7 @@ export function BottomNav() {
 
   return (
     <>
+      <CuteIconsStyles />
       <nav className="sticky bottom-0 z-40 px-3 pb-3 pt-6 bg-gradient-to-t from-white/85 via-white/45 to-transparent">
         <ul className="relative flex items-stretch justify-between rounded-2xl border-[2px] border-baddia-ink/90 px-1 py-1.5 shadow-[3px_3px_0_hsl(260_16%_15%)] bg-white/55 backdrop-blur-xl backdrop-saturate-150">
           {/* glossy top sheen */}
@@ -99,7 +101,7 @@ export function BottomNav() {
                 <span className="absolute inset-x-1.5 top-1 h-3 rounded-full bg-white/45 blur-[1px]" />
                 {/* subtle shimmer dot */}
                 <span className="pointer-events-none absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-baddia-yellow border-2 border-baddia-ink animate-pulse" />
-                <Sparkles size={24} strokeWidth={2.6} className="relative drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
+                <WandIcon size={30} className="relative drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
               </span>
               <span className="mt-1 text-[10px] font-display font-black uppercase tracking-wide text-baddia-hot leading-none">
                 Lectura
