@@ -78,6 +78,7 @@ export function BottomNav() {
 
   return (
     <>
+      <CuteIconsStyles />
       <nav className="sticky bottom-0 z-40 px-3 pb-3 pt-6 bg-gradient-to-t from-white/85 via-white/45 to-transparent">
         <ul className="relative flex items-stretch justify-between rounded-2xl border-[2px] border-baddia-ink/90 px-1 py-1.5 shadow-[3px_3px_0_hsl(260_16%_15%)] bg-white/55 backdrop-blur-xl backdrop-saturate-150">
           {/* glossy top sheen */}
