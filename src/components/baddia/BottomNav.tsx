@@ -47,8 +47,39 @@ export function BottomNav() {
   const [open, setOpen] = useState(false);
   const isPro = user.plan !== "Free";
 
+  const renderPolaroidAvatar = (active: boolean) => (
+    <span
+      className={`relative inline-block bg-white border-[1.5px] border-baddia-ink shadow-[1.5px_1.5px_0_hsl(260_16%_15%)] p-[2px] pb-[6px] rounded-[3px] rotate-[-6deg] transition-all duration-300 ${
+        active ? "-translate-y-0.5 rotate-[-3deg] drop-shadow-[0_2px_0_hsl(260_16%_15%/0.3)]" : "opacity-80 group-hover:opacity-100"
+      }`}
+      style={{ width: 26, height: 30 }}
+    >
+      {user.avatar ? (
+        <img
+          src={user.avatar}
+          alt={user.name}
+          className="w-full h-full object-cover rounded-[1.5px]"
+        />
+      ) : (
+        <span className="w-full h-full rounded-[1.5px] bg-gradient-to-br from-baddia-bubble via-baddia-lavender to-baddia-hot flex items-center justify-center text-white font-display font-black text-[11px]">
+          {(user.name?.[0] || "✨").toUpperCase()}
+        </span>
+      )}
+      {active && (
+        <span
+          aria-hidden
+          className="absolute -top-1 -right-1 text-[10px]"
+          style={{ animation: "cuteSparkle 1.4s ease-in-out infinite" }}
+        >
+          ✨
+        </span>
+      )}
+    </span>
+  );
+
   const renderTab = ({ id, label, Icon }: Tab) => {
     const active = screen === id;
+    const isProfile = id === "profile";
     return (
       <li key={id} className="flex-1">
         <button
@@ -57,13 +88,17 @@ export function BottomNav() {
           aria-current={active ? "page" : undefined}
           className="group w-full flex flex-col items-center justify-center gap-1 py-1.5 transition-transform duration-300 active:scale-90"
         >
-          <Icon
-            size={26}
-            active={active}
-            className={`transition-all duration-300 ${
-              active ? "-translate-y-0.5 drop-shadow-[0_2px_0_hsl(260_16%_15%/0.3)]" : "opacity-70 group-hover:opacity-100"
-            }`}
-          />
+          {isProfile ? (
+            renderPolaroidAvatar(active)
+          ) : (
+            <Icon
+              size={26}
+              active={active}
+              className={`transition-all duration-300 ${
+                active ? "-translate-y-0.5 drop-shadow-[0_2px_0_hsl(260_16%_15%/0.3)]" : "opacity-70 group-hover:opacity-100"
+              }`}
+            />
+          )}
           <span
             className={`text-[10px] font-display font-bold leading-none tracking-wide transition-colors duration-300 ${
               active ? "text-baddia-hot" : "text-baddia-ink/55"
@@ -75,6 +110,7 @@ export function BottomNav() {
       </li>
     );
   };
+
 
   return (
     <>
