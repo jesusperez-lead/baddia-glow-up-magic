@@ -58,10 +58,10 @@ export function BottomNav() {
           className="group w-full flex flex-col items-center justify-center gap-1 py-1.5 transition-transform duration-300 active:scale-90"
         >
           <Icon
-            size={20}
-            strokeWidth={active ? 2.6 : 2}
+            size={26}
+            active={active}
             className={`transition-all duration-300 ${
-              active ? "text-baddia-hot -translate-y-0.5" : "text-baddia-ink/55 group-hover:text-baddia-ink/80"
+              active ? "-translate-y-0.5 drop-shadow-[0_2px_0_hsl(260_16%_15%/0.3)]" : "opacity-70 group-hover:opacity-100"
             }`}
           />
           <span
