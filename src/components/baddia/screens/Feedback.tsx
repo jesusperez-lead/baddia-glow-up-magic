@@ -29,7 +29,7 @@ export function Feedback() {
       setSent(true);
       setUser({ feedbackCount: (user.feedbackCount ?? 0) + 1 });
       setTimeout(() => {
-        toast.success("¡Gracias! Ganaste la insignia Baddia Contributor ✨");
+        toast.success("¡Gracias! Ganaste la insignia Baddia Muse ✨");
         setSent(false);
         setTitle("");
         setDescription("");
@@ -145,7 +145,7 @@ export function Feedback() {
         </button>
 
         <p className="text-[11px] text-baddia-ink/45 font-semibold text-center leading-relaxed px-4">
-          Al enviar tu primer feedback ganás la insignia <b className="text-baddia-ink/70">✧ Baddia Contributor</b> en tu perfil.
+          Al enviar tu primer feedback ganás la insignia <b className="text-baddia-ink/70">✧ Baddia Muse</b> en tu perfil.
         </p>
       </div>
 
@@ -197,7 +197,7 @@ function FeedbackCelebration() {
             Sos parte del glow de Baddia. Cada idea nos hace más mágicas ✨
           </p>
           <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-baddia-gold text-baddia-ink border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-black uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] rotate-[-2deg]">
-            ✧ Baddia Contributor
+            ✧ Baddia Muse
           </span>
         </div>
       </div>
