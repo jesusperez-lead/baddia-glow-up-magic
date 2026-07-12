@@ -131,6 +131,11 @@ export function Profile() {
                 <Gift size={10} /> Ver celebración
               </button>
             )}
+            {(user.feedbackCount ?? 0) > 0 && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-baddia-hot text-white border-2 border-baddia-ink px-2.5 py-1 text-[9.5px] font-display font-black uppercase tracking-widest shadow-[2px_2px_0_hsl(260_16%_15%)] -rotate-2">
+                ✧ contributor
+              </span>
+            )}
           </div>
           <div className="relative rounded-3xl border-[2.5px] border-baddia-ink p-5 pt-8 shadow-[5px_6px_0_hsl(260_16%_15%)] overflow-hidden gradient-bg-baddia text-white">
             <span className="absolute -top-3 -right-2 text-7xl opacity-20 select-none">{glyph}</span>
