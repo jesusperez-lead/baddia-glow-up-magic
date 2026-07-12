@@ -36,6 +36,7 @@ import { Bestie } from "@/components/baddia/screens/Bestie";
 import { PhoneVerify } from "@/components/baddia/screens/PhoneVerify";
 import { Attract } from "@/components/baddia/screens/Attract";
 import { Calendar } from "@/components/baddia/screens/Calendar";
+import { Feedback } from "@/components/baddia/screens/Feedback";
 
 const MAIN_SCREENS = new Set(["daily", "zodiac", "palm", "love", "profile", "outfit", "lucky", "tarot", "astral", "compat", "aura", "manifest"]);
 
@@ -75,6 +76,7 @@ function Router() {
     case "phone-verify": content = <PhoneVerify />; break;
     case "attract": content = <Attract />; break;
     case "calendar": content = <Calendar />; break;
+    case "feedback": content = <Feedback />; break;
     default: content = <Welcome />;
   }
   const showNav = MAIN_SCREENS.has(screen);

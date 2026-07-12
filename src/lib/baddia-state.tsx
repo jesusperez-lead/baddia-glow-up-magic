@@ -32,7 +32,8 @@ export type Screen =
   | "bestie"
   | "phone-verify"
   | "attract"
-  | "calendar";
+  | "calendar"
+  | "feedback";
 
 export type Interest =
   | "Amor" | "Dinero" | "Suerte" | "Crush Energy"
@@ -54,7 +55,10 @@ export interface BaddiaUser {
   avatarCaption?: string;
   goals?: Goal[];
   tone?: Tone;
+  feedbackCount?: number;
 }
+
+export type FeedbackKind = "bug" | "feature" | "wish";
 
 export type Goal = "Amor" | "Claridad" | "Manifestar" | "Glow up" | "Sanar" | "Divertirme" | "Entender mi energía";
 export type Tone = "Dulce" | "Directa" | "Bestie" | "Espiritual" | "Motivadora";
