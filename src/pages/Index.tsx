@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import { useBaddia } from "@/lib/baddia-state";
 import { PhoneFrame } from "@/components/baddia/PhoneFrame";
 import { BottomNav } from "@/components/baddia/BottomNav";
 import { Paywall } from "@/components/baddia/Paywall";
+import { Splash } from "@/components/baddia/Splash";
 import { Welcome } from "@/components/baddia/screens/Welcome";
 import { Onboarding } from "@/components/baddia/screens/Onboarding";
 import { Auth } from "@/components/baddia/screens/Auth";
@@ -87,6 +89,22 @@ function Router() {
   );
 }
 
-const Index = () => <Router />;
+const Index = () => {
+  const [showSplash, setShowSplash] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return !sessionStorage.getItem("baddia_splash_seen");
+  });
+
+  useEffect(() => {
+    if (!showSplash) sessionStorage.setItem("baddia_splash_seen", "1");
+  }, [showSplash]);
+
+  return (
+    <>
+      {showSplash && <Splash onDone={() => setShowSplash(false)} />}
+      <Router />
+    </>
+  );
+};
 
 export default Index;
