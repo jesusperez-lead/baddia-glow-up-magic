@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { Sparkles, Heart, User, Moon, Hand, Star, HeartHandshake, Wand2, Eye, Shirt, Dices, Lock } from "lucide-react";
+import { Sparkles, Heart, Moon, Hand, Star, HeartHandshake, Wand2, Eye, Shirt, Dices, Lock } from "lucide-react";
 import { Screen, useBaddia } from "@/lib/baddia-state";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { DailyIcon, ZodiacIcon, LoveIcon, ProfileIcon, WandIcon, CuteIconsStyles } from "./CuteIcons";
 
-type Tab = { id: Screen; label: string; Icon: any };
+type Tab = { id: Screen; label: string; Icon: React.ComponentType<{ active?: boolean; size?: number; className?: string }> };
 
 const leftTabs: Tab[] = [
-  { id: "daily",  label: "Daily",  Icon: Sparkles },
-  { id: "zodiac", label: "Zodiac", Icon: Moon },
+  { id: "daily",  label: "Daily",  Icon: DailyIcon },
+  { id: "zodiac", label: "Zodiac", Icon: ZodiacIcon },
 ];
 const rightTabs: Tab[] = [
-  { id: "love",    label: "Love", Icon: Heart },
-  { id: "profile", label: "Yo",   Icon: User },
+  { id: "love",    label: "Love", Icon: LoveIcon },
+  { id: "profile", label: "Yo",   Icon: ProfileIcon },
 ];
 
 type Reading = {
