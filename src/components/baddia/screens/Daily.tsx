@@ -85,6 +85,7 @@ export function Daily() {
             </p>
           </div>
           <button
+            data-tour="journal-btn"
             onClick={() => (isPro ? go("journal") : openPaywall())}
             aria-label="Abrir mi diario"
             className="shrink-0 relative group"
