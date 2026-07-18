@@ -130,6 +130,7 @@ export function BottomNav() {
           {/* central FAB slot */}
           <li className="flex-1 relative">
             <button
+              data-tour="fab"
               onClick={() => setOpen(true)}
               aria-label="Lecturas IA"
               className="group absolute left-1/2 -translate-x-1/2 -top-7 flex flex-col items-center"
