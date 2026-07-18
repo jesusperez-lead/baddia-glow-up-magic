@@ -666,6 +666,9 @@ export function Manifest() {
               </p>
             </section>
 
+            {/* My own manifestations (photo + caption) */}
+            <MyManifests />
+
             {/* 30-day flower garden */}
             <SectionLabel emoji="🌷" text="tu jardín de 30 días" />
             <section className="rounded-2xl border-2 border-baddia-ink bg-white/95 p-3 shadow-[3px_3px_0_hsl(260_16%_15%)]">
