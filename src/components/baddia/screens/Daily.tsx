@@ -36,6 +36,10 @@ export function Daily() {
       const t = setTimeout(() => setShowQuoteReveal(true), delay);
       return () => clearTimeout(t);
     }
+    if (!hasSeenTutorial()) {
+      const t2 = setTimeout(() => setShowTutorial(true), fromWelcome ? 3400 : 1600);
+      return () => clearTimeout(t2);
+    }
   }, []);
 
 
