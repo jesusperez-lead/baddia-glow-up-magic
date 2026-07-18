@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import * as htmlToImage from "html-to-image";
 import { useBaddiaVoice } from "@/lib/baddia-voice";
 import { TimePickerSheet } from "@/components/baddia/TimePickerSheet";
+import { MyManifests } from "@/components/baddia/MyManifests";
 
 /* ─────────── Types & constants ─────────── */
 type Category =
@@ -664,6 +665,9 @@ export function Manifest() {
                 "{data.intention}"
               </p>
             </section>
+
+            {/* My own manifestations (photo + caption) */}
+            <MyManifests />
 
             {/* 30-day flower garden */}
             <SectionLabel emoji="🌷" text="tu jardín de 30 días" />
