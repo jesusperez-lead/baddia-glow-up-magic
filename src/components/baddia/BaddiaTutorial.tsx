@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X, ArrowRight, Sparkles } from "lucide-react";
 
@@ -16,9 +16,10 @@ type Step = {
   chip: string;
   title: string;
   desc: string;
-  bg: string;
   accent: string;
-  scene: "daily" | "reading" | "manifest" | "love" | "journal" | "profile";
+  target?: string; // data-tour selector; if undefined -> centered welcome
+  shape?: "rect" | "circle";
+  padding?: number;
 };
 
 const STEPS: Step[] = [
@@ -26,174 +27,108 @@ const STEPS: Step[] = [
     emoji: "✨",
     chip: "bienvenida",
     title: "Baddia, tu bestie mística",
-    desc: "Un tour cortito para que sepas todo lo que puedes hacer aquí. Prometo que es cute 💖",
-    bg: "linear-gradient(135deg,#FFE9F3 0%,#F5E6FF 50%,#FFF7D6 100%)",
+    desc: "Un tour cortito para que sepas todo lo que puedes hacer. Prometo que es cute 💖",
     accent: "#FF7AC8",
-    scene: "daily",
   },
   {
     emoji: "🌸",
     chip: "daily",
     title: "Tu Daily glow",
-    desc: "Cada día una frase, tu energía y una racha que crece contigo. Aquí empieza tu ritual.",
-    bg: "linear-gradient(135deg,#FFF1F7 0%,#FFE0EE 60%,#FFD1E7 100%)",
+    desc: "Aquí ves tu frase del día, tu energía y tu racha. Es tu ritual de cada mañana.",
     accent: "#FF5EB3",
-    scene: "daily",
-  },
-  {
-    emoji: "🔮",
-    chip: "lecturas ia",
-    title: "Baddia lo lee todo",
-    desc: "Toca la varita del centro y se abre el modal: palma, tarot, aura, outfit, crush… tu energía leída al momento.",
-    bg: "linear-gradient(135deg,#2E1A47 0%,#8B63F7 55%,#FF7AC8 100%)",
-    accent: "#FFE066",
-    scene: "reading",
-  },
-  {
-    emoji: "🌙",
-    chip: "manifestar",
-    title: "Manifestar con voz guiada",
-    desc: "Escribe tu frase, sube una foto y Baddia te acompaña con audio y contador. Cada manifestación tiene su propia racha.",
-    bg: "linear-gradient(135deg,#EDE4FF 0%,#D9C7FF 60%,#B79BFF 100%)",
-    accent: "#7A4CFF",
-    scene: "manifest",
-  },
-  {
-    emoji: "💘",
-    chip: "love",
-    title: "Todo sobre tu crush",
-    desc: "Compatibilidad, red/green flags, la inicial de su nombre y si te va a escribir esta semana. Spoiler: sí.",
-    bg: "linear-gradient(135deg,#FFD6E7 0%,#FFB3D1 60%,#FF7AC8 100%)",
-    accent: "#FF3D8A",
-    scene: "love",
+    target: "daily-hero",
+    shape: "rect",
+    padding: 10,
   },
   {
     emoji: "📓",
     chip: "diario",
     title: "Tu diario privado",
-    desc: "Ponle contraseña y una pista secreta. Solo tú entras. Además: calendario de estados y tu historial energético.",
-    bg: "linear-gradient(135deg,#FFF9E0 0%,#FFECC2 60%,#FFD48A 100%)",
+    desc: "Ponle contraseña y una pista secreta. Solo tú entras a leer y escribir.",
     accent: "#E38A2B",
-    scene: "journal",
+    target: "journal-btn",
+    shape: "rect",
+    padding: 8,
+  },
+  {
+    emoji: "🌙",
+    chip: "manifestar",
+    title: "Manifestar con voz guiada",
+    desc: "Escribe tu frase, sube una foto y Baddia te acompaña con audio y racha propia.",
+    accent: "#7A4CFF",
+    target: "manifest-cta",
+    shape: "rect",
+    padding: 8,
+  },
+  {
+    emoji: "🔮",
+    chip: "lecturas ia",
+    title: "Baddia lo lee todo",
+    desc: "Toca la varita del centro: palma, tarot, aura, outfit, crush… tu energía leída al momento.",
+    accent: "#FFB300",
+    target: "fab",
+    shape: "circle",
+    padding: 10,
+  },
+  {
+    emoji: "💘",
+    chip: "love",
+    title: "Todo sobre tu crush",
+    desc: "Compatibilidad, red/green flags, la inicial de su nombre y si te va a escribir.",
+    accent: "#FF3D8A",
+    target: "tab-love",
+    shape: "rect",
+    padding: 6,
   },
   {
     emoji: "💖",
     chip: "yo",
     title: "Tu perfil, tu vibe",
-    desc: "Foto polaroid, tus intereses, tono de Baddia y feedback para ganar tu insignia ✧ Stargirl.",
-    bg: "linear-gradient(135deg,#FFE0F0 0%,#F0D6FF 60%,#D6E4FF 100%)",
+    desc: "Foto polaroid, intereses, tono de Baddia y feedback para ganar tu insignia ✧ Stargirl.",
     accent: "#B85CFF",
-    scene: "profile",
+    target: "tab-profile",
+    shape: "rect",
+    padding: 6,
   },
 ];
 
-function Scene({ scene, accent }: { scene: Step["scene"]; accent: string }) {
-  // Cute animated illustration per scene using pure divs + emoji
-  if (scene === "reading") {
-    return (
-      <div className="relative w-full h-full flex items-center justify-center">
-        {[0, 1, 2].map((i) => (
-          <span
-            key={i}
-            className="absolute w-24 h-36 rounded-2xl border-[2.5px] border-baddia-ink bg-white shadow-[4px_5px_0_hsl(260_16%_15%)] flex items-center justify-center text-3xl"
-            style={{
-              transform: `rotate(${(i - 1) * 12}deg) translateX(${(i - 1) * 34}px) translateY(${Math.abs(i - 1) * 6}px)`,
-              animation: `bt-cardFloat 2.4s ease-in-out ${i * 0.25}s infinite alternate`,
-              background: i === 1 ? "linear-gradient(160deg,#fff,#ffe9f3)" : "#fff",
-            }}
-          >
-            {["🌙", "✨", "💫"][i]}
-          </span>
-        ))}
-        <span className="absolute -top-2 text-2xl animate-sparkle-spin" style={{ color: accent }}>✦</span>
-      </div>
-    );
-  }
-  if (scene === "manifest") {
-    return (
-      <div className="relative w-full h-full flex items-center justify-center">
-        <div
-          className="relative w-40 h-40 rounded-full border-[3px] border-baddia-ink bg-white shadow-[4px_5px_0_hsl(260_16%_15%)] flex items-center justify-center"
-          style={{ animation: "bt-pulse 2s ease-in-out infinite" }}
-        >
-          <span className="text-4xl">🌙</span>
-          <span className="absolute inset-2 rounded-full border-2 border-dashed" style={{ borderColor: accent, animation: "bt-spin 6s linear infinite" }} />
-        </div>
-        {["💖", "✨", "🌟", "💫"].map((e, i) => (
-          <span
-            key={i}
-            className="absolute text-xl"
-            style={{
-              left: `${20 + i * 18}%`,
-              top: `${10 + (i % 2) * 60}%`,
-              animation: `bt-float ${2 + i * 0.3}s ease-in-out ${i * 0.2}s infinite alternate`,
-            }}
-          >
-            {e}
-          </span>
-        ))}
-      </div>
-    );
-  }
-  if (scene === "love") {
-    return (
-      <div className="relative w-full h-full flex items-center justify-center gap-3">
-        <span className="w-24 h-28 rounded-2xl border-[2.5px] border-baddia-ink bg-white shadow-[3px_4px_0_hsl(260_16%_15%)] flex items-center justify-center text-4xl rotate-[-8deg]" style={{ animation: "bt-heartL 2.4s ease-in-out infinite" }}>👩🏻</span>
-        <span className="text-4xl" style={{ animation: "bt-pulse 1.2s ease-in-out infinite", color: accent }}>💘</span>
-        <span className="w-24 h-28 rounded-2xl border-[2.5px] border-baddia-ink bg-white shadow-[3px_4px_0_hsl(260_16%_15%)] flex items-center justify-center text-4xl rotate-[8deg]" style={{ animation: "bt-heartR 2.4s ease-in-out infinite" }}>🧑🏽</span>
-      </div>
-    );
-  }
-  if (scene === "journal") {
-    return (
-      <div className="relative w-full h-full flex items-center justify-center">
-        <div
-          className="relative w-40 h-48 rounded-xl border-[2.5px] border-baddia-ink shadow-[4px_5px_0_hsl(260_16%_15%)] rotate-[-6deg]"
-          style={{
-            background: "repeating-linear-gradient(to bottom,#fffdf7 0px,#fffdf7 12px,hsl(335 60% 85% / 0.55) 13px)",
-            animation: "bt-float 2.4s ease-in-out infinite alternate",
-          }}
-        >
-          <span className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-baddia-yellow border-2 border-baddia-ink flex items-center justify-center text-lg shadow-[2px_2px_0_hsl(260_16%_15%)] rotate-6">🔒</span>
-          <span className="absolute inset-0 flex items-center justify-center text-4xl">📓</span>
-        </div>
-      </div>
-    );
-  }
-  if (scene === "profile") {
-    return (
-      <div className="relative w-full h-full flex items-center justify-center">
-        <div
-          className="relative bg-white border-[2.5px] border-baddia-ink shadow-[4px_5px_0_hsl(260_16%_15%)] p-2 pb-6 rotate-[-6deg]"
-          style={{ animation: "bt-float 2.4s ease-in-out infinite alternate" }}
-        >
-          <div className="w-32 h-36 rounded-[2px] bg-gradient-to-br from-baddia-bubble via-baddia-lavender to-baddia-hot flex items-center justify-center text-5xl">💖</div>
-          <span className="absolute bottom-1 left-0 right-0 text-center font-display font-black text-[11px] text-baddia-ink">stargirl ✧</span>
-        </div>
-      </div>
-    );
-  }
-  // daily
-  return (
-    <div className="relative w-full h-full flex items-center justify-center">
-      <div
-        className="relative w-52 h-32 rounded-2xl border-[2.5px] border-baddia-ink bg-white shadow-[4px_5px_0_hsl(260_16%_15%)] flex items-center justify-center px-4 rotate-[-3deg]"
-        style={{ animation: "bt-float 2.4s ease-in-out infinite alternate" }}
-      >
-        <p className="font-display italic text-center text-[13px] text-baddia-ink leading-snug">
-          "Lo que es para mí, me encuentra con paz y abundancia."
-        </p>
-        <span className="absolute -top-3 -right-3 text-xl animate-sparkle-spin" style={{ color: accent }}>✦</span>
-        <span className="absolute -bottom-3 -left-3 text-lg" style={{ animation: "bt-pulse 1.6s ease-in-out infinite" }}>💖</span>
-      </div>
-    </div>
-  );
+type Rect = { x: number; y: number; w: number; h: number };
+
+function useTargetRect(target: string | undefined) {
+  const [rect, setRect] = useState<Rect | null>(null);
+  useLayoutEffect(() => {
+    if (!target) { setRect(null); return; }
+    let raf = 0;
+    const measure = () => {
+      const el = document.querySelector<HTMLElement>(`[data-tour="${target}"]`);
+      if (!el) { setRect(null); return; }
+      el.scrollIntoView({ block: "center", behavior: "smooth" });
+      // wait a tick for scroll to settle
+      raf = requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect();
+        setRect({ x: r.left, y: r.top, w: r.width, h: r.height });
+      });
+    };
+    measure();
+    const onResize = () => measure();
+    window.addEventListener("resize", onResize);
+    window.addEventListener("scroll", onResize, true);
+    const t = setTimeout(measure, 380);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(t);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onResize, true);
+    };
+  }, [target]);
+  return rect;
 }
 
 export function BaddiaTutorial({ onClose }: { onClose: () => void }) {
   const [i, setI] = useState(0);
   const step = STEPS[i];
   const isLast = i === STEPS.length - 1;
+  const rect = useTargetRect(step.target);
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -203,103 +138,188 @@ export function BaddiaTutorial({ onClose }: { onClose: () => void }) {
 
   const finish = () => { markTutorialSeen(); onClose(); };
 
+  // Build spotlight geometry
+  const pad = step.padding ?? 8;
+  const vw = typeof window !== "undefined" ? window.innerWidth : 400;
+  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+
+  let spotlight: null | { cx: number; cy: number; rx: number; ry: number; radius: number } = null;
+  if (rect) {
+    const rx = rect.w / 2 + pad;
+    const ry = rect.h / 2 + pad;
+    const cx = rect.x + rect.w / 2;
+    const cy = rect.y + rect.h / 2;
+    const radius = step.shape === "circle" ? Math.max(rx, ry) : Math.min(rx, ry) + 12;
+    spotlight = { cx, cy, rx, ry, radius };
+  }
+
+  // Card position: below target if target is in top half, otherwise above
+  const CARD_H_EST = 200;
+  const CARD_W = Math.min(vw - 24, 360);
+  let cardStyle: React.CSSProperties = {
+    left: 12,
+    right: 12,
+    top: Math.max(24, (vh - CARD_H_EST) / 2),
+    maxWidth: CARD_W,
+    marginLeft: "auto",
+    marginRight: "auto",
+  };
+  if (rect) {
+    const below = rect.y + rect.h / 2 < vh / 2;
+    const topPos = below
+      ? Math.min(vh - CARD_H_EST - 16, rect.y + rect.h + pad + 22)
+      : Math.max(16, rect.y - pad - 22 - CARD_H_EST);
+    cardStyle = { left: 12, right: 12, top: topPos, maxWidth: CARD_W, marginLeft: "auto", marginRight: "auto" };
+  }
+
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+    <div className="fixed inset-0 z-[9999]">
       <style>{`
-        @keyframes bt-float { from { transform: translateY(-4px) } to { transform: translateY(4px) } }
-        @keyframes bt-pulse { 0%,100% { transform: scale(1) } 50% { transform: scale(1.12) } }
-        @keyframes bt-spin { to { transform: rotate(360deg) } }
-        @keyframes bt-cardFloat { from { transform: rotate(var(--r,0deg)) translateY(-3px) } to { transform: rotate(var(--r,0deg)) translateY(3px) } }
-        @keyframes bt-heartL { 0%,100% { transform: rotate(-8deg) translateX(0) } 50% { transform: rotate(-4deg) translateX(4px) } }
-        @keyframes bt-heartR { 0%,100% { transform: rotate(8deg) translateX(0) } 50% { transform: rotate(4deg) translateX(-4px) } }
-        @keyframes bt-enter { from { opacity:0; transform: translateY(14px) scale(.98) } to { opacity:1; transform: translateY(0) scale(1) } }
+        @keyframes bt-pulseRing { 0%,100% { transform: scale(1); opacity:.8 } 50% { transform: scale(1.08); opacity:.35 } }
+        @keyframes bt-enter { from { opacity:0; transform: translateY(8px) scale(.98) } to { opacity:1; transform: translateY(0) scale(1) } }
+        @keyframes bt-float { from { transform: translateY(-3px) } to { transform: translateY(3px) } }
+        @keyframes bt-sparkle { 0%,100% { transform: rotate(0) scale(1) } 50% { transform: rotate(180deg) scale(1.2) } }
       `}</style>
 
+      {/* Dim overlay with cutout using SVG mask */}
+      <svg
+        width={vw}
+        height={vh}
+        className="absolute inset-0 pointer-events-auto"
+        onClick={finish}
+        style={{ cursor: "pointer" }}
+      >
+        <defs>
+          <mask id="bt-mask">
+            <rect x="0" y="0" width={vw} height={vh} fill="white" />
+            {spotlight && (
+              step.shape === "circle" ? (
+                <circle cx={spotlight.cx} cy={spotlight.cy} r={spotlight.radius} fill="black" />
+              ) : (
+                <rect
+                  x={spotlight.cx - spotlight.rx}
+                  y={spotlight.cy - spotlight.ry}
+                  width={spotlight.rx * 2}
+                  height={spotlight.ry * 2}
+                  rx={18}
+                  ry={18}
+                  fill="black"
+                />
+              )
+            )}
+          </mask>
+        </defs>
+        <rect x="0" y="0" width={vw} height={vh} fill="rgba(20,10,40,0.72)" mask="url(#bt-mask)" />
+      </svg>
+
+      {/* Animated ring around the spotlight */}
+      {spotlight && (
+        <>
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: step.shape === "circle" ? spotlight.cx - spotlight.radius : spotlight.cx - spotlight.rx,
+              top: step.shape === "circle" ? spotlight.cy - spotlight.radius : spotlight.cy - spotlight.ry,
+              width: step.shape === "circle" ? spotlight.radius * 2 : spotlight.rx * 2,
+              height: step.shape === "circle" ? spotlight.radius * 2 : spotlight.ry * 2,
+              borderRadius: step.shape === "circle" ? "9999px" : 18,
+              boxShadow: `0 0 0 3px ${step.accent}, 0 0 0 6px rgba(255,255,255,0.55), 0 0 24px 4px ${step.accent}88`,
+              animation: "bt-pulseRing 1.6s ease-in-out infinite",
+            }}
+          />
+          {/* cute sparkle badges */}
+          <span
+            className="absolute pointer-events-none text-xl"
+            style={{
+              left: (step.shape === "circle" ? spotlight.cx + spotlight.radius : spotlight.cx + spotlight.rx) - 10,
+              top: (step.shape === "circle" ? spotlight.cy - spotlight.radius : spotlight.cy - spotlight.ry) - 14,
+              color: step.accent,
+              animation: "bt-sparkle 2.4s ease-in-out infinite",
+              textShadow: "0 2px 6px rgba(0,0,0,0.35)",
+            }}
+          >✦</span>
+          <span
+            className="absolute pointer-events-none text-lg"
+            style={{
+              left: (step.shape === "circle" ? spotlight.cx - spotlight.radius : spotlight.cx - spotlight.rx) - 4,
+              top: (step.shape === "circle" ? spotlight.cy + spotlight.radius : spotlight.cy + spotlight.ry) - 10,
+              animation: "bt-float 2s ease-in-out infinite alternate",
+            }}
+          >💖</span>
+        </>
+      )}
+
+      {/* Info card */}
       <div
         key={i}
-        className="relative w-[min(92vw,420px)] rounded-[28px] border-[2.5px] border-baddia-ink shadow-[6px_8px_0_hsl(260_16%_15%)] overflow-hidden"
-        style={{ background: step.bg, animation: "bt-enter .35s ease-out both" }}
+        className="absolute pointer-events-auto rounded-3xl border-[2.5px] border-baddia-ink bg-white shadow-[6px_8px_0_hsl(260_16%_15%)] p-4"
+        style={{ ...cardStyle, animation: "bt-enter .3s ease-out both" }}
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* floating stickers */}
-        <span className="pointer-events-none absolute top-4 left-4 text-lg" style={{ animation: "bt-float 2.2s ease-in-out infinite alternate" }}>✨</span>
-        <span className="pointer-events-none absolute top-8 right-6 text-base" style={{ animation: "bt-float 2.6s ease-in-out .3s infinite alternate" }}>💫</span>
-        <span className="pointer-events-none absolute bottom-24 left-6 text-base" style={{ animation: "bt-float 2.4s ease-in-out .5s infinite alternate" }}>⭐</span>
-
-        {/* skip */}
         <button
           onClick={finish}
           aria-label="Cerrar tutorial"
-          className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white border-2 border-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] flex items-center justify-center active:translate-y-0.5"
+          className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white border-2 border-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] flex items-center justify-center active:translate-y-0.5"
         >
           <X size={16} className="text-baddia-ink" />
         </button>
 
-        {/* scene */}
-        <div className="relative h-56 flex items-center justify-center">
-          <Scene scene={step.scene} accent={step.accent} />
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="text-2xl">{step.emoji}</span>
+          <span
+            className="inline-block px-2 py-0.5 rounded-full border border-baddia-ink text-[9px] font-display font-black uppercase tracking-widest text-white"
+            style={{ background: step.accent }}
+          >
+            {step.chip}
+          </span>
+          <span className="ml-auto text-[10px] font-display font-black text-baddia-ink/60">
+            {i + 1}/{STEPS.length}
+          </span>
+        </div>
+        <h3 className="font-display font-black text-[18px] text-baddia-ink leading-tight">
+          {step.title}
+        </h3>
+        <p className="mt-1.5 text-[13px] text-baddia-ink/70 font-semibold leading-snug">
+          {step.desc}
+        </p>
+
+        <div className="mt-3 flex items-center gap-1.5">
+          {STEPS.map((_, idx) => (
+            <span
+              key={idx}
+              className="h-1.5 rounded-full transition-all"
+              style={{
+                width: idx === i ? 22 : 8,
+                background: idx <= i ? step.accent : "hsl(260 16% 15% / 0.15)",
+              }}
+            />
+          ))}
         </div>
 
-        {/* content card */}
-        <div className="relative mx-4 mb-4 rounded-2xl bg-white border-[2.5px] border-baddia-ink p-4 shadow-[3px_3px_0_hsl(260_16%_15%)]">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">{step.emoji}</span>
-            <span
-              className="inline-block px-2 py-0.5 rounded-full border border-baddia-ink text-[9px] font-display font-black uppercase tracking-widest text-white"
-              style={{ background: step.accent }}
-            >
-              {step.chip}
-            </span>
-            <span className="ml-auto text-[10px] font-display font-black text-baddia-ink/60">
-              {i + 1}/{STEPS.length}
-            </span>
-          </div>
-          <h3 className="font-display font-black text-[19px] text-baddia-ink leading-tight">
-            {step.title}
-          </h3>
-          <p className="mt-1.5 text-[13px] text-baddia-ink/70 font-semibold leading-snug">
-            {step.desc}
-          </p>
-
-          {/* progress dots */}
-          <div className="mt-3 flex items-center gap-1.5">
-            {STEPS.map((_, idx) => (
-              <span
-                key={idx}
-                className="h-1.5 rounded-full transition-all"
-                style={{
-                  width: idx === i ? 22 : 8,
-                  background: idx <= i ? step.accent : "hsl(260 16% 15% / 0.15)",
-                }}
-              />
-            ))}
-          </div>
-
-          {/* actions */}
-          <div className="mt-4 flex items-center gap-2">
-            {i > 0 && (
-              <button
-                onClick={() => setI(i - 1)}
-                className="px-3 py-2 rounded-full border-2 border-baddia-ink bg-white text-[12px] font-display font-black text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-0.5"
-              >
-                atrás
-              </button>
-            )}
-            {!isLast && (
-              <button
-                onClick={finish}
-                className="ml-auto text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink/55"
-              >
-                saltar
-              </button>
-            )}
+        <div className="mt-3 flex items-center gap-2">
+          {i > 0 && (
             <button
-              onClick={() => (isLast ? finish() : setI(i + 1))}
-              className={`${i > 0 && isLast ? "ml-auto" : ""} inline-flex items-center gap-1.5 px-4 py-2 rounded-full border-2 border-baddia-ink text-white text-[13px] font-display font-black shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5`}
-              style={{ background: step.accent, marginLeft: isLast || i === 0 ? "auto" : undefined }}
+              onClick={() => setI(i - 1)}
+              className="px-3 py-2 rounded-full border-2 border-baddia-ink bg-white text-[12px] font-display font-black text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-0.5"
             >
-              {isLast ? (<>empezar <Sparkles size={14} /></>) : (<>siguiente <ArrowRight size={14} /></>)}
+              atrás
             </button>
-          </div>
+          )}
+          {!isLast && (
+            <button
+              onClick={finish}
+              className="text-[11px] font-display font-black uppercase tracking-widest text-baddia-ink/55"
+            >
+              saltar
+            </button>
+          )}
+          <button
+            onClick={() => (isLast ? finish() : setI(i + 1))}
+            className="ml-auto inline-flex items-center gap-1.5 px-4 py-2 rounded-full border-2 border-baddia-ink text-white text-[13px] font-display font-black shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5"
+            style={{ background: step.accent }}
+          >
+            {isLast ? (<>empezar <Sparkles size={14} /></>) : (<>siguiente <ArrowRight size={14} /></>)}
+          </button>
         </div>
       </div>
     </div>,
