@@ -62,7 +62,7 @@ export function Daily() {
       <SparklesDeco />
 
       {/* Header */}
-      <header className="relative z-10 px-6 pt-8 pb-2">
+      <header data-tour="daily-hero" className="relative z-10 px-6 pt-8 pb-2">
         <div className="flex items-center gap-2 mb-3">
           <span className="inline-block rounded-full bg-baddia-yellow border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-bold text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2 uppercase tracking-wider">
             ✨ baddia daily
