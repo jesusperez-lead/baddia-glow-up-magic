@@ -80,9 +80,11 @@ export function BottomNav() {
   const renderTab = ({ id, label, Icon }: Tab) => {
     const active = screen === id;
     const isProfile = id === "profile";
+    const tourAttr = id === "love" ? "tab-love" : id === "profile" ? "tab-profile" : undefined;
     return (
       <li key={id} className="flex-1">
         <button
+          data-tour={tourAttr}
           onClick={() => go(id)}
           aria-label={label}
           aria-current={active ? "page" : undefined}
