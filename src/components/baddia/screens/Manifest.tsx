@@ -209,6 +209,8 @@ export function Manifest() {
   const [shareOpen, setShareOpen] = useState(false);
   const [reminderSheet, setReminderSheet] = useState<null | "ask" | "picker" | "denied">(null);
   const [reminderJustSaved, setReminderJustSaved] = useState(false);
+  const [runningMy, setRunningMy] = useState<MyManifest | null>(null);
+  const [myDone, setMyDone] = useState<MyManifest | null>(null);
 
   useEffect(() => { saveManifest(data); }, [data]);
 
