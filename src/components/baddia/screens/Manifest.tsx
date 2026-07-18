@@ -1221,7 +1221,7 @@ const DURATIONS: { label: string; s: number }[] = [
   { label: "3 min", s: 180 },
 ];
 
-function Ritual({ category, intention, onDone }: { category: Category; intention: string; onDone: () => void }) {
+function Ritual({ category, intention, onDone, photo, title }: { category: Category; intention: string; onDone: () => void; photo?: string; title?: string }) {
   const [phase, setPhase] = useState<Phase>("guide");
   const [audioOn, setAudioOn] = useState<boolean>(() => loadAudioPref());
   const [duration, setDuration] = useState(30);
