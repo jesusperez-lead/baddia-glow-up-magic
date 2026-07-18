@@ -54,6 +54,7 @@ export function Daily() {
           onShare={() => setShareOpen(true)}
         />
       )}
+      {showTutorial && <BaddiaTutorial onClose={() => setShowTutorial(false)} />}
       {/* background blobs */}
       <div className="blob -top-20 -left-16 w-72 h-72 bg-baddia-bubble/20" />
       <div className="blob top-60 -right-20 w-64 h-64 bg-baddia-soft/25" style={{ animationDelay: "4s" }} />
