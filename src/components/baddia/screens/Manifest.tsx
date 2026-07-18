@@ -1453,11 +1453,20 @@ function Ritual({ category, intention, onDone, photo, title }: { category: Categ
                 </linearGradient>
               </defs>
             </svg>
+            {photo && (
+              <span
+                className="absolute rounded-full overflow-hidden border-[3px] border-white shadow-[0_4px_20px_rgba(0,0,0,0.25)]"
+                style={{ inset: 22 }}
+              >
+                <img src={photo} alt="" className="w-full h-full object-cover" style={{ filter: "saturate(1.1) contrast(1.02) brightness(0.9)" }} />
+                <span className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-baddia-ink/50" />
+              </span>
+            )}
             <div className="relative flex flex-col items-center justify-center">
-              <span className="font-display font-black text-[54px] leading-none text-baddia-ink drop-shadow-[0_2px_0_rgba(255,255,255,0.7)]">
+              <span className={`font-display font-black text-[54px] leading-none drop-shadow-[0_2px_0_rgba(255,255,255,0.7)] ${photo ? "text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]" : "text-baddia-ink"}`}>
                 {secs}
               </span>
-              <span className="text-[10px] font-display font-black uppercase tracking-[0.2em] text-baddia-ink/60 mt-1">
+              <span className={`text-[10px] font-display font-black uppercase tracking-[0.2em] mt-1 ${photo ? "text-white/90" : "text-baddia-ink/60"}`}>
                 {paused ? "en pausa" : "segundos"}
               </span>
             </div>
