@@ -63,9 +63,18 @@ export function Daily() {
 
       {/* Header */}
       <header className="relative z-10 px-6 pt-8 pb-2">
-        <span className="inline-block rounded-full bg-baddia-yellow border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-bold text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2 mb-3 uppercase tracking-wider">
-          ✨ baddia daily
-        </span>
+        <div className="flex items-center gap-2 mb-3">
+          <span className="inline-block rounded-full bg-baddia-yellow border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-bold text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2 uppercase tracking-wider">
+            ✨ baddia daily
+          </span>
+          <button
+            onClick={() => setShowTutorial(true)}
+            aria-label="Ver tutorial"
+            className="ml-auto inline-flex items-center gap-1 rounded-full bg-white border-2 border-baddia-ink px-2.5 py-1 text-[10px] font-display font-black text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-0.5"
+          >
+            <HelpCircle size={12} /> tour
+          </button>
+        </div>
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <h1 className="font-display font-bold text-[26px] text-baddia-ink leading-tight">
