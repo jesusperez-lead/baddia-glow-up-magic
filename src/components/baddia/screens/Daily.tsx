@@ -113,7 +113,7 @@ export function Daily() {
         {/* ───── Section: racha glow ───── */}
         <SectionLabel emoji="🌸" text="tu racha glow" />
         <PhoneVerifyWidget />
-        <ManifestCTA onOpen={() => go("manifest")} />
+        <div data-tour="manifest-cta"><ManifestCTA onOpen={() => go("manifest")} /></div>
 
         {/* Cómo atraer — mazo mágico */}
         <button
