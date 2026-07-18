@@ -3,7 +3,8 @@ import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import { ShareGlowSheet } from "../ShareGlowSheet";
 import { GlitterWelcome } from "../GlitterWelcome";
 import { DailyQuoteReveal } from "../DailyQuoteReveal";
-import { Share2, Bookmark, Lock, Check, ArrowRight, Flame, Sparkles, Phone, X } from "lucide-react";
+import { BaddiaTutorial, hasSeenTutorial } from "../BaddiaTutorial";
+import { Share2, Bookmark, Lock, Check, ArrowRight, Flame, Sparkles, Phone, X, HelpCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
