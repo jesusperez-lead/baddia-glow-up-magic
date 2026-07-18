@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Plus, X, Camera, Trash2, Check, Share2, Sparkles, ImagePlus, Pencil } from "lucide-react";
+import { Plus, X, Camera, Trash2, Check, Sparkles, ImagePlus, Pencil, Play, Flame } from "lucide-react";
 import { toast } from "sonner";
 
 /* ─────────── Types & storage ─────────── */
@@ -10,23 +10,55 @@ export type MyManifest = {
   caption: string;
   photo?: string; // dataURL
   createdAt: string;
+  daysCompleted: string[]; // YYYY-MM-DD
 };
 
 const KEY = "baddia.myManifests.v1";
-const load = (): MyManifest[] => {
-  try { const v = localStorage.getItem(KEY); return v ? JSON.parse(v) : []; } catch { return []; }
+export const todayKey = () => new Date().toISOString().slice(0, 10);
+
+export const loadMyManifests = (): MyManifest[] => {
+  try {
+    const v = localStorage.getItem(KEY);
+    if (!v) return [];
+    const arr = JSON.parse(v) as any[];
+    // backward compat: ensure daysCompleted exists
+    return arr.map((m) => ({ ...m, daysCompleted: Array.isArray(m.daysCompleted) ? m.daysCompleted : [] }));
+  } catch { return []; }
 };
-const save = (list: MyManifest[]) => {
+export const saveMyManifests = (list: MyManifest[]) => {
   try { localStorage.setItem(KEY, JSON.stringify(list)); } catch {}
 };
 
+export const markMyManifestDay = (id: string): MyManifest | null => {
+  const list = loadMyManifests();
+  const idx = list.findIndex((m) => m.id === id);
+  if (idx === -1) return null;
+  const t = todayKey();
+  if (!list[idx].daysCompleted.includes(t)) {
+    list[idx] = { ...list[idx], daysCompleted: [...list[idx].daysCompleted, t] };
+    saveMyManifests(list);
+  }
+  return list[idx];
+};
+
 /* ─────────── Main section ─────────── */
-export function MyManifests() {
-  const [list, setList] = useState<MyManifest[]>(() => load());
+export function MyManifests({ onRun }: { onRun?: (m: MyManifest) => void }) {
+  const [list, setList] = useState<MyManifest[]>(() => loadMyManifests());
   const [editorOpen, setEditorOpen] = useState(false);
   const [editing, setEditing] = useState<MyManifest | null>(null);
 
-  useEffect(() => { save(list); }, [list]);
+  useEffect(() => { saveMyManifests(list); }, [list]);
+
+  // Refresh from storage when window regains focus (streak may have been updated by ritual)
+  useEffect(() => {
+    const refresh = () => setList(loadMyManifests());
+    window.addEventListener("focus", refresh);
+    window.addEventListener("baddia:myManifests:updated", refresh as any);
+    return () => {
+      window.removeEventListener("focus", refresh);
+      window.removeEventListener("baddia:myManifests:updated", refresh as any);
+    };
+  }, []);
 
   const openNew = () => { setEditing(null); setEditorOpen(true); };
   const openEdit = (m: MyManifest) => { setEditing(m); setEditorOpen(true); };
@@ -50,13 +82,16 @@ export function MyManifests() {
         </p>
         <span className="h-[2px] flex-1 bg-baddia-ink/15 rounded-full" />
       </div>
+      <p className="text-[10.5px] text-baddia-ink/55 font-display font-semibold italic -mt-1 pl-1">
+        cada una tiene su propia racha 🔥
+      </p>
 
       {/* Add card + list */}
       <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-none">
         {/* + Add */}
         <button
           onClick={openNew}
-          className="shrink-0 w-[150px] h-[210px] rounded-[22px] border-[2.5px] border-dashed border-baddia-ink bg-white/80 shadow-[3px_3px_0_hsl(260_16%_15%)] flex flex-col items-center justify-center gap-2 active:translate-y-0.5"
+          className="shrink-0 w-[150px] h-[230px] rounded-[22px] border-[2.5px] border-dashed border-baddia-ink bg-white/80 shadow-[3px_3px_0_hsl(260_16%_15%)] flex flex-col items-center justify-center gap-2 active:translate-y-0.5"
           style={{ transform: "rotate(-2deg)" }}
         >
           <span className="w-11 h-11 rounded-full border-2 border-baddia-ink bg-gradient-to-br from-baddia-hot to-baddia-bubble text-white flex items-center justify-center shadow-[2px_2px_0_hsl(260_16%_15%)]">
@@ -74,6 +109,7 @@ export function MyManifests() {
             key={m.id}
             item={m}
             rot={i % 2 ? 2 : -2}
+            onRun={() => onRun?.(m)}
             onEdit={() => openEdit(m)}
             onRemove={() => remove(m.id)}
           />
@@ -98,7 +134,16 @@ export function MyManifests() {
 }
 
 /* ─────────── Polaroid card ─────────── */
-function PolaroidCard({ item, rot, onEdit, onRemove }: { item: MyManifest; rot: number; onEdit: () => void; onRemove: () => void }) {
+function PolaroidCard({ item, rot, onRun, onEdit, onRemove }: {
+  item: MyManifest;
+  rot: number;
+  onRun: () => void;
+  onEdit: () => void;
+  onRemove: () => void;
+}) {
+  const streak = item.daysCompleted.length;
+  const completedToday = item.daysCompleted.includes(todayKey());
+
   return (
     <div
       className="relative shrink-0 w-[160px] rounded-[20px] border-[2.5px] border-baddia-ink bg-white p-2 pb-3 shadow-[4px_5px_0_hsl(260_16%_15%_/_0.9)]"
@@ -108,8 +153,18 @@ function PolaroidCard({ item, rot, onEdit, onRemove }: { item: MyManifest; rot: 
       <span className="absolute -top-2 left-6 w-12 h-4 bg-baddia-yellow/80 border border-baddia-ink/10 -rotate-6 shadow-sm" />
       <span className="absolute -top-2 right-5 w-10 h-4 bg-baddia-bubble/80 border border-baddia-ink/10 rotate-6 shadow-sm" />
 
-      {/* photo */}
-      <button onClick={onEdit} className="relative block w-full aspect-square rounded-[14px] overflow-hidden border-2 border-baddia-ink bg-gradient-to-br from-pink-100 via-white to-purple-100">
+      {/* streak chip */}
+      {streak > 0 && (
+        <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 z-10 inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full border-2 border-baddia-ink bg-baddia-yellow shadow-[1.5px_1.5px_0_hsl(260_16%_15%)] font-display font-black text-[10px] text-baddia-ink">
+          <Flame size={9} strokeWidth={3} /> {streak}
+        </span>
+      )}
+
+      {/* photo → runs ritual */}
+      <button
+        onClick={onRun}
+        className="relative block w-full aspect-square rounded-[14px] overflow-hidden border-2 border-baddia-ink bg-gradient-to-br from-pink-100 via-white to-purple-100 active:scale-[0.98]"
+      >
         {item.photo ? (
           <>
             <img src={item.photo} alt={item.title} className="w-full h-full object-cover" style={{ filter: "saturate(1.1) contrast(1.02)" }} />
@@ -121,6 +176,12 @@ function PolaroidCard({ item, rot, onEdit, onRemove }: { item: MyManifest; rot: 
             <span className="text-[10px] font-display font-black uppercase tracking-widest mt-1">sin foto</span>
           </div>
         )}
+        {/* play overlay */}
+        <span className="absolute inset-0 flex items-center justify-center bg-baddia-ink/0 hover:bg-baddia-ink/10 transition">
+          <span className="w-9 h-9 rounded-full border-2 border-baddia-ink bg-white/90 shadow-[2px_2px_0_hsl(260_16%_15%)] flex items-center justify-center">
+            <Play size={14} strokeWidth={3} className="text-baddia-ink translate-x-0.5" />
+          </span>
+        </span>
       </button>
 
       {/* caption */}
@@ -132,11 +193,18 @@ function PolaroidCard({ item, rot, onEdit, onRemove }: { item: MyManifest; rot: 
         {item.caption || "✧ mi intención ✧"}
       </p>
       <p className="mt-0.5 text-[9.5px] text-baddia-ink/55 font-display font-black uppercase tracking-widest text-center truncate px-1">
-        {item.title || "manifestación"}
+        {completedToday ? "hoy ✓ · " : ""}{item.title || "manifestación"}
       </p>
 
       {/* actions */}
       <div className="mt-1.5 flex justify-center gap-1.5">
+        <button
+          onClick={onRun}
+          className="h-7 px-2.5 rounded-full border-2 border-baddia-ink bg-gradient-to-r from-baddia-hot to-baddia-bubble text-white shadow-[1.5px_1.5px_0_hsl(260_16%_15%)] flex items-center justify-center gap-1 active:translate-y-0.5 font-display font-black text-[9px] uppercase tracking-wider"
+          aria-label="Manifestar"
+        >
+          <Sparkles size={10} /> Manifestar
+        </button>
         <button
           onClick={onEdit}
           className="w-7 h-7 rounded-full border-2 border-baddia-ink bg-white shadow-[1.5px_1.5px_0_hsl(260_16%_15%)] flex items-center justify-center active:translate-y-0.5"
@@ -183,6 +251,7 @@ function ManifestEditor({ initial, onClose, onSave }: {
       caption: caption.trim().slice(0, 140),
       photo,
       createdAt: initial?.createdAt ?? new Date().toISOString(),
+      daysCompleted: initial?.daysCompleted ?? [],
     };
     onSave(m);
   };
