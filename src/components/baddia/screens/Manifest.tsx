@@ -669,7 +669,7 @@ export function Manifest() {
             </section>
 
             {/* My own manifestations (photo + caption) */}
-            <MyManifests />
+            <MyManifests onRun={(m) => setRunningMy(m)} />
 
             {/* 30-day flower garden */}
             <SectionLabel emoji="🌷" text="tu jardín de 30 días" />
