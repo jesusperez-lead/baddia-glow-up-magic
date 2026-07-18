@@ -886,6 +886,27 @@ export function Manifest() {
           </div>
         </div>
       )}
+
+      {/* Custom manifestation ritual overlay */}
+      {runningMy && (
+        <MyManifestRitualOverlay
+          item={runningMy}
+          onCancel={() => setRunningMy(null)}
+          onCompleted={(updated) => {
+            setRunningMy(null);
+            setMyDone(updated);
+            try { window.dispatchEvent(new Event("baddia:myManifests:updated")); } catch {}
+          }}
+        />
+      )}
+
+      {/* Custom manifestation celebration */}
+      {myDone && (
+        <MyManifestCelebration
+          item={myDone}
+          onClose={() => setMyDone(null)}
+        />
+      )}
     </div>
   );
 }
