@@ -3,7 +3,8 @@ import { Sparkles as SparklesDeco } from "../PhoneFrame";
 import { ShareGlowSheet } from "../ShareGlowSheet";
 import { GlitterWelcome } from "../GlitterWelcome";
 import { DailyQuoteReveal } from "../DailyQuoteReveal";
-import { Share2, Bookmark, Lock, Check, ArrowRight, Flame, Sparkles, Phone, X } from "lucide-react";
+import { BaddiaTutorial, hasSeenTutorial } from "../BaddiaTutorial";
+import { Share2, Bookmark, Lock, Check, ArrowRight, Flame, Sparkles, Phone, X, HelpCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -16,6 +17,7 @@ export function Daily() {
   const [tarotFlipped, setTarotFlipped] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showQuoteReveal, setShowQuoteReveal] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
   const quote = "Lo que es para mí, me encuentra con claridad, paz y abundancia.";
   const scorePct = 0.87;
   const dash = 314;
@@ -34,6 +36,10 @@ export function Daily() {
       const t = setTimeout(() => setShowQuoteReveal(true), delay);
       return () => clearTimeout(t);
     }
+    if (!hasSeenTutorial()) {
+      const t2 = setTimeout(() => setShowTutorial(true), fromWelcome ? 3400 : 1600);
+      return () => clearTimeout(t2);
+    }
   }, []);
 
 
@@ -48,6 +54,7 @@ export function Daily() {
           onShare={() => setShareOpen(true)}
         />
       )}
+      {showTutorial && <BaddiaTutorial onClose={() => setShowTutorial(false)} />}
       {/* background blobs */}
       <div className="blob -top-20 -left-16 w-72 h-72 bg-baddia-bubble/20" />
       <div className="blob top-60 -right-20 w-64 h-64 bg-baddia-soft/25" style={{ animationDelay: "4s" }} />
@@ -56,9 +63,18 @@ export function Daily() {
 
       {/* Header */}
       <header className="relative z-10 px-6 pt-8 pb-2">
-        <span className="inline-block rounded-full bg-baddia-yellow border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-bold text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2 mb-3 uppercase tracking-wider">
-          ✨ baddia daily
-        </span>
+        <div className="flex items-center gap-2 mb-3">
+          <span className="inline-block rounded-full bg-baddia-yellow border-2 border-baddia-ink px-3 py-1.5 text-[10px] font-display font-bold text-baddia-ink shadow-[3px_3px_0_hsl(260_16%_15%)] -rotate-2 uppercase tracking-wider">
+            ✨ baddia daily
+          </span>
+          <button
+            onClick={() => setShowTutorial(true)}
+            aria-label="Ver tutorial"
+            className="ml-auto inline-flex items-center gap-1 rounded-full bg-white border-2 border-baddia-ink px-2.5 py-1 text-[10px] font-display font-black text-baddia-ink shadow-[2px_2px_0_hsl(260_16%_15%)] active:translate-y-0.5"
+          >
+            <HelpCircle size={12} /> tour
+          </button>
+        </div>
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <h1 className="font-display font-bold text-[26px] text-baddia-ink leading-tight">
