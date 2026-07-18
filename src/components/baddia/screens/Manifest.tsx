@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import * as htmlToImage from "html-to-image";
 import { useBaddiaVoice } from "@/lib/baddia-voice";
 import { TimePickerSheet } from "@/components/baddia/TimePickerSheet";
+import { MyManifests } from "@/components/baddia/MyManifests";
 
 /* ─────────── Types & constants ─────────── */
 type Category =
