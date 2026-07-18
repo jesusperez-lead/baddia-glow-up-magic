@@ -1569,3 +1569,154 @@ function Ritual({ category, intention, onDone, photo, title }: { category: Categ
   );
 }
 
+
+/* ─────────── Overlay: run ritual for a custom MyManifest ─────────── */
+import { createPortal as _cp } from "react-dom";
+
+function MyManifestRitualOverlay({
+  item, onCancel, onCompleted,
+}: {
+  item: MyManifest;
+  onCancel: () => void;
+  onCompleted: (updated: MyManifest) => void;
+}) {
+  const handleDone = () => {
+    const updated = markMyManifestDay(item.id);
+    if (updated) onCompleted(updated);
+    else onCancel();
+  };
+
+  const intention = item.caption?.trim() || item.title || "Mi intención";
+
+  return _cp(
+    <div className="fixed inset-0 z-[90] overflow-y-auto bg-gradient-to-b from-[#fdf6ec] via-[#fff9f1] to-[#fbe9e7] animate-fade-in">
+      <div className="relative min-h-full">
+        <header className="sticky top-0 z-10 px-4 pt-4 pb-3 flex items-center gap-3 bg-gradient-to-b from-[#fdf6ec] via-[#fdf6ec]/95 to-transparent">
+          <button
+            onClick={onCancel}
+            className="w-10 h-10 rounded-2xl border-2 border-baddia-ink bg-white shadow-[2px_2px_0_hsl(260_16%_15%)] flex items-center justify-center active:scale-95"
+            aria-label="Cerrar"
+          >
+            <X size={18} />
+          </button>
+          <div className="flex-1 min-w-0">
+            <p className="text-[10.5px] font-display font-black uppercase tracking-[0.2em] text-baddia-ink/55">manifestando</p>
+            <p className="font-display font-black text-[16px] text-baddia-ink leading-tight truncate">
+              {item.title}
+            </p>
+          </div>
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border-2 border-baddia-ink bg-baddia-yellow shadow-[2px_2px_0_hsl(260_16%_15%)] font-display font-black text-[12px]">
+            🔥 {item.daysCompleted.length}
+          </span>
+        </header>
+
+        {item.photo && (
+          <div className="flex justify-center pt-1 pb-2">
+            <div
+              className="relative bg-white p-2 pb-6 border-[2px] border-baddia-ink shadow-[4px_5px_0_hsl(260_16%_15%_/_0.6)]"
+              style={{ transform: "rotate(-2deg)", width: 150 }}
+            >
+              <span className="absolute -top-2 left-6 w-12 h-4 bg-baddia-yellow/80 border border-baddia-ink/10 -rotate-6 shadow-sm" />
+              <div className="w-[132px] h-[132px] overflow-hidden border border-baddia-ink/10">
+                <img src={item.photo} alt="" className="w-full h-full object-cover" style={{ filter: "saturate(1.1) contrast(1.02)" }} />
+              </div>
+              <p
+                className="absolute bottom-1 left-2 right-2 text-center text-baddia-ink text-[11px] leading-none truncate"
+                style={{ fontFamily: "'Caveat', 'Fraunces', cursive", fontWeight: 700 }}
+              >
+                {item.caption || item.title}
+              </p>
+            </div>
+          </div>
+        )}
+
+        <main className="relative px-4 pb-10">
+          <Ritual
+            category={"Glow up" as Category}
+            intention={intention}
+            photo={item.photo}
+            title={item.title}
+            onDone={handleDone}
+          />
+        </main>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+function MyManifestCelebration({ item, onClose }: { item: MyManifest; onClose: () => void }) {
+  const streak = item.daysCompleted.length;
+  return _cp(
+    <div className="fixed inset-0 z-[95] bg-baddia-ink/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in" onClick={onClose}>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-sm rounded-3xl border-[2.5px] border-baddia-ink bg-gradient-to-br from-baddia-yellow via-baddia-bubble to-baddia-lavender p-6 shadow-[6px_8px_0_hsl(260_16%_15%)] text-center overflow-hidden animate-scale-in"
+      >
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          {Array.from({ length: 18 }).map((_, i) => (
+            <span
+              key={i}
+              className="absolute text-lg"
+              style={{
+                left: `${(i * 41) % 100}%`,
+                top: "-10%",
+                animation: `myconfetti 2.4s cubic-bezier(.4,.1,.5,1) ${i * 0.06}s forwards`,
+              }}
+            >
+              {["✨", "💗", "🌸", "💫", "✦"][i % 5]}
+            </span>
+          ))}
+        </div>
+
+        <p className="relative font-display font-black text-[11px] uppercase tracking-[0.25em] text-white/90">tu manifestación</p>
+        <p className="relative font-display font-black text-[22px] text-white leading-tight mt-1 drop-shadow-[2px_2px_0_hsl(260_16%_15%)]">
+          Día {streak} ✨
+        </p>
+
+        {item.photo && (
+          <div className="relative flex justify-center mt-3">
+            <div
+              className="bg-white p-2 pb-6 border-[2px] border-baddia-ink shadow-[3px_4px_0_hsl(260_16%_15%_/_0.7)]"
+              style={{ transform: "rotate(-3deg)", width: 140 }}
+            >
+              <div className="w-[124px] h-[124px] overflow-hidden">
+                <img src={item.photo} alt="" className="w-full h-full object-cover" />
+              </div>
+              <p
+                className="text-center text-baddia-ink text-[12px] leading-none mt-1 truncate"
+                style={{ fontFamily: "'Caveat', 'Fraunces', cursive", fontWeight: 700 }}
+              >
+                {item.caption || item.title}
+              </p>
+            </div>
+          </div>
+        )}
+
+        <p className="relative text-white/95 font-display font-black text-[14px] mt-3 leading-tight">
+          Sumaste un día a la racha de <br/>
+          <span className="text-baddia-ink bg-white/80 px-2 py-0.5 rounded-full">{item.title}</span>
+        </p>
+        <p className="relative text-white/85 text-[12px] font-semibold italic mt-2 px-2">
+          Baddia guardó tu energía de hoy · vuelve mañana para no romperla 💗
+        </p>
+
+        <button
+          onClick={onClose}
+          className="relative mt-5 w-full rounded-2xl border-[2.5px] border-baddia-ink bg-white text-baddia-ink font-display font-black py-3 text-[14px] shadow-[3px_3px_0_hsl(260_16%_15%)] active:translate-y-0.5"
+        >
+          Volver ✨
+        </button>
+
+        <style>{`
+          @keyframes myconfetti {
+            0%   { transform: translateY(0) rotate(0); opacity: 0; }
+            15%  { opacity: 1; }
+            100% { transform: translateY(360px) rotate(360deg); opacity: 0; }
+          }
+        `}</style>
+      </div>
+    </div>,
+    document.body
+  );
+}
