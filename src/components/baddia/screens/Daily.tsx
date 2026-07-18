@@ -17,6 +17,7 @@ export function Daily() {
   const [tarotFlipped, setTarotFlipped] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showQuoteReveal, setShowQuoteReveal] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
   const quote = "Lo que es para mí, me encuentra con claridad, paz y abundancia.";
   const scorePct = 0.87;
   const dash = 314;
