@@ -227,19 +227,6 @@ export function Splash({ onDone, duration = 3000 }: Props) {
           </div>
         </div>
 
-        {/* loading dots */}
-        <div
-          className="mt-8 flex items-center justify-center gap-1.5"
-          style={{ animation: "captionIn .6s ease-out 1.3s both" }}
-        >
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="inline-block w-2 h-2 rounded-full bg-baddia-hot"
-              style={{ animation: `splashDot 1s ease-in-out ${i * 0.15}s infinite` }}
-            />
-          ))}
-        </div>
       </div>
 
       <style>{`
