@@ -94,11 +94,11 @@ function Router() {
 const Index = () => {
   const [showSplash, setShowSplash] = useState(() => {
     if (typeof window === "undefined") return true;
-    return !sessionStorage.getItem("baddia_splash_seen");
+    return !sessionStorage.getItem("baddia_splash_seen_v2");
   });
 
   useEffect(() => {
-    if (!showSplash) sessionStorage.setItem("baddia_splash_seen", "1");
+    if (!showSplash) sessionStorage.setItem("baddia_splash_seen_v2", "1");
   }, [showSplash]);
 
   return (
